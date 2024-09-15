@@ -11,7 +11,7 @@
     cursor: pointer;
 }
 .transporterDialog , .companyDialog{
-    z-index: 9999;
+    z-index: 999;
     position: fixed;
     top: 0;
     left: 0;
@@ -52,6 +52,9 @@
     border: 1px solid #1c2229;
     border-radius: 5px;
     cursor: pointer;
+}
+.custom-range-picker{
+    z-index: 9999;
 }
 .ant-picker{
     border-color: #1c2229;
