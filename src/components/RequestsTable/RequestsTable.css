@@ -37,7 +37,7 @@
     justify-content: space-between; /* توزيع المسافة بين العنوان والبحث */
     align-items: center; /* محاذاة العناصر عموديًا */
     margin-bottom: 80px;
-    margin-top: 30px;
+    margin-top: 25px;
 }
 
 /* تنسيق عنوان الجدول */
@@ -90,4 +90,12 @@
 
 .search-container input::placeholder {
     color: #999; /* لون النص داخل مربع البحث */
+}
+
+.background-message{
+    color: #999999bd;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    margin: 300px;
 }

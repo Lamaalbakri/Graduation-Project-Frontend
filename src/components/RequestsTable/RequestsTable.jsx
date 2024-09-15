@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import "./RequestsTable.css";
 import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
 import AssignTransporter from '../AssignTransporter/AssignTransporter';
+import "./RequestsTable.css";
 
-function RequestsTable({ data, title }) {
+function RequestsTable({ data, title, showTitleAndSearch = true }) {
 
   const [requests, setData] = useState(data);
   const [openDialog, setOpenDialog] = useState(false); // إضافة الـ state لإدارة فتح الـ Dialog
@@ -15,7 +15,7 @@ function RequestsTable({ data, title }) {
   }, [data]);
 
   if (!requests.length) {
-    return <div>No results found</div>;
+    return <div className='background-message'>No results found</div>;
   }
 
   const handleReject = (value, id) => {
@@ -116,17 +116,19 @@ function RequestsTable({ data, title }) {
 
   return (
     <div className='RequestsTable'>
-      <div className="header-row">
-        <div className="title">{title}</div>
-        <div className="search-container">
-          <div className='search-label'>Search by Name / ID</div>
-          <input
-          type="search"
-          placeholder="Search by Name / ID"
-          className="input-with-icon"
-        />
+     {showTitleAndSearch && ( // Conditionally render the title and search box
+        <div className="header-row">
+          <div className="title">{title}</div>
+          <div className="search-container">
+            <div className='search-label'>Search by Name / ID</div>
+            <input
+              type="search"
+              placeholder="Search by Name / ID"
+              className="input-with-icon"
+            />
+          </div>
         </div>
-      </div>
+      )}
       <DataGrid
         rows={requests} disableRowSelectionOnClick 
         getRowHeight={() => 'auto'}
@@ -157,7 +159,8 @@ function RequestsTable({ data, title }) {
 RequestsTable.propTypes = {
   data: PropTypes.array.isRequired,
   title: PropTypes.string.isRequired,
-  isPrevious: PropTypes.bool
+  isPrevious: PropTypes.bool,
+  showTitleAndSearch: PropTypes.bool // New prop for controlling title and search box visibility
 };
 
 export default RequestsTable;

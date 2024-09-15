@@ -1,18 +1,19 @@
 import { useState, useMemo } from 'react';
 import { previousRequests, currentRequests } from '../RequestsTable/dummyData';
 import RequestsTable from '../RequestsTable/RequestsTable';
+import "./Search.css";
 
 function Search() {
   const [query, setQuery] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
 
-  // دمج الطلبات بدون تعيين isPrevious
+  // Merging requests
   const allRequests = useMemo(() => [
     ...previousRequests,
     ...currentRequests,
   ], []);
 
-  // تصفية البيانات بناءً على المدخلات في مربع البحث
+  // Filtering data based on the search input
   const filteredRequests = useMemo(() => 
     allRequests.filter(request => {
       const manufacturerName = request.manufacturerName ? request.manufacturerName.toLowerCase() : "";
@@ -20,16 +21,16 @@ function Search() {
       return manufacturerName.includes(query.toLowerCase()) || requestId.includes(query);
     }), [query, allRequests]);
 
-  // تحديث حالة البحث عندما يتغير الاستعلام
+  // Handle search query change
   const handleSearch = (e) => {
     setQuery(e.target.value);
-    setHasSearched(true);
+    setHasSearched(!!e.target.value); // Update hasSearched based on whether there's input
   };
 
   return (
-    <div className='Search'>
+    <div className='search'>
       <div className="header-row">
-      <div className="title">Request Search</div>
+      <div className="title">Search For Requests </div>
         <div className="search-container">
           <div className='search-label'>Search by Name / ID</div>
         <input
@@ -46,9 +47,10 @@ function Search() {
           <RequestsTable 
             data={filteredRequests} 
             title="Filtered Requests"
+            showTitleAndSearch={false} // Hide title and search for this page
           />
         ) : (
-          <div>No results found</div>
+          <div className='background-message'>No results found</div>
         )
       ) : null}
     </div>
