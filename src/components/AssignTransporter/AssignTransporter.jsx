@@ -3,41 +3,45 @@ import { CloseOutlined } from "@ant-design/icons";
 import { DatePicker } from "antd";
 import "./AssignTransporter.css"; // تأكد من الاستيراد الصحيح
 
-function AssignTransporter() {
+function AssignTransporter({ onClose, onRequestSent }) {
   const [temperature, setTemperature] = useState("");
   const [weight, setWeight] = useState("");
   const [distance, setDistance] = useState("");
   const [departureCity, setDepartureCity] = useState("");
   const [dateRange, setDateRange] = useState([]);
   const [company, setCompany] = useState("");
-  // const [showDialog, setShowDialog] = useState(false);
   const [currentForm, setCurrentForm] = useState(1);
 
   const handleRadioChange = (setter) => (event) => {
     setter(event.target.value);
   };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (currentForm === 1) {
-      setCurrentForm(2);
-    } else {
-      // Handle form submission
-      // setShowDialog(false);
-      // You might want to close the dialog or redirect after submission
+  const handleNext = () => {
+    if (!temperature || !weight || !distance || !departureCity || dateRange.length === 0) {
+      alert("Please complete all fields before proceeding.");
+      return;
     }
+    setCurrentForm(2);
   };
   const handleBack = () => {
     setCurrentForm(1);
   };
-  // const handleCloseDialog = () => {
-  //     setShowDialog(false);
-  // };
+  const handleSendRequest = (event) => {
+    event.preventDefault();
+    if (!company) {
+      alert("Please select the transport company.");
+      return;
+    }
+
+    // منطق الإرسال هنا
+
+    onRequestSent(); // Call the function to close the dialog
+  };
 
   return (
     <div className="AssignTransporter">
       <div className="transporterDialog">
         <div className="transporterDialogContent">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSendRequest}>
             {currentForm === 1 && (
               <>
                 <h2>Select the transport service type</h2>
@@ -157,13 +161,13 @@ function AssignTransporter() {
                   />
                 </p>
                 <div className="button-container">
-                  <button className="nextButtonStyle" type="submit">
+                  <button className="nextButtonStyle" onClick={handleNext}>
                     Next
                   </button>
                 </div>
                 <div
                   className="closeButtonStyle"
-                  onClick={() => window.history.back()}
+                  onClick={onClose}
                 >
                   <CloseOutlined />
                 </div>
@@ -207,21 +211,31 @@ function AssignTransporter() {
                       />
                     </label>
                     <hr />
+                    <label>
+                      DHL Express
+                      <span className="price">570 SR </span>
+                      <input
+                        type="radio"
+                        value="dhl"
+                        checked={company === "dhl"}
+                        onChange={handleRadioChange(setCompany)}
+                      />
+                    </label>
+                    <hr />
                     <div className="button-container">
                       <button
                         className="backButtonStyle"
-                        type="button"
                         onClick={handleBack}
                       >
                         Back
                       </button>
-                      <button className="sendButtonStyle" type="submit">
+                      <button className="sendButtonStyle" onClick={handleSendRequest}>
                         Send Request
                       </button>
                     </div>
                     <div
                       className="closeButtonStyle"
-                      onClick={() => window.history.back()}
+                      onClick={onClose}
                     >
                       <CloseOutlined />
                     </div>

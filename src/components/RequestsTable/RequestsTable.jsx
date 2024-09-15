@@ -32,6 +32,7 @@ function RequestsTable({ data, title }) {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    setSelectedRequestId(null); // Reset the selected request ID
   };
 
   const columns = [
@@ -146,6 +147,7 @@ function RequestsTable({ data, title }) {
       <AssignTransporter 
         requestId={selectedRequestId} 
         onClose={handleCloseDialog} 
+        onRequestSent={handleCloseDialog} // Pass the function to close the dialog
       />
     )}
     </div>
