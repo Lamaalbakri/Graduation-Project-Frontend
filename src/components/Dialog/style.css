@@ -1,0 +1,73 @@
+/* خلفية الـ Dialog */
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* لون خلفية شفاف */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* للتأكد من الظهور فوق المحتوى الآخر */
+  }
+  
+  /* صندوق الـ Dialog */
+  .dialog-box {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    animation: slideDown 0.3s ease; /* حركة بسيطة للـ Dialog */
+  }
+  
+  /* ترويسة الـ Dialog */
+  .dialog-header {
+    background-color: #007BFF;
+    padding: 15px;
+    color: #fff;
+    text-align: center;
+  }
+  
+  /* محتوى الـ Dialog */
+  .dialog-content {
+    padding: 20px;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  /* أزرار الـ Dialog */
+  .dialog-actions {
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .close-button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .close-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* حركة نزول الـ Dialog */
+  @keyframes slideDown {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  

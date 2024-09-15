@@ -27,9 +27,15 @@
 
 .cell-content div {
     line-height: 2; /* مسافة بين السطور بنسبة 1.5 */
-    text-align: center;
+    text-align: left;
 }
 
+.table-icon{
+    margin: 9px;
+    margin-top: 3px;
+    font-size: 17px;
+    color: #1c2229af;
+}
 /* تنسيق سطر العنوان والبحث */
 .header-row {
     display: flex;

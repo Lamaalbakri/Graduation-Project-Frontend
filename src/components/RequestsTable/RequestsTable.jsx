@@ -3,13 +3,18 @@ import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
 import AssignTransporter from '../AssignTransporter/AssignTransporter';
 import "./RequestsTable.css";
+import { MessageOutlined, MoreOutlined} from '@ant-design/icons';
+import MessageDialog from '../Dialog/MessageDialog';
+import MoreOptionsDialog from '../Dialog/MoreOptionsDialog';
+
 
 function RequestsTable({ data, title, showTitleAndSearch = true }) {
 
   const [requests, setData] = useState(data);
   const [openDialog, setOpenDialog] = useState(false); // إضافة الـ state لإدارة فتح الـ Dialog
   const [selectedRequestId, setSelectedRequestId] = useState(null); // إضافة state لتخزين ID الطلب
-
+  const [openMessageDialog, setOpenMessageDialog] = useState(false); // لحوار الرسالة
+  const [openMoreDialog, setOpenMoreDialog] = useState(false); // لحوار الخيارات الأخرى
   useEffect(() => {
     setData(data); // تحديث البيانات عندما تتغير
   }, [data]);
@@ -35,10 +40,27 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
     setSelectedRequestId(null); // Reset the selected request ID
   };
 
+  const handleOpenMessageDialog = (id) => {
+    setSelectedRequestId(id);
+    setOpenMessageDialog(true);
+  };
+  
+  const handleOpenMoreDialog = (id) => {
+    setSelectedRequestId(id);
+    setOpenMoreDialog(true);
+  };
+  
+  const handleCloseDialogs = () => {
+    setOpenMessageDialog(false);
+    setOpenMoreDialog(false);
+    setSelectedRequestId(null);
+  };
+  
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 , headerAlign: 'center'},
-    { field: 'manufacturerName', headerName: 'Manufacturer Name', width: 200, headerAlign: 'center' },
-    { field: 'supplyingItems', headerName: 'Supplying Items', width: 170, headerAlign: 'center',
+    { field: 'id', headerName: 'ID', width: 70 , headerAlign: 'left'},
+    { field: 'manufacturerName', headerName: 'Manufacturer Name', width: 200, headerAlign: 'left' },
+    { field: 'requestDate', headerName: 'Date', width: 140, headerAlign: 'left' },
+    { field: 'supplyingItems', headerName: 'Supplying Items', width: 170, headerAlign: 'left',
       renderCell: (params) => (
         <div className="cell-content">
           {params.row.supplyingItems && params.row.supplyingItems.map((item, index) => (
@@ -51,7 +73,7 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
         </div>
       )
     },
-    { field: 'quantity', headerName: 'Quantity', type: 'number', width: 90, headerAlign: 'center',
+    { field: 'quantity', headerName: 'Quantity', type: 'number', width: 90, headerAlign: 'left',
       renderCell: (params) => (
         <div className="cell-content">
           {params.row.quantity && params.row.quantity.map((item, index) => (
@@ -63,8 +85,8 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
         </div>
       )
     },
-    { field: 'price', headerName: 'Price', type: 'number', width: 70 , headerAlign: 'center'},
-    { field: 'status', headerName: 'Status', width: 130, headerAlign: 'center',
+    { field: 'price', headerName: 'Price', type: 'number', width: 70 , headerAlign: 'left'},
+    { field: 'status', headerName: 'Status', width: 130, headerAlign: 'left',
       renderCell: (params) => {
         if (!(params.row.status =='rejected' || params.row.status =='delivered' ) ) {
           return (
@@ -88,8 +110,8 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
         }
       }
     },
-    { field: 'arrivalCity', headerName: 'Arrival city', width: 140, headerAlign: 'center' },
-    { field: 'assignTransport', headerName: 'Assign Transport', width: 170, headerAlign: 'center',
+    { field: 'arrivalCity', headerName: 'Arrival city', width: 140, headerAlign: 'left' },
+    { field: 'assignTransport', headerName: 'Assign Transport', width: 170, headerAlign: 'left',
       renderCell: (params) => {
         if (!(params.row.status =='rejected' || params.row.status =='delivered' )) {
           return (
@@ -110,6 +132,14 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
         }
       }
     },
+    { field: 'action', headerName: 'Action', width: 140, headerAlign: 'left', renderCell: (params)=> {
+      return (
+        <div>
+        <MessageOutlined className='table-icon' onClick={() => handleOpenMessageDialog(params.row.id)}/>
+        <MoreOutlined className='table-icon' onClick={() => handleOpenMoreDialog(params.row.id)}/>
+      </div>
+      );
+    } },
   ];
 
   const paginationModel = { page: 0, pageSize: 10 };
@@ -137,7 +167,7 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10]}
         sx={{
-          '& .MuiDataGrid-cell': {textAlign: 'center'},
+          '& .MuiDataGrid-cell': {textAlign: 'left'},
           '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': { py: '8px' },
           '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '10px' },
           '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': { py: '22px' },
@@ -152,6 +182,21 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
         onRequestSent={handleCloseDialog} // Pass the function to close the dialog
       />
     )}
+
+    {openMessageDialog && (
+      <MessageDialog 
+        requestId={selectedRequestId} 
+        onClose={handleCloseDialogs} 
+      />
+    )}
+
+    {openMoreDialog && (
+      <MoreOptionsDialog 
+        requestId={selectedRequestId} 
+        onClose={handleCloseDialogs} 
+      />
+    )}
+
     </div>
   );
 }
