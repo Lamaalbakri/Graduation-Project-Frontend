@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&family=Monoton:wght@200;300;400;500;600;700;800&display=swap');
+
 .AssignTransporter{
     font-family: 'Poppins', sans-serif;
     color: #1c2229;
@@ -21,20 +23,34 @@
 }
 .transporterDialogContent , .companyDialogContent{
     background: #fff;
-    padding: 15px 40px;
     border-radius: 10px;
     position: relative;
+    padding-top: 25px;
+    padding-bottom: 15px;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 .transporterDialogContent label{
     cursor: pointer;
+}
+.transporterDialogContent p{
+    margin: 15px 0;
+    font-size: 1rem;
+}
+.transporterDialogContent hr{
+    border: 0.5px solid #9c9995;
+    width: 100%; 
+    margin-bottom: 10px;
+    margin-top: 5px;
 }
 .AssignTransporter select{
     position: absolute;
     height: 4%;
     width: 25%;
     font-size: 15px;
-    border-color: #1c2229;
+    border: 1px solid #1c2229;
     border-radius: 5px;
+    cursor: pointer;
 }
 .ant-picker{
     border-color: #1c2229;
@@ -49,11 +65,17 @@
     display: flex;
     justify-content: space-between; /* توزيع المساحة بين العناصر */
     align-items: center;
+    font-size: 1rem;
     margin: 15px 0;
     cursor: pointer;
 }
+.companyDialogContent hr{
+    border: 0.5px solid #9c9995;
+    width: 100%; 
+}
 .price{
     margin-left: auto; /* دفع السعر إلى اليمين */
+    margin-right: 10px;
 }
 .button-container{
     display: flex;
@@ -91,7 +113,7 @@
         padding: 10px; 
     }  
     .transporterDialogContent , .companyDialogContent{
-        padding: 10px 25px; 
+        padding: 17px 25px; 
         font-size: 14px;
     }
     .AssignTransporter select{
