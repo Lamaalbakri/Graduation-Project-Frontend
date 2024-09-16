@@ -23,20 +23,56 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
     return <div className='background-message'>No results found</div>;
   }
 
-  const handleReject = (value, id) => {
-    if (value === "rejected") {
-      setData(requests.filter((item) => item.id !== id));
+  const handleStatusChange = (id, newStatus) => {
+    if (newStatus === "accepted") {
+      handleOpenDialog(id); // فتح الـ Dialog عند اختيار "Accepted"
+    } else if (newStatus === "rejected") {
+      handleReject(id); // تنفيذ عملية الحذف عند اختيار "Rejected"
+    } else {
+      setData((prevRequests) =>
+        prevRequests.map((request) =>
+          request.id === id ? { ...request, status: newStatus } : request
+        )
+      );
     }
+  };
+
+  const handleReject = (id) => {
+      setData((prevRequests) => prevRequests.filter((item) => item.id !== id));
     //add delete code from DB?
   };
 
-  const handleOpenDialog = (id) => {
-    setSelectedRequestId(id);
-    setOpenDialog(true);
+  const handleOpenDialog = (id) => { 
+    const rowExists = requests.some((request) => request.id === id);
+    if (rowExists) {
+      setSelectedRequestId(id);
+      setOpenDialog(true);
+    } else {
+      console.error(`No row with id ${id} found`);
+    }
   };
 
-  const handleCloseDialog = () => {
+  const handleCloseDialog = (wasRequestSent) => {
     setOpenDialog(false);
+    if (wasRequestSent) {
+      // لا تقم بتغيير الحالة إلى Pending إذا تم إرسال الطلب بنجاح
+      setData((prevRequests) =>
+        prevRequests.map((request) =>
+          request.id === selectedRequestId
+            ? { ...request, status: "accepted" } // الحفاظ على الحالة Accepted
+            : request
+        )
+      );
+    } else {
+      // إرجاع الحالة إلى Pending إذا لم يتم إرسال الطلب
+      setData((prevRequests) =>
+        prevRequests.map((request) =>
+          request.id === selectedRequestId
+            ? { ...request, status: "pending" }
+            : request
+        )
+      );
+    }
     setSelectedRequestId(null); // Reset the selected request ID
   };
 
@@ -91,10 +127,11 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
         if (!(params.row.status =='rejected' || params.row.status =='delivered' ) ) {
           return (
             <div>
-              <select name="status" id="status" onChange={(e) => handleReject(e.target.value, params.row.id)}>
+              <select name="status" id="status" onChange={(e) => handleStatusChange(params.row.id, e.target.value)}
+                value={params.row.status}>
                 <option value="pending">Pending</option>
-                <option value="confirmed">Confirmed</option>
-                <option value="inProgress">In progress</option>
+                <option value="accepted">Accepted </option>
+                <option value="inProgress">In Progress</option>
                 <option value="delivered">Delivered</option>
                 <option value="rejected">Rejected</option>
               </select>
@@ -111,27 +148,27 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
       }
     },
     { field: 'arrivalCity', headerName: 'Arrival city', width: 140, headerAlign: 'left' },
-    { field: 'assignTransport', headerName: 'Assign Transport', width: 170, headerAlign: 'left',
-      renderCell: (params) => {
-        if (!(params.row.status =='rejected' || params.row.status =='delivered' )) {
-          return (
-            <div className='buttonDiv'>
+    // { field: 'assignTransport', headerName: 'Assign Transport', width: 170, headerAlign: 'left',
+    //   renderCell: (params) => {
+    //     if (!(params.row.status =='rejected' || params.row.status =='delivered' )) {
+    //       return (
+    //         <div className='buttonDiv'>
               
-                <button className='tableButton' 
-                onClick={() => handleOpenDialog(params.row.id)}>
-                Assign Transporter
-                </button> 
-            </div>
-          );
-        }else {
-          return (
-            <div>
-              {params.row.status === "delivered" && "Transport Assigned"}
-            </div>
-          );
-        }
-      }
-    },
+    //             <button className='tableButton' 
+    //             onClick={() => handleOpenDialog(params.row.id)}>
+    //             Assign Transporter
+    //             </button> 
+    //         </div>
+    //       );
+    //     }else {
+    //       return (
+    //         <div>
+    //           {params.row.status === "delivered" && "Transport Assigned"}
+    //         </div>
+    //       );
+    //     }
+    //   }
+    // },
     { field: 'action', headerName: 'Action', width: 140, headerAlign: 'left', renderCell: (params)=> {
       return (
         <div>
@@ -178,8 +215,8 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
     {openDialog && (
       <AssignTransporter 
         requestId={selectedRequestId} 
-        onClose={handleCloseDialog} 
-        onRequestSent={handleCloseDialog} // Pass the function to close the dialog
+        onClose={() => handleCloseDialog(false)}// تمرير false إذا أغلق المستخدم الـ Dialog بدون إرسال 
+        onRequestSent={() => handleCloseDialog(true)} // تمرير true إذا تم إرسال الطلب بنجاح
       />
     )}
 

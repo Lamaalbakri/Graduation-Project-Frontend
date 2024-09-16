@@ -3,7 +3,7 @@ import { CloseOutlined } from "@ant-design/icons";
 import { DatePicker } from "antd";
 import "./AssignTransporter.css"; // تأكد من الاستيراد الصحيح
 
-function AssignTransporter({ onClose, onRequestSent }) {
+function AssignTransporter({onClose, onRequestSent }) {
   const [temperature, setTemperature] = useState("");
   const [weight, setWeight] = useState("");
   const [distance, setDistance] = useState("");
@@ -35,6 +35,7 @@ function AssignTransporter({ onClose, onRequestSent }) {
     // منطق الإرسال هنا
 
     onRequestSent(); // Call the function to close the dialog
+    
   };
 
   return (
@@ -45,7 +46,7 @@ function AssignTransporter({ onClose, onRequestSent }) {
             {currentForm === 1 && (
               <>
                 <h2>Select the transport service type</h2>
-                <p>
+                <div className="category">
                   <strong>Temperature Control</strong>
                   <hr />
                   <label>
@@ -67,8 +68,8 @@ function AssignTransporter({ onClose, onRequestSent }) {
                     />{" "}
                     Refrigerated Delivery
                   </label>
-                </p>
-                <p>
+                </div>
+                <div className="category">
                   <strong>Weight Category</strong>
                   <hr />
                   <label>
@@ -100,8 +101,8 @@ function AssignTransporter({ onClose, onRequestSent }) {
                     />{" "}
                     Over 15 tons
                   </label>
-                </p>
-                <p>
+                </div >
+                <div className="category">
                   <strong>Distance Category</strong>
                   <hr />
                   <label>
@@ -133,8 +134,8 @@ function AssignTransporter({ onClose, onRequestSent }) {
                     />{" "}
                     Long Distance (1000 km and Above)
                   </label>
-                </p>
-                <p>
+                </div>
+                <div className="category">
                   <strong>Departure City</strong>
                   <hr />
                   <select
@@ -150,8 +151,8 @@ function AssignTransporter({ onClose, onRequestSent }) {
                     <option value="Abha">Abha</option>
                   </select>
                   <br />
-                </p>
-                <p>
+                </div>
+                <div className="category">
                   <strong>Delivery Date Range</strong>
                   <hr />
                   <DatePicker.RangePicker
@@ -159,7 +160,7 @@ function AssignTransporter({ onClose, onRequestSent }) {
                     onChange={(dates) => setDateRange(dates)}
                     className="custom-range-picker"
                   />
-                </p>
+                </div>
                 <div className="button-container">
                   <button className="nextButtonStyle" onClick={handleNext}>
                     Next
