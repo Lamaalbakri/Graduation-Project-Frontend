@@ -3,18 +3,20 @@ import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
 import AssignTransporter from '../AssignTransporter/AssignTransporter';
 import "./RequestsTable.css";
-import { MessageOutlined, MoreOutlined} from '@ant-design/icons';
+import { MessageOutlined} from '@ant-design/icons';
 import MessageDialog from '../Dialog/MessageDialog';
-import MoreOptionsDialog from '../Dialog/MoreOptionsDialog';
+import TrackingDialog from '../Dialog/TrackingDialog';
+
 
 
 function RequestsTable({ data, title, showTitleAndSearch = true }) {
-
   const [requests, setData] = useState(data);
   const [openDialog, setOpenDialog] = useState(false); // إضافة الـ state لإدارة فتح الـ Dialog
   const [selectedRequestId, setSelectedRequestId] = useState(null); // إضافة state لتخزين ID الطلب
   const [openMessageDialog, setOpenMessageDialog] = useState(false); // لحوار الرسالة
-  const [openMoreDialog, setOpenMoreDialog] = useState(false); // لحوار الخيارات الأخرى
+  const [openTrackingDialog, setOpenTrackingDialog] = useState(false); // لحوار الخيارات الأخرى
+  const [selectedStatus, setSelectedStatus] = useState(""); // لإدارة الحالة المختارة
+
   useEffect(() => {
     setData(data); // تحديث البيانات عندما تتغير
   }, [data]);
@@ -81,14 +83,15 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
     setOpenMessageDialog(true);
   };
   
-  const handleOpenMoreDialog = (id) => {
+  const handleTrackingDialog = (id,status) => {
     setSelectedRequestId(id);
-    setOpenMoreDialog(true);
+    setSelectedStatus(status); // حفظ الحالة المختارة
+    setOpenTrackingDialog(true);
   };
   
   const handleCloseDialogs = () => {
     setOpenMessageDialog(false);
-    setOpenMoreDialog(false);
+    setOpenTrackingDialog(false);
     setSelectedRequestId(null);
   };
   
@@ -148,32 +151,15 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
       }
     },
     { field: 'arrivalCity', headerName: 'Arrival city', width: 140, headerAlign: 'left' },
-    // { field: 'assignTransport', headerName: 'Assign Transport', width: 170, headerAlign: 'left',
-    //   renderCell: (params) => {
-    //     if (!(params.row.status =='rejected' || params.row.status =='delivered' )) {
-    //       return (
-    //         <div className='buttonDiv'>
-              
-    //             <button className='tableButton' 
-    //             onClick={() => handleOpenDialog(params.row.id)}>
-    //             Assign Transporter
-    //             </button> 
-    //         </div>
-    //       );
-    //     }else {
-    //       return (
-    //         <div>
-    //           {params.row.status === "delivered" && "Transport Assigned"}
-    //         </div>
-    //       );
-    //     }
-    //   }
-    // },
     { field: 'action', headerName: 'Action', width: 140, headerAlign: 'left', renderCell: (params)=> {
       return (
         <div>
-        <MessageOutlined className='table-icon' onClick={() => handleOpenMessageDialog(params.row.id)}/>
-        <MoreOutlined className='table-icon' onClick={() => handleOpenMoreDialog(params.row.id)}/>
+          <div className="action-buttons">
+            <MessageOutlined className='table-icon message-icon' onClick={() => handleOpenMessageDialog(params.row.id)} />
+            <div >
+              <button className='tracking-icon' onClick={() => handleTrackingDialog(params.row.id, params.row.status)}></button>
+            </div>
+          </div>
       </div>
       );
     } },
@@ -227,10 +213,11 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
       />
     )}
 
-    {openMoreDialog && (
-      <MoreOptionsDialog 
+    {openTrackingDialog && (
+      <TrackingDialog 
         requestId={selectedRequestId} 
-        onClose={handleCloseDialogs} 
+        onClose={handleCloseDialogs}
+        currentStatus={selectedStatus} // تمرير الحالة المختارة 
       />
     )}
 

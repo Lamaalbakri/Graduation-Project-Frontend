@@ -3,10 +3,28 @@
     color: #1c2229;
     padding: 20px;
 }
-.buttonDiv {
+
+.action-buttons {
     display: flex;
-    justify-content: center; 
-    align-items: center;         
+   /* لضمان محاذاة الأيقونات عموديًا */
+}
+
+.tracking-icon {
+    margin-top: 5px;
+    margin-left: 20px;
+    height: 30px; 
+    width: 30px;  
+    background: url('../images/tracking.png') no-repeat center center; /* تحديد الصورة كمصدر الخلفية */
+    background-size: contain; /* التأكد من أن الصورة يتم احتواؤها ضمن مساحة الزر */
+    border: none; /* إزالة الحدود الافتراضية */
+    cursor: pointer; /* تغيير شكل المؤشر عند التحويم */
+}
+
+.table-icon {
+    margin-bottom: 10px;
+    margin-left: 0px;
+    font-size: 17px;
+    color: #1c2229af;
 }
 
 .tableButton {
@@ -30,12 +48,6 @@
     text-align: left;
 }
 
-.table-icon{
-    margin: 9px;
-    margin-top: 3px;
-    font-size: 17px;
-    color: #1c2229af;
-}
 /* تنسيق سطر العنوان والبحث */
 .header-row {
     display: flex;
