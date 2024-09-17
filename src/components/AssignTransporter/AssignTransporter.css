@@ -111,6 +111,14 @@
 .nextButtonStyle:hover , .backButtonStyle:hover , .sendButtonStyle:hover{
     background-color: #595a5b;
 }
+.ant-btn-primary{
+    background-color: #1c2229;
+    border-color: #1c2229;
+}
+.ant-btn-primary:active,
+.ant-btn-primary:focus{
+  background-color: #1c2229 !important;
+}
 
 @media screen and (max-width: 768px){
     .transporterDialog , .companyDialog{

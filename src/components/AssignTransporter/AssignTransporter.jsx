@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CloseOutlined } from "@ant-design/icons";
 import { DatePicker } from "antd";
+import { Modal } from 'antd';
 import "./AssignTransporter.css"; // تأكد من الاستيراد الصحيح
 
 function AssignTransporter({onClose, onRequestSent }) {
@@ -17,7 +18,10 @@ function AssignTransporter({onClose, onRequestSent }) {
   };
   const handleNext = () => {
     if (!temperature || !weight || !distance || !departureCity || dateRange.length === 0) {
-      alert("Please complete all fields before proceeding.");
+      Modal.error({
+        title: 'Error',
+        content: 'Please complete all fields before proceeding.',
+      });
       return;
     }
     setCurrentForm(2);
@@ -27,15 +31,21 @@ function AssignTransporter({onClose, onRequestSent }) {
   };
   const handleSendRequest = (event) => {
     event.preventDefault();
-    if (!company) {
-      alert("Please select the transport company.");
-      return;
+    if (currentForm === 2) {
+      if (!company) {
+        Modal.error({
+          title: 'Error',
+          content: 'Please select the transport company.',
+        });
+        return;
+      }
     }
 
     // منطق الإرسال هنا
-
-    onRequestSent(); // Call the function to close the dialog
     
+    if (currentForm === 2) {
+      onRequestSent(); // استدعاء الدالة فقط إذا كانت جميع المعلومات مكتملة
+    }
   };
 
   return (
