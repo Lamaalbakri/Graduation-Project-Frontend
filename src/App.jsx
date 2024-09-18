@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import {Button, Layout, theme} from 'antd';
 import {MenuUnfoldOutlined, MenuFoldOutlined, LoginOutlined} from '@ant-design/icons'
@@ -14,6 +15,8 @@ import AssignTransporter from './components/AssignTransporter/AssignTransporter'
 
 const { Header, Sider} = Layout;
 function App() {
+  const [userType, setUserType] = useState('supplier'); // يمكنك تغيير قيمة الـ userType حسب المنطق الخاص بتطبيقك
+  
   const [darkTheme, setDarkTheme] = useState(true)
   const [collapsed, setCollapsed] = useState(false)
   const toggleTheme = () => setDarkTheme(!darkTheme);
@@ -30,12 +33,15 @@ function App() {
 
         <Sider width={266} collapsed={collapsed} className={collapsed ? 'sidebar-closed' : ''} collapsible
         trigger={null} theme= {darkTheme ? 'dark' : 'light'}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '25px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '25px' }}>
           <UserLogo />
-          <span className='span'>Supplier</span>
+          <span className='span'>Supplier</span> {/* يحتاج تعديل مفروض يتغير على حسب الستيكهولدرز */}
         </div>
-          <MenuList darkTheme= {darkTheme} />
-          <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} />
+        <div>
+            <MenuList darkTheme={darkTheme} userType={userType} />
+        </div>
+        {/*<MenuList darkTheme= {darkTheme} />*/}
+        <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} />
         </Sider>
 
         <Layout>
