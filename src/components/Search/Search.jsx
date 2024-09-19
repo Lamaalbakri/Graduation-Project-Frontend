@@ -4,8 +4,8 @@ import RequestsTable from '../RequestsTable/RequestsTable';
 import "./Search.css";
 
 function Search() {
-  const [query, setQuery] = useState("");
-  const [hasSearched, setHasSearched] = useState(false);
+  const [query, setQuery] = useState("");// This variable holds the search text entered by the user.  Initialized to an empty string.
+  const [hasSearched, setHasSearched] = useState(false);//This variable is used to determine whether the user has performed a search. 
 
   // Merging requests
   const allRequests = useMemo(() => [
@@ -19,7 +19,7 @@ function Search() {
       const manufacturerName = request.manufacturerName ? request.manufacturerName.toLowerCase() : "";
       const requestId = request.id ? request.id.toString() : "";
       return manufacturerName.includes(query.toLowerCase()) || requestId.includes(query);
-    }), [query, allRequests]);
+    }), [query, allRequests]);//It tells React when to recalculate the filteredRequests.
 
   // Handle search query change
   const handleSearch = (e) => {
