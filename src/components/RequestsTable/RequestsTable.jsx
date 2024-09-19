@@ -9,7 +9,7 @@ import TrackingDialog from '../Dialog/TrackingDialog';
 
 
 
-function RequestsTable({ data, title, showTitleAndSearch = true }) {
+function RequestsTable({ data }) {
   const [requests, setData] = useState(data);
   const [openDialog, setOpenDialog] = useState(false); // إضافة الـ state لإدارة فتح الـ Dialog
   const [selectedRequestId, setSelectedRequestId] = useState(null); // إضافة state لتخزين ID الطلب
@@ -169,19 +169,6 @@ function RequestsTable({ data, title, showTitleAndSearch = true }) {
 
   return (
     <div className='RequestsTable'>
-     {showTitleAndSearch && ( // Conditionally render the title and search box
-        <div className="header-row">
-          <div className="title">{title}</div>
-          <div className="search-container">
-            <div className='search-label'>Search by Name / ID</div>
-            <input
-              type="search"
-              placeholder="Search by Name / ID"
-              className="input-with-icon"
-            />
-          </div>
-        </div>
-      )}
       <DataGrid
         rows={requests} disableRowSelectionOnClick 
         getRowHeight={() => 'auto'}
