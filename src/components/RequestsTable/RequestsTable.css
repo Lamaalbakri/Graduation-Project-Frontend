@@ -54,7 +54,7 @@
     flex-direction: row; /* لجعل العنوان والبحث في نفس المستوى */
     justify-content: space-between; /* توزيع المسافة بين العنوان والبحث */
     align-items: center; /* محاذاة العناصر عموديًا */
-    margin-bottom: 80px;
+    margin-bottom: 50px;
     margin-top: 25px;
 }
 
