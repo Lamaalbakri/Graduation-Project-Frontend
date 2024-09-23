@@ -1,27 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
 .HomePage {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
   scroll-behavior: smooth;
 }
-
-::selection {
+.HomePage ::selection {
   color: #000;
   background: #3c9b93;
 }
-
-nav {
+.HomePage nav {
   position: relative;
   background: #f4d53f;
   width: 100%;
   padding: 10px 0;
   z-index: 12;
 }
-
-.img {
+.HomePage .img {
   background: url('https://t3.ftcdn.net/jpg/04/35/22/72/240_F_435227211_Ipbz8YZYB9ELUmkjaeNon4jSLclpNmUV.jpg') no-repeat;
   width: 100%;
   height: 100vh;
@@ -30,16 +24,14 @@ nav {
   background-position: center;
   position: relative;
 }
-
-.img::before {
+.HomePage .img::before {
   content: '';
   position: absolute;
   height: 100%;
   width: 100%;
   background: rgba(0, 0, 0, 0.4);
 }
-
-.center {
+.HomePage .center {
   position: absolute;
   top: 52%;
   left: 50%;
@@ -48,19 +40,16 @@ nav {
   padding: 0 20px;
   text-align: center;
 }
-
-.center .title {
+.HomePage .center #title {
   color: #e0dddd;
   font-size: 40px;
   filter: blur(1px);
   font-weight: 600;
 }
-
-.center .btns {
+.HomePage .center .btns {
   margin-top: 50px;
 }
-
-.center .btns button {
+.HomePage .center .btns button {
   height: 50px;
   width: 150px;
   border-radius: 4px;
@@ -74,89 +63,41 @@ nav {
   outline: none;
   transition: all 0.3s ease;
 }
-
-.center .btns button:first-child {
+.HomePage .center .btns button:first-child {
   color: #ebf7f0;
   background: none;
 }
-
-.btns button:first-child:hover {
+.HomePage .btns button:first-child:hover {
   background: #ebf7f0;
   color: black;
 }
-
-.center .btns button:last-child {
+.HomePage .center .btns button:last-child {
   background: none;
   color:#ebf7f0 ;
 }
-
-.btns button:last-child:hover {
+.HomePage .btns button:last-child:hover {
   background: #ebf7f0;
   color: black;
 }
 
 /* Services Section */
-#services {
+.HomePage #services {
   background: linear-gradient(to right, #f8f8f8, #e8e8e8);
   padding: 60px 0;
 }
-
-#services .content {
+.HomePage #services .content {
   max-width: 70em;
   margin: auto;
   text-align: center;
 }
-
-#services h2 {
+.HomePage #services h2 {
   font-size: 2.5em;
   margin-bottom: 40px;
   color: #1c2229;;
 }
 
-#services .service-card {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  margin: 20px 0;
-  padding: 20px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-#services .service-card h3 {
-  font-size: 1.5em;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-#services .service-card p {
-  font-size: 1.2em;
-  color: #666;
-  line-height: 1.6;
-}
-
-/* Footer Section */
-footer {
-  background: #333;
-  color: #fff;
-  padding: 40px 0;
-  text-align: center;
-}
-
-footer p {
-  font-size: 1.2em;
-  margin-bottom: 20px;
-}
-
-
 /* Service Card Styles */
-#services .service-cards {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  margin-top: 40px;
-}
-
-#services .service-card {
+.HomePage #services .service-card {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -167,31 +108,35 @@ footer p {
   position: relative;
   overflow: hidden;
 }
-
-#services .service-card:hover {
+.HomePage #services .service-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
 }
-
-#services .service-card h3 {
+.HomePage #services .service-card h3 {
   color: #333;
   font-size: 1.8em;
   margin-bottom: 10px;
 }
-
-#services .service-card p {
+.HomePage #services .service-card p {
   color: #666;
   font-size: 1.2em;
   line-height: 1.6;
+  text-align: center;
 }
-
-#services .service-card i {
+.HomePage #services .service-card i {
   color: #f4d53f;
   font-size: 3em;
   margin-top: 10px;
-  transition: transform 0.3s ease;
 }
 
-#services .service-card:hover i {
-  transform: rotate(360deg);
+/* Footer Section */
+.HomePage footer {
+  background: #333;
+  color: #fff;
+  padding: 40px 0;
+  text-align: center;
+}
+.HomePage footer p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
 }

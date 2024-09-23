@@ -17,7 +17,7 @@ function SCMShomePage() {
         <div className="img"></div>
         <div className="center">
           <img src={image} alt="image" width="300" />
-          <div className="title">Supply Chain Management System</div>
+          <div id="title">Supply Chain Management System</div>
           <div className="btns">
             <a href="">
               <button>Register</button>
@@ -32,7 +32,18 @@ function SCMShomePage() {
         <div className="content">
           <h2>Our Services</h2>
           <div className="service-card">
-            <i>
+            <i
+              style={{
+                display: "inline-block",
+                transition: "transform 0.3s ease",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.transform = "rotate(360deg)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "rotate(0deg)")
+              }
+            >
               <FontAwesomeIcon icon={faUsersCog} />
             </i>
             <h3>Facilitate Communication</h3>
@@ -42,14 +53,36 @@ function SCMShomePage() {
             </p>
           </div>
           <div className="service-card">
-            <i>
+            <i
+              style={{
+                display: "inline-block",
+                transition: "transform 0.3s ease",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.transform = "rotate(360deg)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "rotate(0deg)")
+              }
+            >
               <FontAwesomeIcon icon={faWarehouse} />
             </i>
             <h3>Inventory Management</h3>
             <p>Efficiently managing and optimizing inventory.</p>
           </div>
           <div className="service-card">
-            <i>
+            <i
+              style={{
+                display: "inline-block",
+                transition: "transform 0.3s ease",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.transform = "rotate(360deg)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.transform = "rotate(0deg)")
+              }
+            >
               <FontAwesomeIcon icon={faHandshake} />
             </i>
             <h3>Enhanced Collaboration</h3>

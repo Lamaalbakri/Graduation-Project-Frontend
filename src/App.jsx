@@ -1,25 +1,35 @@
-import React from "react";
 import { useState } from "react";
-import { Button, Layout, theme } from "antd";
+import { Layout, theme } from "antd";
 import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  LoginOutlined,
-} from "@ant-design/icons";
-import Logo from "./components/Logo";
-import UserLogo from "./components/UserLogo";
-import MenuList from "./components/MenuList";
-import ToggleThemeButton from "./components/ToggleThemeButton";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+import AppHeader from "./components/AppHeader";
 import PreviousRequests from "./components/RequestsTable/PreviousRequests";
 import CurrentRequests from "./components/RequestsTable/CurrentRequests";
-import Home from "./components/Home";
+import HomeUser from "./components/HomeUser/HomeUser";
 import Search from "./components/Search/Search";
 import AssignTransporter from "./components/AssignTransporter/AssignTransporter";
+import SCMShomePage from "./components/HomePage/SCMShomePage";
 
-const { Header, Sider } = Layout;
+const { Content } = Layout;
+
 function App() {
-  const [userType, setUserType] = useState("supplier"); // يمكنك تغيير قيمة الـ userType حسب المنطق الخاص بتطبيقك
+  return (
+    <Router>
+      <Routes>
+        <Route path="/websiteHomePage" element={<HomePageLayout />} />
+        <Route path="*" element={<MainLayout />} />
+      </Routes>
+    </Router>
+  );
+}
+
+function MainLayout() {
+  const [userType, setUserType] = useState("supplier");
   const [darkTheme, setDarkTheme] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
   const toggleTheme = () => setDarkTheme(!darkTheme);
@@ -27,87 +37,48 @@ function App() {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     console.log("Logout clicked");
+    navigate("/websiteHomePage");
   };
 
   return (
-    <Router>
+    <Layout>
+      <Sidebar
+        collapsed={collapsed}
+        darkTheme={darkTheme}
+        toggleTheme={toggleTheme}
+        userType={userType}
+      />
       <Layout>
-        <Sider
-          width={266}
+        <AppHeader
           collapsed={collapsed}
-          className={collapsed ? "sidebar-closed" : ""}
-          collapsible
-          trigger={null}
-          theme={darkTheme ? "dark" : "light"}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              padding: "25px",
-            }}
-          >
-            <UserLogo />
-            <span className="span">Supplier</span>{" "}
-            {/* يحتاج تعديل مفروض يتغير على حسب الستيكهولدرز */}
-          </div>
-          <div>
-            <MenuList darkTheme={darkTheme} userType={userType} />
-          </div>
-          {/*<MenuList darkTheme= {darkTheme} />*/}
-          <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} />
-        </Sider>
-
-        <Layout>
-          <Header
-            style={{
-              padding: 0,
-              background: colorBgContainer,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              type="text"
-              className="toggle"
-              onClick={() => setCollapsed(!collapsed)}
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            />
-            <Logo />
-            <Button
-              type="text"
-              className="logout-button"
-              icon={<LoginOutlined />}
-              onClick={handleLogout}
-            >
-              Logout
-            </Button>
-          </Header>
-          <Layout.Content style={{ padding: "0 24px", minHeight: 280 }}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="/assignTransporter"
-                element={<AssignTransporter />}
-              />
-              {/*<Route path="/addRawMaterial" element={<AddRawMaterial />} />
+          setCollapsed={setCollapsed}
+          handleLogout={handleLogout}
+          colorBgContainer={colorBgContainer}
+        />
+        <Content style={{ padding: "0 24px", minHeight: 280 }}>
+          <Routes>
+            <Route path="/home" element={<HomeUser />} />
+            <Route path="/assignTransporter" element={<AssignTransporter />} />
+            {/*<Route path="/addRawMaterial" element={<AddRawMaterial />} />
               <Route path="/viewRawMaterial" element={<ViewRawMaterial />} />
-              <Route path="/searchRawMaterial" element={<SearchRawMaterial />} />
               <Route path="/updateRawMaterial" element={<UpdateRawMaterial />} />
               <Route path="/deleteRawMaterial" element={<DeleteRawMaterial />} /> */}
-              <Route path="/currentRequests" element={<CurrentRequests />} />
-              <Route path="/previousRequests" element={<PreviousRequests />} />
-              <Route path="/searchRequest" element={<Search />} />
-            </Routes>
-          </Layout.Content>
-        </Layout>
+            <Route path="/currentRequests" element={<CurrentRequests />} />
+            <Route path="/previousRequests" element={<PreviousRequests />} />
+            <Route path="/searchRequest" element={<Search />} />
+          </Routes>
+        </Content>
       </Layout>
-    </Router>
+    </Layout>
   );
+}
+
+function HomePageLayout() {
+  return <SCMShomePage />;
 }
 
 export default App;
