@@ -7,6 +7,23 @@ import ToggleThemeButton from "./ToggleThemeButton";
 const { Sider } = Layout;
 
 const Sidebar = ({ collapsed, darkTheme, toggleTheme, userType }) => {
+  const getUserRole = (userType) => {
+    switch (userType) {
+      case "supplier":
+        return "Supplier";
+      case "transporter":
+        return "Transporter";
+      case "manufacturer":
+        return "Manufacturer";
+      case "distributor":
+        return "Distributor";
+      case "retailer":
+        return "Retailer";
+      default:
+        return "User";
+    }
+  };
+
   return (
     <Sider
       width={266}
@@ -25,7 +42,7 @@ const Sidebar = ({ collapsed, darkTheme, toggleTheme, userType }) => {
         }}
       >
         <UserLogo />
-        <span className="span">Supplier</span>
+        <span className="span">{getUserRole(userType)}</span>
       </div>
       <MenuList darkTheme={darkTheme} userType={userType} />
       <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} />

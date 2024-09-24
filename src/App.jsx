@@ -18,18 +18,19 @@ import SCMShomePage from "./components/HomePage/SCMShomePage";
 const { Content } = Layout;
 
 function App() {
+  const userType = "supplier"; // على حسب نوع الستيكهولدرز الذي تريد عرضه
+
   return (
     <Router>
       <Routes>
         <Route path="/websiteHomePage" element={<HomePageLayout />} />
-        <Route path="*" element={<MainLayout />} />
+        <Route path="*" element={<MainLayout userType={userType} />} />
       </Routes>
     </Router>
   );
 }
 
-function MainLayout() {
-  const [userType, setUserType] = useState("supplier");
+function MainLayout({ userType }) {
   const [darkTheme, setDarkTheme] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
   const toggleTheme = () => setDarkTheme(!darkTheme);
@@ -46,12 +47,14 @@ function MainLayout() {
 
   return (
     <Layout>
-      <Sidebar
-        collapsed={collapsed}
-        darkTheme={darkTheme}
-        toggleTheme={toggleTheme}
-        userType={userType}
-      />
+      {userType && (
+        <Sidebar
+          collapsed={collapsed}
+          darkTheme={darkTheme}
+          toggleTheme={toggleTheme}
+          userType={userType}
+        />
+      )}
       <Layout>
         <AppHeader
           collapsed={collapsed}

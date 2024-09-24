@@ -64,6 +64,24 @@ const MenuList = ({ darkTheme, userType }) => {
           </Menu.SubMenu>
         </React.Fragment>
       )}
+
+      {userType === "manufacturer" && (
+        <React.Fragment>
+          {/* قائمة العناصر التي تخص الـ "manufacturer" */}
+        </React.Fragment>
+      )}
+
+      {userType === "distributor" && (
+        <React.Fragment>
+          {/* قائمة العناصر التي تخص الـ "distributor" */}
+        </React.Fragment>
+      )}
+
+      {userType === "retailer" && (
+        <React.Fragment>
+          {/* قائمة العناصر التي تخص الـ "retailer" */}
+        </React.Fragment>
+      )}
     </Menu>
   );
 };
