@@ -1,0 +1,109 @@
+/* Main content section */
+.main-content {
+    flex: 1; 
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    padding-top: 10px; /* Padding at the top to give space for the top-bar */
+}
+
+/* Welcome card */
+.welcome-card {
+    background-color: #f0f0f0;
+    padding: 65px;
+    border-radius: 15px;
+    width: calc(100% - 320px);
+    height: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    margin: 0 0 5px 0;
+    position: relative;
+    z-index: 1;
+}
+.welcome-title {
+    font-size: 36px;
+    font-weight: 600;
+    color: #1c2229;
+    margin-bottom: 10px;
+    text-align: left;
+}
+.welcome-text {
+    font-size: 16px;
+    color: #333;
+    white-space: nowrap;
+    text-align: left;
+    margin-top: 10px;
+}
+  
+/* Header containing the card and image */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0px;
+    color: #333;
+}
+.P1 {
+    margin-left: 0px;
+    max-width: 430px;
+}
+.P1 img {
+    width: 100%;
+    height: auto;
+}
+
+/* Action buttons below the card */
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding: 0 0px;
+    position: relative;
+    z-index: 0;
+}
+.actions button {
+    flex-grow: 1;
+    padding: 15px 20px;
+    border: none;
+    background-color: #f4f4f4;
+    color: #333;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    margin: 0 5px;
+    max-width: 200px;
+} 
+.actions button:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-2px);
+} 
+.actions button i {
+    font-size: 20px;
+}
+
+/* Dashboard below the card action buttons */ 
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+  /* Map styling */
+.map {
+    width: 100%;
+    height: 250px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+} 
+.map img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

@@ -28,9 +28,15 @@ const MenuList = ({ darkTheme, userType }) => {
             <Menu.Item key="addRawMaterial">
               <Link to="/addRawMaterial">Add Raw Material</Link>
             </Menu.Item>
-            <Menu.Item key="viewRawMaterial">View Raw Material</Menu.Item>
-            <Menu.Item key="updateRawMaterial">Update Raw Material</Menu.Item>
-            <Menu.Item key="deleteRawMaterial">Delete Raw Material</Menu.Item>
+            <Menu.Item key="viewRawMaterial">
+              <Link to="/viewRawMaterial">View Raw Material</Link>
+            </Menu.Item>
+            <Menu.Item key="updateRawMaterial">
+              <Link to="/updateRawMaterial">Update Raw Material</Link>
+            </Menu.Item>
+            <Menu.Item key="deleteRawMaterial">
+              <Link to="/deleteRawMaterial">Delete Raw Material</Link>
+            </Menu.Item>
           </Menu.SubMenu>
           <Menu.SubMenu
             key="manageMaterialRequests"
@@ -38,8 +44,7 @@ const MenuList = ({ darkTheme, userType }) => {
             title="Manage Requests"
           >
             <Menu.Item key="sCurrent">
-              <Link to="/currentRequests">Current Requests</Link>{" "}
-              {/* تغليف العنصر بـ Link */}
+              <Link to="/currentRequests">Current Requests</Link>
             </Menu.Item>
             <Menu.Item key="sPrevious">
               <Link to="/previousRequests">Previous Requests</Link>

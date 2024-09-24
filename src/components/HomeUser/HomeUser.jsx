@@ -1,13 +1,17 @@
 import React from "react";
+import WelcomeCard from "./WelcomeCard ";
+import Actions from "./Actions";
+import Dashboard from "./Dashboard";
+import "./HomeUser.css";
 
 function HomeUser() {
   return (
-    <div>
-      <button> Add Raw Materials</button>
-      <button> View Raw Materials</button>
-      <button> Search Raw Materials</button>
-      <button> Current Requests</button>
-      <button>Previous Requests</button>
+    <div className="main-content">
+      <WelcomeCard
+        welcomeText={"Let's get started to manage your raw materials"}
+      />
+      <Actions />
+      <Dashboard />
     </div>
   );
 }
