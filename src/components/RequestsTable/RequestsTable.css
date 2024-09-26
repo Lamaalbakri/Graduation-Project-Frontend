@@ -9,6 +9,76 @@
    /* لضمان محاذاة الأيقونات عموديًا */
 }
 
+/* Format the dropdown list */
+.status-select {
+    padding: 5px;
+    border-radius: 8px;
+    outline: none;
+    width: 93%;
+    text-align: center;
+}
+
+.status-select:hover {
+    background-color: #3d3c3c3c;
+    color: #0b0b0b;
+    border: none; /* إزالة أي تنسيق حدود */
+}
+.status-select option:hover {
+    background-color: #3d3c3c3c;
+    color: #0b0b0b; /* لون النص */
+     /* حجم الخط للخيار */
+}
+
+.status-pending {
+    background-color: #ff990059;
+    color: #5e3902; 
+}
+
+.status-accepted {
+    background-color: #0d62a761;
+    color: #03477f;
+}
+
+.status-delivered{
+    background-color: #4caf4f71;
+    color: #023404;
+}
+.status-inProgress {
+    background-color: #7a4caf71;
+    color: #400188;
+}
+
+.status-rejected {
+    background-color: #f443366d;
+    color: #7e0901;
+}
+
+.status-text {
+    padding: 5px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.status-text.status-rejected {
+    background-color: #f443366d;
+    color: #7e0901;
+    padding: 5px;
+    border-radius: 8px;
+    outline: none;
+    width: 93%;
+    text-align: center;
+}
+
+.status-text.status-delivered {
+    background-color: #4caf4f71;
+    color: #023404;
+    padding: 5px;
+    border-radius: 8px;
+    outline: none;
+    width: 93%;
+    text-align: center;
+}
+
 .tracking-icon {
     margin-top: 5px;
     margin-left: 20px;

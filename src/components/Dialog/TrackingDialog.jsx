@@ -1,10 +1,11 @@
-import { useState ,useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import "./style.css";
 import { Steps } from 'antd';
-import { CloseOutlined } from "@ant-design/icons";
+import { CloseOutlined, ClockCircleOutlined, CheckCircleOutlined, SyncOutlined, CheckOutlined } from "@ant-design/icons";
 
 function TrackingDialog({ onClose, currentStatus }) {
   const [status, setData] = useState(currentStatus);
+
   useEffect(() => {
     setData(currentStatus); // تحديث البيانات عندما تتغير
   }, [currentStatus]);
@@ -24,8 +25,6 @@ function TrackingDialog({ onClose, currentStatus }) {
     }
   };
 
-  
-
   return (
     <div className="dialog-overlay">
       <div className="dialog-box">
@@ -34,20 +33,20 @@ function TrackingDialog({ onClose, currentStatus }) {
             <CloseOutlined />
           </div>
           <div className='dialog-title'>
-          Track Request Status
+            Track Request Status
           </div>
-          {/* عرض خطوات الحالة بناءً على الاختيار */}
-          <Steps className='step'
+          <Steps
             direction="vertical"
             current={getCurrentStep()} // تعيين الخطوة الحالية بناءً على الحالة
             items={[
               {
                 title: 'Pending',
-                description:'Waiting for supplier acceptance',
+                description: 'Waiting for supplier acceptance',
+            
               },
               {
                 title: 'Accepted',
-                description:'Waiting for transporter acceptance',
+                description: 'Waiting for transporter acceptance',
               },
               {
                 title: 'In Progress',
@@ -55,7 +54,7 @@ function TrackingDialog({ onClose, currentStatus }) {
               },
               {
                 title: 'Delivered',
-                description:'The request delivered',
+                description: 'The request delivered',
               },
             ]}
           />

@@ -53,7 +53,36 @@
     color: #333;
 
   }
-  
+
+  /* لتغيير لون الخطوة في حالة process */
+.ant-steps-item-process .ant-steps-item-icon {
+  background-color: #1c2229!important; /* لون الخلفية المخصص */
+  border-color: #1c2229!important; /* لون الحدود المخصص */
+}
+
+.ant-steps-item-process .ant-steps-item-icon > .ant-steps-icon {
+  color: white!important; /* لون الأيقونة داخل الخطوة */
+}
+
+.ant-steps-item-process .ant-steps-item-title {
+  color: #1c2229!important; /* لون العنوان المخصص */
+}
+
+.ant-steps-item-process .ant-steps-item-description {
+  color: #1c2229!important; /* لون الوصف المخصص */
+}
+
+.ant-steps-item-finish .ant-steps-item-tail::after {
+  background-color: #1c2229!important; /* لون الخط بين الخطوات المكتملة */
+}
+.ant-steps-item-finish .ant-steps-item-icon{
+  background-color: #3d567392!important; /* لون الخلفية المخصص */
+  border-color: #3d567300!important; /* لون الحدود المخصص */
+}
+.ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+  color:#1c2229!important; /* تغيير اللون للحالة المنتهية */
+}
+
   /* حركة نزول الـ Dialog */
   @keyframes slideDown {
     from {

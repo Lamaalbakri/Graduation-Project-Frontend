@@ -7,10 +7,13 @@ import { MessageOutlined} from '@ant-design/icons';
 import MessageDialog from '../Dialog/MessageDialog';
 import TrackingDialog from '../Dialog/TrackingDialog';
 
-
-
 function RequestsTable({ data }) {
-  const [requests, setData] = useState(data);
+  const [requests, setData] = useState(() => 
+    data.map(request => ({
+      ...request,
+      statusClass: `status-${request.status}` // إضافة خاصية statusClass مباشرة عند التحميل
+    }))
+  );
   const [openDialog, setOpenDialog] = useState(false); // إضافة الـ state لإدارة فتح الـ Dialog
   const [selectedRequestId, setSelectedRequestId] = useState(null); // إضافة state لتخزين ID الطلب
   const [openMessageDialog, setOpenMessageDialog] = useState(false); // لحوار الرسالة
@@ -19,8 +22,21 @@ function RequestsTable({ data }) {
 
   useEffect(() => {
     setData(data); // تحديث البيانات عندما تتغير
+    
   }, [data]);
 
+  useEffect(() => {
+    // تحديث الأنماط عند تحميل الصفحة لأول مرة
+    const statusSelectElements = document.querySelectorAll('.status-select');
+  
+    statusSelectElements.forEach((selectElement) => {
+      if (selectElement.value === 'pending') {
+        selectElement.classList.add('status-pending');
+      }
+    });
+  }, [requests]);
+
+  
   if (!requests.length) {
     return <div className='background-message'>No results found</div>;
   }
@@ -127,22 +143,26 @@ function RequestsTable({ data }) {
     { field: 'price', headerName: 'Price', type: 'number', width: 70 , headerAlign: 'left'},
     { field: 'status', headerName: 'Status', width: 130, headerAlign: 'left',
       renderCell: (params) => {
+        const statusClass=`status-${params.row.status}`;// Define class based on status
+        
         if (!(params.row.status =='rejected' || params.row.status =='delivered' ) ) {
           return (
             <div>
               <select name="status" id="status" onChange={(e) => handleStatusChange(params.row.id, e.target.value)}
-                value={params.row.status}>
-                <option value="pending">Pending</option>
-                <option value="accepted">Accepted </option>
-                <option value="inProgress">In Progress</option>
-                <option value="delivered">Delivered</option>
-                <option value="rejected">Rejected</option>
+                value={params.row.status}
+                className={`status-select ${statusClass}`}// Apply class based on status
+              >
+                <option value="pending" className="status-pending">Pending</option>
+                <option value="accepted" className="status-accepted">Accepted </option>
+                <option value="inProgress" className="status-inProgress">In Progress</option>
+                <option value="delivered" className="status-delivered">Delivered</option>
+                <option value="rejected" className="status-rejected">Rejected</option>
               </select>
             </div>
           );
         }else {
           return (
-            <div>
+            <div className={`status-text ${statusClass}`}>
               {params.row.status === "rejected" && "Rejected"}
               {params.row.status === "delivered" && "Delivered"}
             </div>
