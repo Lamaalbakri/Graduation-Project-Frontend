@@ -20,6 +20,8 @@ function TrackingDialog({ onClose, currentStatus }) {
         return 2;
       case "delivered":
         return 3;
+      case "rejected":
+        return 4;
       default:
         return 0; // الخطوة الافتراضية
     }
@@ -35,6 +37,7 @@ function TrackingDialog({ onClose, currentStatus }) {
           <div className='dialog-title'>
             Track Request Status
           </div>
+          { getCurrentStep()!==4 ?  (
           <Steps
             direction="vertical"
             current={getCurrentStep()} // تعيين الخطوة الحالية بناءً على الحالة
@@ -57,7 +60,9 @@ function TrackingDialog({ onClose, currentStatus }) {
                 description: 'The request delivered',
               },
             ]}
-          />
+          />): (
+            <div> <p>No tracking information available, the request has been rejected.</p> </div>
+          )}
         </div>
       </div>
     </div>
