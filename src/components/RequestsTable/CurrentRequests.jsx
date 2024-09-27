@@ -10,7 +10,7 @@ function CurrentRequests() {
   useEffect(()=>{
     //run this function when it is frist render
     const fetchRowMatirealRequests= async ()=>{
-      const response = await fetch('http://localhost:8500/api/v1/rawMaterialRequest')
+      const response = await fetch('http://localhost:8500/api/v1/rawMaterialCurrentRequest')
       
       if(!response.ok){
         throw new Error(`Error: ${response.status}`);
@@ -33,7 +33,7 @@ function CurrentRequests() {
     if (objectIdRegex.test(searchQuery)) {
       setIsSearchingById(true);
       try {
-        const response = await fetch(`http://localhost:8500/api/v1/rawMaterialRequest/${searchQuery}`);
+        const response = await fetch(`http://localhost:8500/api/v1/rawMaterialCurrentRequest/${searchQuery}`);
         if (response.ok) {
           const json = await response.json();
           setFilteredRequests([json.data]); // عرض النتيجة التي تم العثور عليها
