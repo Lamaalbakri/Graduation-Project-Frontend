@@ -112,9 +112,9 @@ function RequestsTable({ data }) {
   };
   
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 , headerAlign: 'left'},
+    { field: '_id', headerName: 'ID', width: 70 , headerAlign: 'left'},
     { field: 'manufacturerName', headerName: 'Manufacturer Name', width: 200, headerAlign: 'left' },
-    { field: 'requestDate', headerName: 'Date', width: 140, headerAlign: 'left' },
+    { field: 'createdAt', headerName: 'Request Date', width: 140, headerAlign: 'left' },
     { field: 'supplyingItems', headerName: 'Supplying Items', width: 170, headerAlign: 'left',
       renderCell: (params) => (
         <div className="cell-content">
@@ -193,6 +193,7 @@ function RequestsTable({ data }) {
         rows={requests} disableRowSelectionOnClick 
         getRowHeight={() => 'auto'}
         columns={columns}
+        getRowId={(row) => row._id} // تحديد أن الـ _id هو id الفريد
         autoHeight
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10]}
@@ -234,7 +235,7 @@ function RequestsTable({ data }) {
 
 RequestsTable.propTypes = {
   data: PropTypes.array.isRequired,
-  title: PropTypes.string.isRequired,
+  // title: PropTypes.string.isRequired,
   isPrevious: PropTypes.bool,
   showTitleAndSearch: PropTypes.bool // New prop for controlling title and search box visibility
 };
