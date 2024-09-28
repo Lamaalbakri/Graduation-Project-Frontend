@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { CloseOutlined } from "@ant-design/icons";
 import { DatePicker } from "antd";
-import { Modal } from 'antd';
+import { Modal } from "antd";
 import "./AssignTransporter.css"; // تأكد من الاستيراد الصحيح
 
-function AssignTransporter({onClose, onRequestSent }) {
+function AssignTransporter({ onClose, onRequestSent }) {
   const [temperature, setTemperature] = useState("");
   const [weight, setWeight] = useState("");
   const [distance, setDistance] = useState("");
@@ -16,35 +16,77 @@ function AssignTransporter({onClose, onRequestSent }) {
   const handleRadioChange = (setter) => (event) => {
     setter(event.target.value);
   };
+
+  // Handle validation when clicking "Next" in form 1
   const handleNext = () => {
-    if (!temperature || !weight || !distance || !departureCity || dateRange.length === 0) {
+    if (
+      !temperature ||
+      !weight ||
+      !distance ||
+      !departureCity ||
+      dateRange.length === 0
+    ) {
       Modal.error({
-        title: 'Error',
-        content: 'Please complete all fields before proceeding.',
+        title: "Error",
+        content: "Please complete all fields before proceeding.",
       });
-      return;
+      return; // Stop here if fields are incomplete
     }
-    setCurrentForm(2);
+    setCurrentForm(2); // Move to form 2 if fields are complete
   };
+
+  // Handle going back to form 1
   const handleBack = () => {
     setCurrentForm(1);
   };
-  const handleSendRequest = (event) => {
+
+  // Handle sending the request in form 2
+  const handleSendRequest = async (event) => {
     event.preventDefault();
+
+    // Ensure we are in the second form and the company field is selected
     if (currentForm === 2) {
       if (!company) {
         Modal.error({
-          title: 'Error',
-          content: 'Please select the transport company.',
+          title: "Error",
+          content: "Please select the transport company.",
         });
-        return;
+        return; // Stop here if no company is selected
       }
-    }
 
-    // منطق الإرسال هنا
-    
-    if (currentForm === 2) {
-      onRequestSent(); // استدعاء الدالة فقط إذا كانت جميع المعلومات مكتملة
+      try {
+        // Send the request to the backend API
+        const response = await fetch(
+          "http://localhost:8500/api/v1/transportRequest",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              temperature,
+              weight,
+              distance,
+              departureCity,
+              dateRange, // Array of dates
+              company,
+            }),
+          }
+        );
+
+        // Handle success and error cases
+        if (response.ok) {
+          onRequestSent(); // Call this function if the request is successful
+        } else {
+          Modal.error({
+            title: "Error",
+            content: "Failed to send request.",
+          });
+        }
+      } catch (error) {
+        Modal.error({
+          title: "Error",
+          content: "An error occurred while sending the request.",
+        });
+      }
     }
   };
 
@@ -62,8 +104,8 @@ function AssignTransporter({onClose, onRequestSent }) {
                   <label>
                     <input
                       type="radio"
-                      value="regular"
-                      checked={temperature === "regular"}
+                      value="Regular Delivery"
+                      checked={temperature === "Regular Delivery"}
                       onChange={handleRadioChange(setTemperature)}
                     />{" "}
                     Regular Delivery
@@ -72,8 +114,8 @@ function AssignTransporter({onClose, onRequestSent }) {
                   <label>
                     <input
                       type="radio"
-                      value="refrigerated"
-                      checked={temperature === "refrigerated"}
+                      value="Refrigerated Delivery"
+                      checked={temperature === "Refrigerated Delivery"}
                       onChange={handleRadioChange(setTemperature)}
                     />{" "}
                     Refrigerated Delivery
@@ -85,8 +127,8 @@ function AssignTransporter({onClose, onRequestSent }) {
                   <label>
                     <input
                       type="radio"
-                      value="light"
-                      checked={weight === "light"}
+                      value="3 to 7 tons"
+                      checked={weight === "3 to 7 tons"}
                       onChange={handleRadioChange(setWeight)}
                     />{" "}
                     3 to 7 tons
@@ -95,8 +137,8 @@ function AssignTransporter({onClose, onRequestSent }) {
                   <label>
                     <input
                       type="radio"
-                      value="med"
-                      checked={weight === "med"}
+                      value="7 to 15 tons"
+                      checked={weight === "7 to 15 tons"}
                       onChange={handleRadioChange(setWeight)}
                     />{" "}
                     7 to 15 tons
@@ -105,21 +147,21 @@ function AssignTransporter({onClose, onRequestSent }) {
                   <label>
                     <input
                       type="radio"
-                      value="heavy"
-                      checked={weight === "heavy"}
+                      value="Over 15 tons"
+                      checked={weight === "Over 15 tons"}
                       onChange={handleRadioChange(setWeight)}
                     />{" "}
                     Over 15 tons
                   </label>
-                </div >
+                </div>
                 <div className="category">
                   <strong>Distance Category</strong>
                   <hr />
                   <label>
                     <input
                       type="radio"
-                      value="short"
-                      checked={distance === "short"}
+                      value="Short Distance (100-400 km)"
+                      checked={distance === "Short Distance (100-400 km)"}
                       onChange={handleRadioChange(setDistance)}
                     />{" "}
                     Short Distance (100-400 km)
@@ -128,8 +170,8 @@ function AssignTransporter({onClose, onRequestSent }) {
                   <label>
                     <input
                       type="radio"
-                      value="medium"
-                      checked={distance === "medium"}
+                      value="Medium Distance (400-800 km)"
+                      checked={distance === "Medium Distance (400-800 km)"}
                       onChange={handleRadioChange(setDistance)}
                     />{" "}
                     Medium Distance (400-800 km)
@@ -138,8 +180,8 @@ function AssignTransporter({onClose, onRequestSent }) {
                   <label>
                     <input
                       type="radio"
-                      value="long"
-                      checked={distance === "long"}
+                      value="Long Distance (1000 km and Above)"
+                      checked={distance === "Long Distance (1000 km and Above)"}
                       onChange={handleRadioChange(setDistance)}
                     />{" "}
                     Long Distance (1000 km and Above)
@@ -157,7 +199,7 @@ function AssignTransporter({onClose, onRequestSent }) {
                     <option value="Makkah">Makkah</option>
                     <option value="Taif">Taif</option>
                     <option value="Riyadh">Riyadh</option>
-                    <option value="Al Khobar">Al-Khobar</option>
+                    <option value="Al-Khobar">Al-Khobar</option>
                     <option value="Abha">Abha</option>
                   </select>
                   <br />
@@ -176,10 +218,7 @@ function AssignTransporter({onClose, onRequestSent }) {
                     Next
                   </button>
                 </div>
-                <div
-                  className="closeButtonStyle"
-                  onClick={onClose}
-                >
+                <div className="closeButtonStyle" onClick={onClose}>
                   <CloseOutlined />
                 </div>
               </>
@@ -194,8 +233,8 @@ function AssignTransporter({onClose, onRequestSent }) {
                       <span className="price">500 SR</span>
                       <input
                         type="radio"
-                        value="express"
-                        checked={company === "express"}
+                        value="500 SR"
+                        checked={company === "500 SR"}
                         onChange={handleRadioChange(setCompany)}
                       />
                     </label>
@@ -205,8 +244,8 @@ function AssignTransporter({onClose, onRequestSent }) {
                       <span className="price">350 SR </span>
                       <input
                         type="radio"
-                        value="aramex"
-                        checked={company === "aramex"}
+                        value="350 SR"
+                        checked={company === "350 SR"}
                         onChange={handleRadioChange(setCompany)}
                       />
                     </label>
@@ -216,8 +255,8 @@ function AssignTransporter({onClose, onRequestSent }) {
                       <span className="price">400 SR </span>
                       <input
                         type="radio"
-                        value="zajil"
-                        checked={company === "zajil"}
+                        value="400 SR"
+                        checked={company === "400 SR"}
                         onChange={handleRadioChange(setCompany)}
                       />
                     </label>
@@ -227,27 +266,24 @@ function AssignTransporter({onClose, onRequestSent }) {
                       <span className="price">570 SR </span>
                       <input
                         type="radio"
-                        value="dhl"
-                        checked={company === "dhl"}
+                        value="570 SR"
+                        checked={company === "570 SR"}
                         onChange={handleRadioChange(setCompany)}
                       />
                     </label>
                     <hr />
                     <div className="button-container">
-                      <button
-                        className="backButtonStyle"
-                        onClick={handleBack}
-                      >
+                      <button className="backButtonStyle" onClick={handleBack}>
                         Back
                       </button>
-                      <button className="sendButtonStyle" onClick={handleSendRequest}>
+                      <button
+                        className="sendButtonStyle"
+                        onClick={handleSendRequest}
+                      >
                         Send Request
                       </button>
                     </div>
-                    <div
-                      className="closeButtonStyle"
-                      onClick={onClose}
-                    >
+                    <div className="closeButtonStyle" onClick={onClose}>
                       <CloseOutlined />
                     </div>
                   </div>
