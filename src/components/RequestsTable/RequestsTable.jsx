@@ -6,6 +6,8 @@ import "./RequestsTable.css";
 import { MessageOutlined} from '@ant-design/icons';
 import MessageDialog from '../Dialog/MessageDialog';
 import TrackingDialog from '../Dialog/TrackingDialog';
+import { updateRawMaterialRequestStatus } from '../../api/rawMaterialRequestAPI';
+import moment from 'moment';
 
 function RequestsTable({ data }) {
   const [requests, setData] = useState(() => 
@@ -41,27 +43,39 @@ function RequestsTable({ data }) {
     return <div className='background-message'>No results found</div>;
   }
 
-  const handleStatusChange = (id, newStatus) => {
+  const handleStatusChange = async (id, newStatus) => {
+    
     if (newStatus === "accepted") {
       handleOpenDialog(id); // فتح الـ Dialog عند اختيار "Accepted"
+      return;
     } else if (newStatus === "rejected") {
       handleReject(id); // تنفيذ عملية الحذف عند اختيار "Rejected"
-    } else {
-      setData((prevRequests) =>
-        prevRequests.map((request) =>
-          request.id === id ? { ...request, status: newStatus } : request
-        )
-      );
-    }
+      return;
+    } 
+      try {
+        
+  
+        const updatedRequest = await updateRawMaterialRequestStatus(id, newStatus); // استلام الرد
+  
+        // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
+        setData((prevRequests) =>
+          prevRequests.map((request) =>
+            request._id === id ? { ...request, status: updatedRequest.data.status ,statusClass: `status-${updatedRequest.data.status}`} : request
+          )
+        );
+      } catch (error) {
+        console.error("Error updating the status:", error);
+      }
+    
   };
 
   const handleReject = (id) => {
-      setData((prevRequests) => prevRequests.filter((item) => item.id !== id));
+      setData((prevRequests) => prevRequests.filter((item) => item._id !== id));
     //add delete code from DB?
   };
 
   const handleOpenDialog = (id) => { 
-    const rowExists = requests.some((request) => request.id === id);
+    const rowExists = requests.some((request) => request._id === id);
     if (rowExists) {
       setSelectedRequestId(id);
       setOpenDialog(true);
@@ -70,26 +84,36 @@ function RequestsTable({ data }) {
     }
   };
 
-  const handleCloseDialog = (wasRequestSent) => {
+  const handleCloseDialog = async (wasRequestSent) => {
     setOpenDialog(false);
+    const requestToUpdate = requests.find((request) => request._id === selectedRequestId); 
     if (wasRequestSent) {
-      // لا تقم بتغيير الحالة إلى Pending إذا تم إرسال الطلب بنجاح
-      setData((prevRequests) =>
-        prevRequests.map((request) =>
-          request.id === selectedRequestId
-            ? { ...request, status: "accepted" } // الحفاظ على الحالة Accepted
-            : request
-        )
-      );
+      try {
+        
+  
+        const updatedRequest = await updateRawMaterialRequestStatus(selectedRequestId, "accepted"); // استلام الرد
+  
+        // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
+        setData((prevRequests) =>
+          prevRequests.map((request) =>
+            request._id === selectedRequestId ? { ...request, status: updatedRequest.data.status ,statusClass: `status-${updatedRequest.data.status}`} : request
+          )
+        );
+      } catch (error) {
+        console.error("Error updating the status:", error);
+      }
     } else {
       // إرجاع الحالة إلى Pending إذا لم يتم إرسال الطلب
-      setData((prevRequests) =>
-        prevRequests.map((request) =>
-          request.id === selectedRequestId
-            ? { ...request, status: "pending" }
-            : request
-        )
-      );
+      if(requestToUpdate){
+        setData((prevRequests) =>
+          prevRequests.map((request) =>
+            request._id === selectedRequestId
+              ? { ...request, status: requestToUpdate.status,statusClass: `status-${requestToUpdate.status}`}
+              : request
+          )
+        );
+      }
+      
     }
     setSelectedRequestId(null); // Reset the selected request ID
   };
@@ -114,7 +138,14 @@ function RequestsTable({ data }) {
   const columns = [
     { field: '_id', headerName: 'ID', width: 70 , headerAlign: 'left'},
     { field: 'manufacturerName', headerName: 'Manufacturer Name', width: 200, headerAlign: 'left' },
-    { field: 'createdAt', headerName: 'Request Date', width: 140, headerAlign: 'left' },
+    {  field: 'createdAt', 
+      headerName: 'Request Date', 
+      width: 140, 
+      headerAlign: 'left',
+      renderCell: (params) => {
+        return moment(params.row.createdAt).format('YYYY-MM-DD'); // تنسيق التاريخ هنا
+      }
+    },
     { field: 'supplyingItems', headerName: 'Supplying Items', width: 170, headerAlign: 'left',
       renderCell: (params) => (
         <div className="cell-content">
@@ -148,7 +179,7 @@ function RequestsTable({ data }) {
         if (!(params.row.status =='rejected' || params.row.status =='delivered' ) ) {
           return (
             <div>
-              <select name="status" id="status" onChange={(e) => handleStatusChange(params.row.id, e.target.value)}
+              <select name="status" id="status" onChange={(e) => handleStatusChange(params.row._id, e.target.value)}
                 value={params.row.status}
                 className={`status-select ${statusClass}`}// Apply class based on status
               >

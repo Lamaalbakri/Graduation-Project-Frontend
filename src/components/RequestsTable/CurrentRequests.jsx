@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import RequestsTable from './RequestsTable';
-
+import {searchCurrentRequestById,fetchAllCurrentRequests} from '../../api/rawMaterialRequestAPI';
 
 function CurrentRequests() {
   const [query, setQuery] = useState('');
   const [rawMaterialRequests, setRawMaterialRequests] = useState(null);
   const [filteredRequests, setFilteredRequests] = useState(null);
-  const [isSearchingById, setIsSearchingById] = useState(false);
   useEffect(()=>{
-    //run this function when it is frist render
-    const fetchRowMatirealRequests= async ()=>{
-      const response = await fetch('http://localhost:8500/api/v1/rawMaterialCurrentRequest')
-      
-      if(!response.ok){
-        throw new Error(`Error: ${response.status}`);
+    const getRequests = async () => {
+      try {
+        const requests = await fetchAllCurrentRequests(); // استدعاء دالة جلب جميع الطلبات
+        setRawMaterialRequests(requests);
+        setFilteredRequests(requests);
+      } catch (error) {
+        console.error('Error fetching requests:', error);
       }
-      const json= await response.json()
-      setRawMaterialRequests(json.data);
-      setFilteredRequests(json.data); 
-    
-    }
-    fetchRowMatirealRequests();
-  },[]);
+    };
+    getRequests(); // استدعاء الدالة عند تحميل المكون لأول مرة
+  }, []);
 
   const handleSearch = async (e) => {
     const searchQuery = e.target.value.toLowerCase();
@@ -31,21 +27,14 @@ function CurrentRequests() {
     const objectIdRegex = /^[0-9a-fA-F]{24}$/;
 
     if (objectIdRegex.test(searchQuery)) {
-      setIsSearchingById(true);
       try {
-        const response = await fetch(`http://localhost:8500/api/v1/rawMaterialCurrentRequest/${searchQuery}`);
-        if (response.ok) {
-          const json = await response.json();
-          setFilteredRequests([json.data]); // عرض النتيجة التي تم العثور عليها
-        } else {
-          setFilteredRequests([]); // إذا لم يتم العثور على طلب، عرض لا شيء
-        }
+        const requestData = await searchCurrentRequestById(searchQuery); // استدعاء الدالة من ملف API
+        setFilteredRequests([requestData]); // عرض النتيجة التي تم العثور عليها
       } catch (error) {
         console.error('Error fetching request by id:', error);
         setFilteredRequests([]);
       }
     } else {
-      setIsSearchingById(false);
       // إذا كان البحث باستخدام الاسم
       if (rawMaterialRequests) {
         const filtered = rawMaterialRequests.filter(
@@ -77,7 +66,7 @@ function CurrentRequests() {
         {rawMaterialRequests ? ( // Conditional rendering
       <RequestsTable data={filteredRequests} />
     ) : (
-      <p>Loading requests...</p> // Display a loading message until data is available
+      <p className='background-message'>Loading requests...</p> // Display a loading message until data is available
     )}
         
     </div>
