@@ -12,9 +12,14 @@ function AssignTransporter({ onClose, onRequestSent }) {
   const [dateRange, setDateRange] = useState([]);
   const [company, setCompany] = useState("");
   const [currentForm, setCurrentForm] = useState(1);
+  const { RangePicker } = DatePicker;
 
   const handleRadioChange = (setter) => (event) => {
     setter(event.target.value);
+  };
+
+  const onDateChange = (dates) => {
+    setDateRange(dates ? dates.map((date) => date.startOf("day")) : []);
   };
 
   // Handle validation when clicking "Next" in form 1
@@ -66,7 +71,7 @@ function AssignTransporter({ onClose, onRequestSent }) {
               weight,
               distance,
               departureCity,
-              dateRange, // Array of dates
+              dateRange: dateRange.map((date) => date.format("YYYY-MM-DD")), // التأكد من تنسيق التاريخ
               company,
             }),
           }
@@ -207,9 +212,9 @@ function AssignTransporter({ onClose, onRequestSent }) {
                 <div className="category">
                   <strong>Delivery Date Range</strong>
                   <hr />
-                  <DatePicker.RangePicker
+                  <RangePicker
                     value={dateRange}
-                    onChange={(dates) => setDateRange(dates)}
+                    onChange={onDateChange}
                     className="custom-range-picker"
                   />
                 </div>
