@@ -3,14 +3,16 @@ import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
 import AssignTransporter from '../AssignTransporter/AssignTransporter';
 import "./RequestsTable.css";
-import { MessageOutlined} from '@ant-design/icons';
+import { MessageOutlined } from '@ant-design/icons';
 import MessageDialog from '../Dialog/MessageDialog';
 import TrackingDialog from '../Dialog/TrackingDialog';
-import { updateRawMaterialRequestStatus } from '../../api/rawMaterialRequestAPI';
+import ConfirmationDialog from '../Dialog/ConfirmationDialog';
+import { updateRawMaterialRequestStatus, moveCurrentToPrevious } from '../../api/rawMaterialRequestAPI';
 import moment from 'moment';
 
+
 function RequestsTable({ data }) {
-  const [requests, setData] = useState(() => 
+  const [requests, setData] = useState(() =>
     data.map(request => ({
       ...request,
       statusClass: `status-${request.status}` // إضافة خاصية statusClass مباشرة عند التحميل
@@ -21,16 +23,17 @@ function RequestsTable({ data }) {
   const [openMessageDialog, setOpenMessageDialog] = useState(false); // لحوار الرسالة
   const [openTrackingDialog, setOpenTrackingDialog] = useState(false); // لحوار الخيارات الأخرى
   const [selectedStatus, setSelectedStatus] = useState(""); // لإدارة الحالة المختارة
+  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
 
   useEffect(() => {
     setData(data); // تحديث البيانات عندما تتغير
-    
+
   }, [data]);
 
   useEffect(() => {
     // تحديث الأنماط عند تحميل الصفحة لأول مرة
     const statusSelectElements = document.querySelectorAll('.status-select');
-  
+
     statusSelectElements.forEach((selectElement) => {
       if (selectElement.value === 'pending') {
         selectElement.classList.add('status-pending');
@@ -38,43 +41,80 @@ function RequestsTable({ data }) {
     });
   }, [requests]);
 
-  
+
   if (!requests.length) {
     return <div className='background-message'>No results found</div>;
   }
 
   const handleStatusChange = async (id, newStatus) => {
-    
+
     if (newStatus === "accepted") {
       handleOpenDialog(id); // فتح الـ Dialog عند اختيار "Accepted"
       return;
     } else if (newStatus === "rejected") {
       handleReject(id); // تنفيذ عملية الحذف عند اختيار "Rejected"
       return;
-    } 
-      try {
-        
-  
-        const updatedRequest = await updateRawMaterialRequestStatus(id, newStatus); // استلام الرد
-  
-        // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
-        setData((prevRequests) =>
-          prevRequests.map((request) =>
-            request._id === id ? { ...request, status: updatedRequest.data.status ,statusClass: `status-${updatedRequest.data.status}`} : request
-          )
-        );
-      } catch (error) {
-        console.error("Error updating the status:", error);
-      }
-    
+    }
+    try {
+      const updatedRequest = await updateRawMaterialRequestStatus(id, newStatus); // استلام الرد
+      // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
+      setData((prevRequests) =>
+        prevRequests.map((request) =>
+          request._id === id ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` } : request
+        )
+      );
+    } catch (error) {
+      console.error("Error updating the status:", error);
+    }
+
   };
 
   const handleReject = (id) => {
-      setData((prevRequests) => prevRequests.filter((item) => item._id !== id));
+    const rowExists = requests.some((request) => request._id === id);
+    if (rowExists) {
+      setSelectedRequestId(id);
+      setOpenConfirmationDialog(true);
+    } else {
+      console.error(`No row with id ${id} found`);
+    }
+    // setData((prevRequests) => prevRequests.filter((item) => item._id !== id));
     //add delete code from DB?
   };
 
-  const handleOpenDialog = (id) => { 
+  const handleConfirmReject = async (requestId) => {
+    const requestToUpdate = requests.find((request) => request._id === selectedRequestId);
+    if (openConfirmationDialog) {
+      try {
+        const updatedRequest = await updateRawMaterialRequestStatus(selectedRequestId, "rejected"); // استلام الرد
+        // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
+        setData((prevRequests) =>
+          prevRequests.map((request) =>
+            request._id === requestId ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` } : request
+          )
+        );
+        moveCurrentToPrevious(selectedRequestId);
+      } catch (error) {
+        console.error("Error updating the status:", error);
+      }
+    } else {
+      // إرجاع الحالة إلى Pending إذا لم يتم إرسال الطلب
+      if (requestToUpdate) {
+        setData((prevRequests) =>
+          prevRequests.map((request) =>
+            request._id === selectedRequestId
+              ? { ...request, status: requestToUpdate.status, statusClass: `status-${requestToUpdate.status}` }
+              : request
+          )
+        );
+      }
+
+    }
+    setSelectedRequestId(null); // Reset the selected request ID
+    setOpenConfirmationDialog(false); // إغلاق المودال بعد التأكيد
+  };
+
+
+  const handleOpenDialog = (id) => {
     const rowExists = requests.some((request) => request._id === id);
     if (rowExists) {
       setSelectedRequestId(id);
@@ -86,17 +126,14 @@ function RequestsTable({ data }) {
 
   const handleCloseDialog = async (wasRequestSent) => {
     setOpenDialog(false);
-    const requestToUpdate = requests.find((request) => request._id === selectedRequestId); 
+    const requestToUpdate = requests.find((request) => request._id === selectedRequestId);
     if (wasRequestSent) {
       try {
-        
-  
         const updatedRequest = await updateRawMaterialRequestStatus(selectedRequestId, "accepted"); // استلام الرد
-  
         // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
         setData((prevRequests) =>
           prevRequests.map((request) =>
-            request._id === selectedRequestId ? { ...request, status: updatedRequest.data.status ,statusClass: `status-${updatedRequest.data.status}`} : request
+            request._id === selectedRequestId ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` } : request
           )
         );
       } catch (error) {
@@ -104,16 +141,16 @@ function RequestsTable({ data }) {
       }
     } else {
       // إرجاع الحالة إلى Pending إذا لم يتم إرسال الطلب
-      if(requestToUpdate){
+      if (requestToUpdate) {
         setData((prevRequests) =>
           prevRequests.map((request) =>
             request._id === selectedRequestId
-              ? { ...request, status: requestToUpdate.status,statusClass: `status-${requestToUpdate.status}`}
+              ? { ...request, status: requestToUpdate.status, statusClass: `status-${requestToUpdate.status}` }
               : request
           )
         );
       }
-      
+
     }
     setSelectedRequestId(null); // Reset the selected request ID
   };
@@ -122,35 +159,38 @@ function RequestsTable({ data }) {
     setSelectedRequestId(id);
     setOpenMessageDialog(true);
   };
-  
-  const handleTrackingDialog = (id,status) => {
+
+  const handleTrackingDialog = (id, status) => {
     setSelectedRequestId(id);
     setSelectedStatus(status); // حفظ الحالة المختارة
     setOpenTrackingDialog(true);
   };
-  
+
   const handleCloseDialogs = () => {
+    setOpenConfirmationDialog(false)
     setOpenMessageDialog(false);
     setOpenTrackingDialog(false);
     setSelectedRequestId(null);
   };
-  
+
   const columns = [
-    { field: '_id', headerName: 'ID', width: 70 , headerAlign: 'left'},
+    { field: '_id', headerName: 'ID', width: 70, headerAlign: 'left' },
     { field: 'manufacturerName', headerName: 'Manufacturer Name', width: 200, headerAlign: 'left' },
-    {  field: 'createdAt', 
-      headerName: 'Request Date', 
-      width: 140, 
+    {
+      field: 'createdAt',
+      headerName: 'Request Date',
+      width: 140,
       headerAlign: 'left',
       renderCell: (params) => {
         return moment(params.row.createdAt).format('YYYY-MM-DD'); // تنسيق التاريخ هنا
       }
     },
-    { field: 'supplyingItems', headerName: 'Supplying Items', width: 170, headerAlign: 'left',
+    {
+      field: 'supplyingItems', headerName: 'Supplying Items', width: 170, headerAlign: 'left',
       renderCell: (params) => (
         <div className="cell-content">
           {params.row.supplyingItems && params.row.supplyingItems.map((item, index) => (
-            <div 
+            <div
               key={index}
               className={`supplying-item ${index !== params.row.supplyingItems.length - 1 ? 'item-with-border' : ''}`}>
               {item}
@@ -159,7 +199,8 @@ function RequestsTable({ data }) {
         </div>
       )
     },
-    { field: 'quantity', headerName: 'Quantity', type: 'number', width: 90, headerAlign: 'left',
+    {
+      field: 'quantity', headerName: 'Quantity', type: 'number', width: 90, headerAlign: 'left',
       renderCell: (params) => (
         <div className="cell-content">
           {params.row.quantity && params.row.quantity.map((item, index) => (
@@ -171,12 +212,13 @@ function RequestsTable({ data }) {
         </div>
       )
     },
-    { field: 'price', headerName: 'Price', type: 'number', width: 70 , headerAlign: 'left'},
-    { field: 'status', headerName: 'Status', width: 130, headerAlign: 'left',
+    { field: 'price', headerName: 'Price', type: 'number', width: 70, headerAlign: 'left' },
+    {
+      field: 'status', headerName: 'Status', width: 130, headerAlign: 'left',
       renderCell: (params) => {
-        const statusClass=`status-${params.row.status}`;// Define class based on status
-        
-        if (!(params.row.status =='rejected' || params.row.status =='delivered' ) ) {
+        const statusClass = `status-${params.row.status}`;// Define class based on status
+
+        if (!(params.row.status == 'rejected' || params.row.status == 'delivered')) {
           return (
             <div>
               <select name="status" id="status" onChange={(e) => handleStatusChange(params.row._id, e.target.value)}
@@ -191,7 +233,7 @@ function RequestsTable({ data }) {
               </select>
             </div>
           );
-        }else {
+        } else {
           return (
             <div className={`status-text ${statusClass}`}>
               {params.row.status === "rejected" && "Rejected"}
@@ -202,18 +244,20 @@ function RequestsTable({ data }) {
       }
     },
     { field: 'arrivalCity', headerName: 'Arrival city', width: 140, headerAlign: 'left' },
-    { field: 'action', headerName: 'Action', width: 140, headerAlign: 'left', renderCell: (params)=> {
-      return (
-        <div>
-          <div className="action-buttons">
-            <MessageOutlined className='table-icon message-icon' onClick={() => handleOpenMessageDialog(params.row.id)} />
-            <div >
-              <button className='tracking-icon' onClick={() => handleTrackingDialog(params.row.id, params.row.status)}></button>
+    {
+      field: 'action', headerName: 'Action', width: 140, headerAlign: 'left', renderCell: (params) => {
+        return (
+          <div>
+            <div className="action-buttons">
+              <MessageOutlined className='table-icon message-icon' onClick={() => handleOpenMessageDialog(params.row.id)} />
+              <div >
+                <button className='tracking-icon' onClick={() => handleTrackingDialog(params.row.id, params.row.status)}></button>
+              </div>
             </div>
           </div>
-      </div>
-      );
-    } },
+        );
+      }
+    },
   ];
 
   const paginationModel = { page: 0, pageSize: 10 };
@@ -221,7 +265,7 @@ function RequestsTable({ data }) {
   return (
     <div className='RequestsTable'>
       <DataGrid
-        rows={requests} disableRowSelectionOnClick 
+        rows={requests} disableRowSelectionOnClick
         getRowHeight={() => 'auto'}
         columns={columns}
         getRowId={(row) => row._id} // تحديد أن الـ _id هو id الفريد
@@ -229,36 +273,44 @@ function RequestsTable({ data }) {
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10]}
         sx={{
-          '& .MuiDataGrid-cell': {textAlign: 'left'},
+          '& .MuiDataGrid-cell': { textAlign: 'left' },
           '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': { py: '8px' },
           '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '10px' },
           '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': { py: '22px' },
-        }} 
+        }}
       />
+      {openConfirmationDialog && (
+        <ConfirmationDialog
+          title="Confirm Rejection"
+          message="Are you sure you want to reject this request?"
+          onConfirm={() => handleConfirmReject(selectedRequestId)}
+          onCancel={() => setOpenConfirmationDialog(false)}
+        />
+      )}
 
       {/* إضافة مكون AssignTransporter هنا ليظهر كـ Dialog */}
-    {openDialog && (
-      <AssignTransporter 
-        requestId={selectedRequestId} 
-        onClose={() => handleCloseDialog(false)}// تمرير false إذا أغلق المستخدم الـ Dialog بدون إرسال 
-        onRequestSent={() => handleCloseDialog(true)} // تمرير true إذا تم إرسال الطلب بنجاح
-      />
-    )}
+      {openDialog && (
+        <AssignTransporter
+          requestId={selectedRequestId}
+          onClose={() => handleCloseDialog(false)}// تمرير false إذا أغلق المستخدم الـ Dialog بدون إرسال 
+          onRequestSent={() => handleCloseDialog(true)} // تمرير true إذا تم إرسال الطلب بنجاح
+        />
+      )}
 
-    {openMessageDialog && (
-      <MessageDialog 
-        requestId={selectedRequestId} 
-        onClose={handleCloseDialogs} 
-      />
-    )}
+      {openMessageDialog && (
+        <MessageDialog
+          requestId={selectedRequestId}
+          onClose={handleCloseDialogs}
+        />
+      )}
 
-    {openTrackingDialog && (
-      <TrackingDialog 
-        requestId={selectedRequestId} 
-        onClose={handleCloseDialogs}
-        currentStatus={selectedStatus} // تمرير الحالة المختارة 
-      />
-    )}
+      {openTrackingDialog && (
+        <TrackingDialog
+          requestId={selectedRequestId}
+          onClose={handleCloseDialogs}
+          currentStatus={selectedStatus} // تمرير الحالة المختارة 
+        />
+      )}
 
     </div>
   );
