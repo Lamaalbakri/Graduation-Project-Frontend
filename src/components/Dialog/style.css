@@ -1,126 +1,135 @@
 /* خلفية الـ Dialog */
 .dialog-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* لون خلفية شفاف */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* للتأكد من الظهور فوق المحتوى الآخر */ 
-  }
-  .step{
-    margin-top: 30px;
-    color: #1c2229; 
-  }
-  .dialog-title{
-    color: #1c2229; 
-    font-size: 20px;
-    margin-bottom: 20px;
-    text-align: start;
-    font-weight: bold;
-  }
-  .dialog-box {
-    position: relative; /* لتمكين تثبيت الأيقونة داخل الـ Dialog */
-    background-color: #fff;
-    border-radius: 8px;
-    width: 300px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-  p{
-    margin-top:20px ;
-    color: #1c2229; 
-    font-size: 16px;
-    text-align: start;
-  }
-
-  /* .button-container{
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    padding: 10px 0px;
-} */
-.cancel-button , .confirm-button{
-    background-color: #1c2229!important;
-    color: white!important;
-    padding: 8px 20px!important;
-    border: none!important;
-    border-radius: 5px!important;
-    cursor: pointer!important;
-    transition: background-color 0.3s!important;
-    box-shadow: none!important;
-    top: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* لون خلفية شفاف */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  /* للتأكد من الظهور فوق المحتوى الآخر */
 }
 
-  .close-button{
-    position: absolute;
-    background-color: #1c2229;
-    color: #fff;
-    padding: 8px 20px;
-    border-radius: 5px;
-    border: none;
-    right: 15px;
-    bottom: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s; 
-    /* top: 10px; */
-    z-index: 1000; /* لتكون فوق محتوى الـ Dialog */
-    /* font-size: 16px; */
-  }
-  
-  .close-button:hover, .cancel-button:hover , .confirm-button:hover{
+.step {
+  margin-top: 30px;
+  color: #1c2229;
+}
+
+.dialog-title {
+  color: #1c2229;
+  font-size: 20px;
+  margin-bottom: 20px;
+  text-align: start;
+  font-weight: bold;
+}
+
+.dialog-box {
+  position: relative;
+  /* لتمكين تثبيت الأيقونة داخل الـ Dialog */
+  background-color: #fff;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+p {
+  margin-top: 20px;
+  color: #1c2229;
+  font-size: 16px;
+  text-align: start;
+}
+
+.cancel-button,
+.confirm-button {
+  background-color: #1c2229 !important;
+  color: white !important;
+  padding: 8px 20px !important;
+  border: none !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s !important;
+  box-shadow: none !important;
+  top: 10px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  /* لتكون فوق محتوى الـ Dialog */
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.cancel-button:hover,
+.confirm-button:hover {
   background-color: #595a5b !important;
-  }
-  /* محتوى الـ Dialog */
-  .dialog-content {
-    padding: 30px;
-    text-align: center;
-    font-size: 16px;
-    color: #333;
-
-  }
-
-  /* لتغيير لون الخطوة في حالة process */
-.ant-steps-item-process .ant-steps-item-icon {
-  background-color: #1c2229!important; /* لون الخلفية المخصص */
-  border-color: #1c2229!important; /* لون الحدود المخصص */
 }
 
-.ant-steps-item-process .ant-steps-item-icon > .ant-steps-icon {
-  color: white!important; /* لون الأيقونة داخل الخطوة */
+/* محتوى الـ Dialog */
+.dialog-content {
+  padding: 30px;
+  text-align: center;
+  font-size: 16px;
+  color: #333;
+
+}
+
+/* لتغيير لون الخطوة في حالة process */
+.ant-steps-item-process .ant-steps-item-icon {
+  background-color: #1c2229 !important;
+  /* لون الخلفية المخصص */
+  border-color: #1c2229 !important;
+  /* لون الحدود المخصص */
+}
+
+.ant-steps-item-process .ant-steps-item-icon>.ant-steps-icon {
+  color: white !important;
+  /* لون الأيقونة داخل الخطوة */
 }
 
 .ant-steps-item-process .ant-steps-item-title {
-  color: #1c2229!important; /* لون العنوان المخصص */
+  color: #1c2229 !important;
+  /* لون العنوان المخصص */
 }
 
 .ant-steps-item-process .ant-steps-item-description {
-  color: #1c2229!important; /* لون الوصف المخصص */
+  color: #1c2229 !important;
+  /* لون الوصف المخصص */
 }
 
 .ant-steps-item-finish .ant-steps-item-tail::after {
-  background-color: #1c2229!important; /* لون الخط بين الخطوات المكتملة */
-}
-.ant-steps-item-finish .ant-steps-item-icon{
-  background-color: #3d567392!important; /* لون الخلفية المخصص */
-  border-color: #3d567300!important; /* لون الحدود المخصص */
-}
-.ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
-  color:#1c2229!important; /* تغيير اللون للحالة المنتهية */
+  background-color: #1c2229 !important;
+  /* لون الخط بين الخطوات المكتملة */
 }
 
-  /* حركة نزول الـ Dialog */
-  @keyframes slideDown {
-    from {
-      transform: translateY(-20px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
+.ant-steps-item-finish .ant-steps-item-icon {
+  background-color: #3d567392 !important;
+  /* لون الخلفية المخصص */
+  border-color: #3d567300 !important;
+  /* لون الحدود المخصص */
+}
+
+.ant-steps-item-finish .ant-steps-item-icon>.ant-steps-icon {
+  color: #1c2229 !important;
+  /* تغيير اللون للحالة المنتهية */
+}
+
+/* حركة نزول الـ Dialog */
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
   }
-  
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
