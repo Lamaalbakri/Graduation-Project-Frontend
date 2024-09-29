@@ -186,7 +186,7 @@ function RequestsTable({ data }) {
       width: 140,
       headerAlign: 'left',
       renderCell: (params) => {
-        return moment(params.row.createdAt).format('YYYY-MM-DD'); // تنسيق التاريخ هنا
+        return moment(params.row.createdAt).format('YYYY-MM-DD HH:mm:ss'); // تنسيق التاريخ هنا
       }
     },
     {
