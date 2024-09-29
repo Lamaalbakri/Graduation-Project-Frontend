@@ -34,6 +34,9 @@ function AssignTransporter({ onClose, onRequestSent }) {
       Modal.error({
         title: "Error",
         content: "Please complete all fields before proceeding.",
+        okButtonProps: {
+          className: "confirm-button"
+        }
       });
       return; // Stop here if fields are incomplete
     }
@@ -55,6 +58,9 @@ function AssignTransporter({ onClose, onRequestSent }) {
         Modal.error({
           title: "Error",
           content: "Please select the transport company.",
+          okButtonProps: {
+            className: "confirm-button"
+          }
         });
         return; // Stop here if no company is selected
       }
@@ -84,12 +90,18 @@ function AssignTransporter({ onClose, onRequestSent }) {
           Modal.error({
             title: "Error",
             content: "Failed to send request.",
+            okButtonProps: {
+              className: "confirm-button"
+            }
           });
         }
       } catch (error) {
         Modal.error({
           title: "Error",
           content: "An error occurred while sending the request.",
+          okButtonProps: {
+            className: "confirm-button"
+          }
         });
       }
     }

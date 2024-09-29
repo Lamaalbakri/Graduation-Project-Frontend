@@ -51,10 +51,11 @@ function RequestsTable({ data }) {
     if (newStatus === "accepted") {
       handleOpenDialog(id); // فتح الـ Dialog عند اختيار "Accepted"
       return;
-    } else if (newStatus === "rejected") {
-      handleReject(id); // تنفيذ عملية الحذف عند اختيار "Rejected"
+    } else if (newStatus === "rejected" || newStatus === "delivered") {
+      handleDeleteOrReject(id, newStatus); // تنفيذ عملية الحذف عند اختيار "Rejected"
       return;
     }
+
     try {
       const updatedRequest = await updateRawMaterialRequestStatus(id, newStatus); // استلام الرد
       // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
@@ -69,11 +70,12 @@ function RequestsTable({ data }) {
 
   };
 
-  const handleReject = (id) => {
+  const handleDeleteOrReject = (id, action) => {
     const rowExists = requests.some((request) => request._id === id);
     if (rowExists) {
       setSelectedRequestId(id);
       setOpenConfirmationDialog(true);
+      setSelectedStatus(action);
     } else {
       console.error(`No row with id ${id} found`);
     }
@@ -81,11 +83,11 @@ function RequestsTable({ data }) {
     //add delete code from DB?
   };
 
-  const handleConfirmReject = async (requestId) => {
+  const handleConfirmAction = async (requestId) => {
     const requestToUpdate = requests.find((request) => request._id === selectedRequestId);
     if (openConfirmationDialog) {
       try {
-        const updatedRequest = await updateRawMaterialRequestStatus(selectedRequestId, "rejected"); // استلام الرد
+        const updatedRequest = await updateRawMaterialRequestStatus(selectedRequestId, selectedStatus); // استلام الرد
         // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
         setData((prevRequests) =>
           prevRequests.map((request) =>
@@ -93,6 +95,8 @@ function RequestsTable({ data }) {
           )
         );
         moveCurrentToPrevious(selectedRequestId);
+        // حذف الطلب من الواجهة الأمامية بعد نقله إلى الطلبات السابقة
+        setData((prevRequests) => prevRequests.filter((request) => request._id !== requestId));
       } catch (error) {
         console.error("Error updating the status:", error);
       }
@@ -281,9 +285,9 @@ function RequestsTable({ data }) {
       />
       {openConfirmationDialog && (
         <ConfirmationDialog
-          title="Confirm Rejection"
-          message="Are you sure you want to reject this request?"
-          onConfirm={() => handleConfirmReject(selectedRequestId)}
+          title={`Confirm ${selectedStatus === "rejected" ? "Rejection" : "Delivery"}`} // تغيير العنوان بناءً على العملية
+          message={`Are you sure you want to ${selectedStatus === "rejected" ? "reject" : "mark as delivered"} this request?`} // تغيير الرسالة بناءً على العملية
+          onConfirm={() => handleConfirmAction(selectedRequestId, selectedStatus)} // تمرير العملية المختارة مع الطلب
           onCancel={() => setOpenConfirmationDialog(false)}
         />
       )}

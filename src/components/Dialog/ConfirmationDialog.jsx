@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'antd';
+import "./style.css";
 
 const ConfirmationDialog = ({ title, message, onConfirm, onCancel }) => {
     return (
@@ -10,6 +11,13 @@ const ConfirmationDialog = ({ title, message, onConfirm, onCancel }) => {
             onCancel={onCancel}
             okText="Confirm"
             cancelText="Cancel"
+
+            okButtonProps={{
+                className: "confirm-button"
+            }}
+            cancelButtonProps={{
+                className: "cancel-button"
+            }}
         >
             <p>{message}</p>
         </Modal>

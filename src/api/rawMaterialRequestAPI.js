@@ -50,8 +50,14 @@ export const deleteCurrentRequestById = async (id) => {
     if (!response.ok) {
         throw new Error(`Error deleting current request: ${response.status}`);
     }
+    // إذا كانت الاستجابة 204، فلا تحاول قراءة JSON
 
-    return await response.json(); // استلام الرد بعد الحذف
+    if (response.status !== 204) {
+        const data = await response.json(); // فقط حاول قراءة JSON إذا لم تكن الاستجابة 204
+        return data; // استلام الرد بعد الحذف
+    }
+
+    return { msg: 'Request deleted successfully' }; // رد مناسب عند الحذف بنجاح بدون محتوى
 };
 
 //search current by id

@@ -57,14 +57,15 @@
     z-index: 9999;
 }
 .ant-picker{
-    border-color: #1c2229;
+    border-color: #1c2229 !important;
 }
 .ant-picker:hover{
-    border-color: #1c2229; 
+    border-color: #1c2229 !important; 
 }
 .ant-picker-input{
-    color: #1c2229; 
+    color: #1c2229 !important; 
 }
+
 .companyDialogContent label{
     display: flex;
     justify-content: space-between; /* توزيع المساحة بين العناصر */
@@ -108,16 +109,16 @@
     cursor: pointer;
     transition: background-color 0.3s;
 }
-.nextButtonStyle:hover , .backButtonStyle:hover , .sendButtonStyle:hover{
-    background-color: #595a5b;
+.nextButtonStyle:hover , .backButtonStyle:hover , .sendButtonStyle:hover, .confirm-button{
+    background-color: #595a5b !important;
 }
 .ant-btn-primary{
-    background-color: #1c2229;
-    border-color: #1c2229;
+    background-color: #1c2229!important;
+    border-color: #1c2229!important;
 }
 .ant-btn-primary:active,
 .ant-btn-primary:focus{
-  background-color: #1c2229 !important;
+ background-color: #1c2229 !important;
 }
 
 @media screen and (max-width: 768px){
