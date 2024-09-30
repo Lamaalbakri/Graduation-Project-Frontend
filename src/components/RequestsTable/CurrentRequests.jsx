@@ -28,7 +28,7 @@ function CurrentRequests() {
   }, []);
 
   const handleSearch = async (e) => {
-    const searchQuery = e.target.value.toLowerCase();
+    const searchQuery = e.target.value.trim().toLowerCase();
     setQuery(searchQuery);
 
     // Regex to validate MongoDB ObjectId
@@ -37,7 +37,11 @@ function CurrentRequests() {
     if (objectIdRegex.test(searchQuery)) {
       try {
         const requestData = await searchCurrentRequestById(searchQuery); // استدعاء الدالة من ملف API
-        setFilteredRequests([requestData]); // عرض النتيجة التي تم العثور عليها
+        if (requestData === null) {
+          setFilteredRequests([]); // إذا كانت النتيجة null، قم بتعيين مصفوفة فارغة
+        } else {
+          setFilteredRequests([requestData]); // عرض النتيجة التي تم العثور عليها
+        }
       } catch (error) {
         console.error('Error fetching request by id:', error);
         setFilteredRequests([]);
@@ -68,10 +72,12 @@ function CurrentRequests() {
         </div>
       </div>
 
-      {rawMaterialRequests ? ( // Conditional rendering
+      {rawMaterialRequests && filteredRequests.length ? ( // Conditional rendering
         <RequestsTable data={filteredRequests} />
       ) : (
-        <p className='background-message'>Loading requests...</p> // Display a loading message until data is available
+        <p className='background-message'>
+          {filteredRequests && filteredRequests.length === 0 ? 'No requests found' : 'Loading requests...'}
+        </p> // Display a loading message until data is available
       )}
 
     </div>

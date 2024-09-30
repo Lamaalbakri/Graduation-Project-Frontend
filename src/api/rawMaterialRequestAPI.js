@@ -62,22 +62,39 @@ export const deleteCurrentRequestById = async (id) => {
 
 //search current by id
 export const searchCurrentRequestById = async (id) => {
-    const response = await fetch(`${API_URL}/rawMaterialCurrentRequest/${id}`);
-    if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
+    try {
+        const response = await fetch(`${API_URL}/rawMaterialCurrentRequest/${id}`);
+        if (!response.ok) {
+            if (response.status === 404) {
+                // console.warn(`Request with ID ${id} not found.`);
+                return null; // إعادة null في حالة عدم العثور على البيانات
+            }
+            throw new Error(`Error: ${response.status}`);
+        }
+        const json = await response.json();
+        return json.data; // إعادة البيانات المستردة
+    } catch (error) {
+        console.error(`Failed to fetch current request: ${error.message}`);
+        throw error; // إرسال الخطأ لمزيد من المعالجة في حالة وجود مشكلة أخرى
     }
-    const json = await response.json();
-    return json.data; // إعادة البيانات المستردة
 };
 
 //search Previous by id
 export const searchPreviousRequestById = async (id) => {
-    const response = await fetch(`${API_URL}/rawMaterialPreviousRequest/${id}`);
-    if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
+    try {
+        const response = await fetch(`${API_URL}/rawMaterialPreviousRequest/${id}`);
+        if (!response.ok) {
+            if (response.status === 404) {
+                return null; // إعادة null في حالة عدم العثور على البيانات
+            }
+            throw new Error(`Error: ${response.status}`);
+        }
+        const json = await response.json();
+        return json.data; // إعادة البيانات المستردة
+    } catch (error) {
+        console.error(`Failed to fetch previous request: ${error.message}`);
+        throw error; // إرسال الخطأ لمزيد من المعالجة في حالة وجود مشكلة أخرى
     }
-    const json = await response.json();
-    return json.data; // إعادة البيانات المستردة
 };
 
 //move currnt request to preveious request

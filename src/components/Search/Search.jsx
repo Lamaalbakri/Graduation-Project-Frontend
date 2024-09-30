@@ -11,7 +11,7 @@ function Search() {
 
   // Handle search query change
   const handleSearch = async (e) => {
-    const searchQuery = e.target.value.trim(); // Trim the input to avoid unnecessary spaces
+    const searchQuery = e.target.value.trim().toLowerCase(); // Trim the input to avoid unnecessary spaces
     setQuery(searchQuery);
     setHasSearched(!!searchQuery); // Update hasSearched to true if query is not empty
 
@@ -27,26 +27,22 @@ function Search() {
       if (objectIdRegex.test(searchQuery)) {
         // Search by ID (for both current and previous requests)
 
-        // محاولة البحث عن current request مع التعامل مع الأخطاء
-        let currentRequest = null;
-        try {
-          currentRequest = await searchCurrentRequestById(searchQuery);
-        } catch (error) {
-          console.warn("Current request not found:", error);
-        }
+        // استخدم Promise.allSettled للبحث في كلا الجدولين في وقت واحد
+        const [currentResult, previousResult] = await Promise.allSettled([
+          searchCurrentRequestById(searchQuery),
+          searchPreviousRequestById(searchQuery),
+        ]);
 
-        // محاولة البحث عن previous request مع التعامل مع الأخطاء
-        let previousRequest = null;
-        try {
-          previousRequest = await searchPreviousRequestById(searchQuery);
-        } catch (error) {
-          console.warn("Previous request not found:", error);
-        }
-
-        // تجميع النتائج فقط إذا كانت غير null
+        // تجميع النتائج فقط إذا تم العثور على بيانات
         const results = [];
-        if (currentRequest) results.push(currentRequest);
-        if (previousRequest) results.push(previousRequest);
+
+        if (currentResult.status === 'fulfilled' && currentResult.value) {
+          results.push(currentResult.value);
+        }
+
+        if (previousResult.status === 'fulfilled' && previousResult.value) {
+          results.push(previousResult.value);
+        }
 
         setFilteredRequests(results.length > 0 ? results : []); // Show results if found
       } else {
@@ -69,7 +65,7 @@ function Search() {
         setFilteredRequests(filtered);
       }
     } catch (error) {
-      console.error("Error fetching requests:", error);
+      //console.error("Error fetching requests:", error);
       setFilteredRequests([]); // Handle errors by resetting the filtered requests
     } finally {
       setLoading(false); // Stop loading
