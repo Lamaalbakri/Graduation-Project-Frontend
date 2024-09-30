@@ -23,35 +23,23 @@ function Search() {
     setLoading(true); // Start loading
     try {
       const objectIdRegex = /^[0-9a-fA-F]{24}$/; // MongoDB ObjectId validation regex
+      const [currentRequests, previousRequests] = await Promise.all([
+        fetchAllCurrentRequests(),
+        fetchAllPreviousRequests(),
+      ]);
 
       if (objectIdRegex.test(searchQuery)) {
         // Search by ID (for both current and previous requests)
-
-        // استخدم Promise.allSettled للبحث في كلا الجدولين في وقت واحد
-        const [currentResult, previousResult] = await Promise.allSettled([
-          searchCurrentRequestById(searchQuery),
-          searchPreviousRequestById(searchQuery),
-        ]);
-
-        // تجميع النتائج فقط إذا تم العثور على بيانات
-        const results = [];
-
-        if (currentResult.status === 'fulfilled' && currentResult.value) {
-          results.push(currentResult.value);
-        }
-
-        if (previousResult.status === 'fulfilled' && previousResult.value) {
-          results.push(previousResult.value);
-        }
-
-        setFilteredRequests(results.length > 0 ? results : []); // Show results if found
+        const filtered = [
+          ...currentRequests.filter((request) =>
+            request._id.toLowerCase().includes(searchQuery.toLowerCase())
+          ),
+          ...previousRequests.filter((request) =>
+            request._id.toLowerCase().includes(searchQuery.toLowerCase())
+          ),
+        ];
+        setFilteredRequests(filtered);
       } else {
-        // Search by Name (fetch all and filter)
-        const [currentRequests, previousRequests] = await Promise.all([
-          fetchAllCurrentRequests(),
-          fetchAllPreviousRequests(),
-        ]);
-
         // Filter both collections based on the query
         const filtered = [
           ...currentRequests.filter((request) =>
@@ -108,3 +96,21 @@ function Search() {
 }
 
 export default Search;
+// search by id without fiching all data
+// استخدم Promise.allSettled للبحث في كلا الجدولين في وقت واحد
+// const [currentResult, previousResult] = await Promise.allSettled([
+//   searchCurrentRequestById(searchQuery),
+//   searchPreviousRequestById(searchQuery),
+// ]);
+
+// // تجميع النتائج فقط إذا تم العثور على بيانات
+// const results = [];
+
+// if (currentResult.status === 'fulfilled' && currentResult.value) {
+//   results.push(currentResult.value);
+// }
+
+// if (previousResult.status === 'fulfilled' && previousResult.value) {
+//   results.push(previousResult.value);
+//setFilteredRequests(results.length > 0 ? results : []); // Show results if found
+// }

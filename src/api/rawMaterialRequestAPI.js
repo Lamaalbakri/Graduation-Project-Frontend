@@ -79,6 +79,25 @@ export const searchCurrentRequestById = async (id) => {
     }
 };
 
+//search current by manufacturer name
+export const searchCurrentRequestByMName = async (MName) => {
+    try {
+        const response = await fetch(`${API_URL}/rawMaterialCurrentRequest/manufacturerName/${MName}`);
+        if (!response.ok) {
+            if (response.status === 404) {
+                // console.warn(`Request with ID ${id} not found.`);
+                return null; // إعادة null في حالة عدم العثور على البيانات
+            }
+            throw new Error(`Error: ${response.status}`);
+        }
+        const json = await response.json();
+        return json.data; // إعادة البيانات المستردة
+    } catch (error) {
+        console.error(`Failed to fetch current request: ${error.message}`);
+        throw error; // إرسال الخطأ لمزيد من المعالجة في حالة وجود مشكلة أخرى
+    }
+};
+
 //search Previous by id
 export const searchPreviousRequestById = async (id) => {
     try {
@@ -93,6 +112,25 @@ export const searchPreviousRequestById = async (id) => {
         return json.data; // إعادة البيانات المستردة
     } catch (error) {
         console.error(`Failed to fetch previous request: ${error.message}`);
+        throw error; // إرسال الخطأ لمزيد من المعالجة في حالة وجود مشكلة أخرى
+    }
+};
+
+//search Previous by manufacturer name
+export const searchPreviousRequestByMName = async (MName) => {
+    try {
+        const response = await fetch(`${API_URL}/rawMaterialPreviousRequest/manufacturerName/${MName}`);
+        if (!response.ok) {
+            if (response.status === 404) {
+                // console.warn(`Request with ID ${id} not found.`);
+                return null; // إعادة null في حالة عدم العثور على البيانات
+            }
+            throw new Error(`Error: ${response.status}`);
+        }
+        const json = await response.json();
+        return json.data; // إعادة البيانات المستردة
+    } catch (error) {
+        console.error(`Failed to fetch Previous request: ${error.message}`);
         throw error; // إرسال الخطأ لمزيد من المعالجة في حالة وجود مشكلة أخرى
     }
 };

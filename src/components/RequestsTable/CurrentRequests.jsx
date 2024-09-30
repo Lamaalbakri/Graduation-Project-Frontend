@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import RequestsTable from './RequestsTable';
-import { searchCurrentRequestById, fetchAllCurrentRequests } from '../../api/rawMaterialRequestAPI';
+import { searchCurrentRequestById, searchCurrentRequestByMName, fetchAllCurrentRequests } from '../../api/rawMaterialRequestAPI';
 
 function CurrentRequests() {
   const [query, setQuery] = useState('');
   const [rawMaterialRequests, setRawMaterialRequests] = useState(null);
   const [filteredRequests, setFilteredRequests] = useState(null);
 
-  const filterRequestsByName = (requests, query) => {
-    const searchQuery = query.toLowerCase();
-    return requests.filter((request) =>
-      request.manufacturerName.toLowerCase().includes(searchQuery)
-    );
-  };
 
   useEffect(() => {
     const getRequests = async () => {
@@ -35,25 +29,43 @@ function CurrentRequests() {
     const objectIdRegex = /^[0-9a-fA-F]{24}$/;
 
     if (objectIdRegex.test(searchQuery)) {
-      try {
-        const requestData = await searchCurrentRequestById(searchQuery); // استدعاء الدالة من ملف API
-        if (requestData === null) {
-          setFilteredRequests([]); // إذا كانت النتيجة null، قم بتعيين مصفوفة فارغة
-        } else {
-          setFilteredRequests([requestData]); // عرض النتيجة التي تم العثور عليها
+      if (rawMaterialRequests) {
+        const filtered = rawMaterialRequests.filter((request) =>
+          request._id.toLowerCase().includes(searchQuery)
+        );
+        setFilteredRequests(filtered.length > 0 ? filtered : []);
+      } else {
+        try {
+          const requestData = await searchCurrentRequestById(searchQuery); // استدعاء الدالة من ملف API
+          if (requestData === null) {
+            setFilteredRequests([]); // إذا كانت النتيجة null، قم بتعيين مصفوفة فارغة
+          } else {
+            setFilteredRequests([requestData]); // عرض النتيجة التي تم العثور عليها
+          }
+        } catch (error) {
+          console.error('Error fetching request by id:', error);
+          setFilteredRequests([]);
         }
-      } catch (error) {
-        console.error('Error fetching request by id:', error);
-        setFilteredRequests([]);
       }
     } else {
-      // إذا كان البحث باستخدام الاسم
+      // البحث بالاسم باستخدام البيانات التي تم جلبها بالفعل
       if (rawMaterialRequests) {
-        const filtered = filterRequestsByName(rawMaterialRequests, searchQuery);
-        setFilteredRequests(filtered);
+        const filtered = rawMaterialRequests.filter((request) =>
+          request.manufacturerName.toLowerCase().includes(searchQuery)
+        );
+        setFilteredRequests(filtered.length > 0 ? filtered : []);
+      } else {
+        try {
+          const requestData = await searchCurrentRequestByMName(searchQuery); // استدعاء البحث من API إذا لم تكن البيانات موجودة محلياً
+          setFilteredRequests(requestData ? [requestData] : []);
+        } catch (error) {
+          console.error('Error fetching request by name:', error);
+          setFilteredRequests([]);
+        }
       }
     }
   };
+
 
 
   return (
