@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RequestsTable from './RequestsTable';
 import { searchPreviousRequestById, fetchAllPreviousRequests, searchPreviousRequestByMName } from '../../api/rawMaterialRequestAPI';
+
 function PreviousRequests() {
   const [query, setQuery] = useState('');
   const [rawMaterialRequests, setRawMaterialRequests] = useState(null);
@@ -23,36 +24,44 @@ function PreviousRequests() {
     const searchQuery = e.target.value.trim().toLowerCase();
     setQuery(searchQuery);
 
-    // Regex to validate MongoDB ObjectId
-    const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+    // Regex to validate MongoDB 
+    const validShortId = /^m?[0-9a-z]{8}$/;
+    let foundResult = false;
 
-    if (objectIdRegex.test(searchQuery)) {
+    if (validShortId.test(searchQuery)) {
       if (rawMaterialRequests) {
         const filtered = rawMaterialRequests.filter((request) =>
-          request._id.toLowerCase().includes(searchQuery)
+          request.shortId?.toLowerCase().includes(searchQuery)
         );
-        setFilteredRequests(filtered.length > 0 ? filtered : []);
-      } else {
+        if (filtered.length > 0) {
+          setFilteredRequests(filtered);
+          foundResult = true; // تم العثور على النتيجة
+        }
+      } if (!foundResult) {
         try {
           const requestData = await searchPreviousRequestById(searchQuery); // استدعاء الدالة من ملف API
-          if (requestData === null) {
-            setFilteredRequests([]); // إذا كانت النتيجة null، قم بتعيين مصفوفة فارغة
+          if (requestData) {
+            setFilteredRequests([requestData]);
+            foundResult = true; // تم العثور على النتيجة
           } else {
-            setFilteredRequests([requestData]); // عرض النتيجة التي تم العثور عليها
+            setFilteredRequests([]); // لا توجد نتائج
           }
         } catch (error) {
           console.error('Error fetching request by id:', error);
           setFilteredRequests([]);
         }
       }
-    } else {
+    } if (!foundResult) {
       // البحث بالاسم باستخدام البيانات التي تم جلبها بالفعل
       if (rawMaterialRequests) {
         const filtered = rawMaterialRequests.filter((request) =>
-          request.manufacturerName.toLowerCase().includes(searchQuery)
+          request.manufacturerName?.toLowerCase().includes(searchQuery)
         );
-        setFilteredRequests(filtered.length > 0 ? filtered : []);
-      } else {
+        if (filtered.length > 0) {
+          setFilteredRequests(filtered);
+          foundResult = true; // تم العثور على النتيجة
+        }
+      } if (!foundResult) {
         try {
           const requestData = await searchPreviousRequestByMName(searchQuery); // استدعاء البحث من API إذا لم تكن البيانات موجودة محلياً
           setFilteredRequests(requestData ? [requestData] : []);
@@ -63,6 +72,7 @@ function PreviousRequests() {
       }
     }
   };
+
 
   return (
     <div className='RequestsTable'>

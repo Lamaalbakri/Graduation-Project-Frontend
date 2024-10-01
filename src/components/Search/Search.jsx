@@ -22,24 +22,29 @@ function Search() {
 
     setLoading(true); // Start loading
     try {
-      const objectIdRegex = /^[0-9a-fA-F]{24}$/; // MongoDB ObjectId validation regex
+      const validShortId = /^m?[0-9a-z]{8}$/;
+      let foundResult = false;
       const [currentRequests, previousRequests] = await Promise.all([
         fetchAllCurrentRequests(),
         fetchAllPreviousRequests(),
       ]);
 
-      if (objectIdRegex.test(searchQuery)) {
+      if (validShortId.test(searchQuery)) {
         // Search by ID (for both current and previous requests)
         const filtered = [
           ...currentRequests.filter((request) =>
-            request._id.toLowerCase().includes(searchQuery.toLowerCase())
+            request.shortId.toLowerCase().includes(searchQuery.toLowerCase())
           ),
           ...previousRequests.filter((request) =>
-            request._id.toLowerCase().includes(searchQuery.toLowerCase())
+            request.shortId.toLowerCase().includes(searchQuery.toLowerCase())
           ),
         ];
-        setFilteredRequests(filtered);
-      } else {
+        if (filtered.length > 0) {
+          // إذا تم العثور على نتائج بالـ ID، عرض النتائج وإيقاف البحث
+          setFilteredRequests(filtered);
+          foundResult = true; // تم العثور على نتائج بالـ ID
+        }
+      } if (!foundResult) {
         // Filter both collections based on the query
         const filtered = [
           ...currentRequests.filter((request) =>

@@ -61,7 +61,7 @@ function RequestsTable({ data }) {
       // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
       setData((prevRequests) =>
         prevRequests.map((request) =>
-          request._id === id ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` } : request
+          request.shortId === id ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` } : request
         )
       );
     } catch (error) {
@@ -71,7 +71,7 @@ function RequestsTable({ data }) {
   };
 
   const handleDeleteOrReject = (id, action) => {
-    const rowExists = requests.some((request) => request._id === id);
+    const rowExists = requests.some((request) => request.shortId === id);
     if (rowExists) {
       setSelectedRequestId(id);
       setOpenConfirmationDialog(true);
@@ -79,24 +79,22 @@ function RequestsTable({ data }) {
     } else {
       console.error(`No row with id ${id} found`);
     }
-    // setData((prevRequests) => prevRequests.filter((item) => item._id !== id));
-    //add delete code from DB?
   };
 
   const handleConfirmAction = async (requestId) => {
-    const requestToUpdate = requests.find((request) => request._id === selectedRequestId);
+    const requestToUpdate = requests.find((request) => request.shortId === selectedRequestId);
     if (openConfirmationDialog) {
       try {
         const updatedRequest = await updateRawMaterialRequestStatus(selectedRequestId, selectedStatus); // استلام الرد
         // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
         setData((prevRequests) =>
           prevRequests.map((request) =>
-            request._id === requestId ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` } : request
+            request.shortId === requestId ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` } : request
           )
         );
         moveCurrentToPrevious(selectedRequestId);
         // حذف الطلب من الواجهة الأمامية بعد نقله إلى الطلبات السابقة
-        setData((prevRequests) => prevRequests.filter((request) => request._id !== requestId));
+        setData((prevRequests) => prevRequests.filter((request) => request.shortId !== requestId));
       } catch (error) {
         console.error("Error updating the status:", error);
       }
@@ -105,7 +103,7 @@ function RequestsTable({ data }) {
       if (requestToUpdate) {
         setData((prevRequests) =>
           prevRequests.map((request) =>
-            request._id === selectedRequestId
+            request.shortId === selectedRequestId
               ? { ...request, status: requestToUpdate.status, statusClass: `status-${requestToUpdate.status}` }
               : request
           )
@@ -119,7 +117,7 @@ function RequestsTable({ data }) {
 
 
   const handleOpenDialog = (id) => {
-    const rowExists = requests.some((request) => request._id === id);
+    const rowExists = requests.some((request) => request.shortId === id);
     if (rowExists) {
       setSelectedRequestId(id);
       setOpenDialog(true);
@@ -130,14 +128,14 @@ function RequestsTable({ data }) {
 
   const handleCloseDialog = async (wasRequestSent) => {
     setOpenDialog(false);
-    const requestToUpdate = requests.find((request) => request._id === selectedRequestId);
+    const requestToUpdate = requests.find((request) => request.shortId === selectedRequestId);
     if (wasRequestSent) {
       try {
         const updatedRequest = await updateRawMaterialRequestStatus(selectedRequestId, "accepted"); // استلام الرد
         // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
         setData((prevRequests) =>
           prevRequests.map((request) =>
-            request._id === selectedRequestId ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` } : request
+            request.shortId === selectedRequestId ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` } : request
           )
         );
       } catch (error) {
@@ -148,7 +146,7 @@ function RequestsTable({ data }) {
       if (requestToUpdate) {
         setData((prevRequests) =>
           prevRequests.map((request) =>
-            request._id === selectedRequestId
+            request.shortId === selectedRequestId
               ? { ...request, status: requestToUpdate.status, statusClass: `status-${requestToUpdate.status}` }
               : request
           )
@@ -178,7 +176,13 @@ function RequestsTable({ data }) {
   };
 
   const columns = [
-    { field: '_id', headerName: 'ID', width: 70, headerAlign: 'left' },
+    {
+      field: 'shortId', headerName: 'ID', width: 120, headerAlign: 'left', renderCell: (params) => (
+        <div>
+          #{params.value} {/* إضافة مربع '#' قبل القيمة */}
+        </div>
+      ),
+    },// إضافة مربع '#' قبل كل ID},
     { field: 'manufacturerName', headerName: 'Manufacturer Name', width: 200, headerAlign: 'left' },
     {
       field: 'createdAt',
@@ -225,7 +229,7 @@ function RequestsTable({ data }) {
         if (!(params.row.status == 'rejected' || params.row.status == 'delivered')) {
           return (
             <div>
-              <select name="status" id="status" onChange={(e) => handleStatusChange(params.row._id, e.target.value)}
+              <select name="status" id="status" onChange={(e) => handleStatusChange(params.row.shortId, e.target.value)}
                 value={params.row.status}
                 className={`status-select ${statusClass}`}// Apply class based on status
               >
@@ -253,9 +257,9 @@ function RequestsTable({ data }) {
         return (
           <div>
             <div className="action-buttons">
-              <MessageOutlined className='table-icon message-icon' onClick={() => handleOpenMessageDialog(params.row.id)} />
+              <MessageOutlined className='table-icon message-icon' onClick={() => handleOpenMessageDialog(params.row.shortId)} />
               <div >
-                <button className='tracking-icon' onClick={() => handleTrackingDialog(params.row.id, params.row.status)}></button>
+                <button className='tracking-icon' onClick={() => handleTrackingDialog(params.row.shortId, params.row.status)}></button>
               </div>
             </div>
           </div>
@@ -272,7 +276,7 @@ function RequestsTable({ data }) {
         rows={requests} disableRowSelectionOnClick
         getRowHeight={() => 'auto'}
         columns={columns}
-        getRowId={(row) => row._id} // تحديد أن الـ _id هو id الفريد
+        getRowId={(row) => row.shortId} // تحديد أن الـ shortId هو id الفريد
         autoHeight
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10]}
