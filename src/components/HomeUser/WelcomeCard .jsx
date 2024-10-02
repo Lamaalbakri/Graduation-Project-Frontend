@@ -1,3 +1,4 @@
+import React from "react";
 import p1 from "../images/P1.jpg";
 
 const WelcomeCard = ({ welcomeText }) => {

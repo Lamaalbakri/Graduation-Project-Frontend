@@ -57,7 +57,9 @@ header {
 /* Action buttons below the card */
 .actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
     margin-bottom: 30px;
     padding: 0 0px;
     position: relative;

@@ -18,7 +18,7 @@ import SCMShomePage from "./components/HomePage/SCMShomePage";
 const { Content } = Layout;
 
 function App() {
-  const userType = "supplier"; // على حسب نوع الستيكهولدرز الذي تريد عرضه
+  const userType = "transporter"; // على حسب نوع الستيكهولدرز الذي تريد عرضه
 
   return (
     <Router>
@@ -64,7 +64,7 @@ function MainLayout({ userType }) {
         />
         <Content style={{ padding: "0 24px", minHeight: 280 }}>
           <Routes>
-            <Route path="/home" element={<HomeUser />} />
+            <Route path="/home" element={<HomeUser userType={userType} />} />
             <Route path="/assignTransporter" element={<AssignTransporter />} />
             {/*<Route path="/addRawMaterial" element={<AddRawMaterial />} />
               <Route path="/viewRawMaterial" element={<ViewRawMaterial />} />
