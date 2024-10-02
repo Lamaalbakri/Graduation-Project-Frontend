@@ -23,6 +23,7 @@
 .ant-menu-item-selected{
     background-color: #f4d53f;
     color: #1c2229;
+    transform: translateY(-2px);
 }
 .ant-menu-item{
   transition: background-color 0.3s;

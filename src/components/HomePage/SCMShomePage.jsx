@@ -5,6 +5,7 @@ import {
   faWarehouse,
   faHandshake,
 } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 import "./SCMShomePage.css";
 
 function SCMShomePage() {
@@ -16,15 +17,15 @@ function SCMShomePage() {
       <section id="home">
         <div className="img"></div>
         <div className="center">
-          <img src={image} alt="image" width="300" />
+          <img src={image} alt="SCMS Logo" width="300" />
           <div id="title">Supply Chain Management System</div>
           <div className="btns">
-            <a href="">
+            <Link to="/register">
               <button>Register</button>
-            </a>
-            <a href="">
+            </Link>
+            <Link to="/login">
               <button>Login</button>
-            </a>
+            </Link>
           </div>
         </div>
       </section>

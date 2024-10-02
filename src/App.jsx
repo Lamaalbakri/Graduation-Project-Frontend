@@ -13,6 +13,8 @@ import CurrentRequests from "./components/RequestsTable/CurrentRequests";
 import HomeUser from "./components/HomeUser/HomeUser";
 import Search from "./components/Search/Search";
 import AssignTransporter from "./components/AssignTransporter/AssignTransporter";
+import RegisterPage from "./components/Register-Login/RegisterPage";
+import LoginPage from "./components/Register-Login/LoginPage";
 import SCMShomePage from "./components/HomePage/SCMShomePage";
 
 const { Content } = Layout;
@@ -23,7 +25,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/websiteHomePage" element={<HomePageLayout />} />
+        <Route path="/" element={<HomePageLayout />} />
+        <Route path="/register" element={<RegisterPageLayout />} />
+        <Route path="/login" element={<LoginPageLayout />} />
         <Route path="*" element={<MainLayout userType={userType} />} />
       </Routes>
     </Router>
@@ -42,7 +46,7 @@ function MainLayout({ userType }) {
 
   const handleLogout = () => {
     console.log("Logout clicked");
-    navigate("/websiteHomePage");
+    navigate("/");
   };
 
   return (
@@ -82,6 +86,14 @@ function MainLayout({ userType }) {
 
 function HomePageLayout() {
   return <SCMShomePage />;
+}
+
+function RegisterPageLayout() {
+  return <RegisterPage />;
+}
+
+function LoginPageLayout() {
+  return <LoginPage />;
 }
 
 export default App;
