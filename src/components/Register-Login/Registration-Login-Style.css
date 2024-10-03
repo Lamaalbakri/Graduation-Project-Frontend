@@ -8,7 +8,7 @@
     justify-content: center;
     background-color: #1c2229; /* #4070f4*/
 } 
-.container{
+.containerRegisterLogin{
     position: relative;
     max-width: 490px;
     width: 100%;
@@ -16,10 +16,10 @@
     border-radius: 12px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
-.container .form{
+.containerRegisterLogin .form{
     padding: 27px;
 }
-.container .form .title{
+.containerRegisterLogin .form .title{
     position: relative;
     font-size: 27px;
     font-weight: 600;
@@ -129,7 +129,7 @@
     padding: 10px;
     color: #d9534f;
 }
-.container footer {
+.containerRegisterLogin footer {
     position: fixed;
     left: 0;
     bottom: 0;
@@ -147,7 +147,7 @@
 }
 
 @media (max-height: 600px) {
-    footer {
+    .containerRegisterLogin footer {
         position: static;
     }
 }

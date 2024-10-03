@@ -40,7 +40,7 @@ function RegisterPage() {
     return errors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const {
       full_name,
@@ -51,8 +51,10 @@ function RegisterPage() {
       userType,
     } = formData;
 
-    if (phone_number.length !== 10) {
-      setErrors(["Phone number must be 10 digits."]);
+    if (!/^\d{10}$/.test(phone_number)) {
+      setErrors([
+        "Phone number must be exactly 10 digits and contain only numbers.",
+      ]);
       return;
     }
 
@@ -67,42 +69,53 @@ function RegisterPage() {
       return;
     }
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const userExists = users.some((user) => user.email === email);
-
-    if (userExists) {
-      setErrors(["This email is already registered."]);
+    if (!userType) {
+      setErrors(["Please select a user type."]);
       return;
     }
 
-    const newUser = {
-      full_name,
-      email,
-      phone_number,
-      password,
-      userType,
-    };
+    try {
+      const response = await fetch("http://localhost:8500/api/v1/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name,
+          email,
+          phone_number,
+          password,
+          confirm_password,
+          userType,
+        }),
+      });
 
-    users.push(newUser);
-    localStorage.setItem("users", JSON.stringify(users));
+      if (!response.ok) {
+        const errorData = await response.text(); // Get text response
+        console.error("Error response:", errorData);
+        throw new Error("Error registering user." + errorData);
+      }
 
-    setSuccessMessage("You have registered successfully!");
-    setFormData({
-      full_name: "",
-      email: "",
-      phone_number: "",
-      password: "",
-      confirm_password: "",
-      userType: "",
-    });
+      const responseData = await response.json(); // استخراج البيانات بنجاح
+      setSuccessMessage(responseData.message);
+      setFormData({
+        full_name: "",
+        email: "",
+        phone_number: "",
+        password: "",
+        confirm_password: "",
+        userType: "",
+      });
 
-    setErrors([]);
-    navigate("/login");
+      setErrors([]);
+      navigate("/login");
+    } catch (error) {
+      console.error("Fetch error:", error);
+      setErrors([error.message || "Error registering user."]);
+    }
   };
 
   return (
     <div className="main-container">
-      <div className="container">
+      <div className="containerRegisterLogin">
         <div className="form register">
           <span className="title">Registration</span>
 
