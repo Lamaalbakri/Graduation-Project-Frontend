@@ -49,8 +49,8 @@ const MenuList = ({ darkTheme, userType }) => {
             <Menu.Item key="sPrevious">
               <Link to="/previousRequests">Previous Requests</Link>
             </Menu.Item>
-            <Menu.Item key="sSearchRequest">
-              <Link to="/searchRequest">Search for Request</Link>
+            <Menu.Item key="sSearchRequests">
+              <Link to="/searchRequests">Search for Request</Link>
             </Menu.Item>
           </Menu.SubMenu>
         </React.Fragment>

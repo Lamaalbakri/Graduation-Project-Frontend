@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { searchCurrentRequestById, fetchAllCurrentRequests, fetchAllPreviousRequests, searchPreviousRequestById } from '../../api/rawMaterialRequestAPI';
-import RequestsTable from '../RequestsTable/RequestsTable';
-import "./Search.css";
+import RequestsTable from './RequestsTable';
+import "./RequestsTable.css";
 
 function Search() {
   const [query, setQuery] = useState(""); // Holds the search input

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "./style.css";
+import "./DialogStyle.css";
 import { Steps } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 

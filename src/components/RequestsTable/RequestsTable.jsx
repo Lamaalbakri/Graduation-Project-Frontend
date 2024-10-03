@@ -1,284 +1,190 @@
 import { useState, useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import AssignTransporter from '../AssignTransporter/AssignTransporter';
-import "./RequestsTable.css";
-import { MessageOutlined } from '@ant-design/icons';
 import MessageDialog from '../Dialog/MessageDialog';
 import TrackingDialog from '../Dialog/TrackingDialog';
 import ConfirmationDialog from '../Dialog/ConfirmationDialog';
 import { updateRawMaterialRequestStatus, moveCurrentToPrevious } from '../../api/rawMaterialRequestAPI';
-import moment from 'moment';
+import { MessageOutlined } from '@ant-design/icons';
+import { DataGrid } from '@mui/x-data-grid';
+import "./RequestsTable.css";
 
-
+// The RequestsTable component receives and displays a list of data such as previous and current requests.
 function RequestsTable({ data }) {
-  const [requests, setData] = useState(() =>
-    data.map(request => ({
-      ...request,
-      statusClass: `status-${request.status}` // إضافة خاصية statusClass مباشرة عند التحميل
-    }))
-  );
-  const [openDialog, setOpenDialog] = useState(false); // إضافة الـ state لإدارة فتح الـ Dialog
-  const [selectedRequestId, setSelectedRequestId] = useState(null); // إضافة state لتخزين ID الطلب
-  const [openMessageDialog, setOpenMessageDialog] = useState(false); // لحوار الرسالة
-  const [openTrackingDialog, setOpenTrackingDialog] = useState(false); // لحوار الخيارات الأخرى
-  const [selectedStatus, setSelectedStatus] = useState(""); // لإدارة الحالة المختارة
-  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
+
+  //Prepare the state for each request individually.
+  const [requests, setRequests] = useState(data.map(request => ({
+    ...request,//A new object is created containing all the properties in the request.
+    statusClass: `status-${request.status}`,//Add a new property to the object, statusClass to style the drop-down list status.
+  })));
+
+  // Unified state to manage all dialogs
+  const [dialogState, setDialogState] = useState({
+    assignTransporterDialog: false,
+    messageDialog: false,
+    trackingDialog: false,
+    confirmationDialog: false,
+  });
+  const [selectedRequestId, setSelectedRequestId] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   useEffect(() => {
-    setData(data); // تحديث البيانات عندما تتغير
-
+    setRequests(data); // Update requests when data changes
   }, [data]);
 
-  useEffect(() => {
-    // تحديث الأنماط عند تحميل الصفحة لأول مرة
-    const statusSelectElements = document.querySelectorAll('.status-select');
+  // Helper function to toggle dialog states (open or close)
+  const toggleDialog = (dialogName, value, requestId = null, status = "") => {
+    setDialogState(prev => ({ ...prev, [dialogName]: value }));
+    if (requestId) setSelectedRequestId(requestId);
+    if (status) setSelectedStatus(status);
+  };
 
-    statusSelectElements.forEach((selectElement) => {
-      if (selectElement.value === 'pending') {
-        selectElement.classList.add('status-pending');
-      }
-    });
-  }, [requests]);
-
-
-  if (!requests.length) {
-    return <div className='background-message'>No results found</div>;
-  }
-
-  const handleStatusChange = async (id, newStatus) => {
-
-    if (newStatus === "accepted") {
-      handleOpenDialog(id); // فتح الـ Dialog عند اختيار "Accepted"
-      return;
-    } else if (newStatus === "rejected" || newStatus === "delivered") {
-      handleDeleteOrReject(id, newStatus); // تنفيذ عملية الحذف عند اختيار "Rejected"
-      return;
-    }
-
+  // Unified method to update request status
+  const updateRequestStatus = async (id, newStatus) => {
     try {
-      const updatedRequest = await updateRawMaterialRequestStatus(id, newStatus); // استلام الرد
-      // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
-      setData((prevRequests) =>
-        prevRequests.map((request) =>
-          request.shortId === id ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` } : request
+      //update in DB, get the request info after update
+      const updatedRequest = await updateRawMaterialRequestStatus(id, newStatus);
+      //update in front-end
+      setRequests(prevRequests =>
+        prevRequests.map(request =>// Check each request in the list; update if shortId matches, else keep unchanged.
+          request.shortId === id//Check if the shortId of the request matches the ID we want to update.
+            ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` }
+            : request//Returns the request as is if the condition is false.
         )
       );
     } catch (error) {
       console.error("Error updating the status:", error);
     }
-
   };
 
-  const handleDeleteOrReject = (id, action) => {
-    const rowExists = requests.some((request) => request.shortId === id);
-    if (rowExists) {
-      setSelectedRequestId(id);
-      setOpenConfirmationDialog(true);
-      setSelectedStatus(action);
-    } else {
-      console.error(`No row with id ${id} found`);
+  // Handle status change from drop-down list (open dialog or update directly)
+  const handleStatusChange = (id, newStatus) => {
+    switch (newStatus) {
+      case "accepted":
+        toggleDialog("assignTransporterDialog", true, id);
+        break;
+      case "rejected":
+      case "delivered":
+        toggleDialog("confirmationDialog", true, id, newStatus);
+        break;
+      default:
+        updateRequestStatus(id, newStatus);
     }
   };
 
-  const handleConfirmAction = async (requestId) => {
-    const requestToUpdate = requests.find((request) => request.shortId === selectedRequestId);
-    if (openConfirmationDialog) {
-      try {
-        const updatedRequest = await updateRawMaterialRequestStatus(selectedRequestId, selectedStatus); // استلام الرد
-        // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
-        setData((prevRequests) =>
-          prevRequests.map((request) =>
-            request.shortId === requestId ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` } : request
-          )
-        );
-        moveCurrentToPrevious(selectedRequestId);
-        // حذف الطلب من الواجهة الأمامية بعد نقله إلى الطلبات السابقة
-        setData((prevRequests) => prevRequests.filter((request) => request.shortId !== requestId));
-      } catch (error) {
-        console.error("Error updating the status:", error);
-      }
-    } else {
-      // إرجاع الحالة إلى Pending إذا لم يتم إرسال الطلب
-      if (requestToUpdate) {
-        setData((prevRequests) =>
-          prevRequests.map((request) =>
-            request.shortId === selectedRequestId
-              ? { ...request, status: requestToUpdate.status, statusClass: `status-${requestToUpdate.status}` }
-              : request
-          )
-        );
-      }
-
-    }
-    setSelectedRequestId(null); // Reset the selected request ID
-    setOpenConfirmationDialog(false); // إغلاق المودال بعد التأكيد
-  };
-
-
-  const handleOpenDialog = (id) => {
-    const rowExists = requests.some((request) => request.shortId === id);
-    if (rowExists) {
-      setSelectedRequestId(id);
-      setOpenDialog(true);
-    } else {
-      console.error(`No row with id ${id} found`);
+  // Handle confirmation for delete or reject, called after clicking confirm in the dialog "onConfirm()"
+  const handleConfirmAction = async () => {
+    try {
+      //update in DB
+      await updateRequestStatus(selectedRequestId, selectedStatus);
+      //Move current request to previous request table in DB
+      moveCurrentToPrevious(selectedRequestId);
+      //remove current request from table in front-end
+      setRequests(prevRequests =>
+        //filter keeps undelivered or not rejected requests
+        prevRequests.filter(request => request.shortId !== selectedRequestId)
+      );
+    } catch (error) {
+      console.error("Error during confirmation action:", error);
+    } finally {
+      // set state of dialog to false "close" 
+      toggleDialog("confirmationDialog", false);
     }
   };
 
-  const handleCloseDialog = async (wasRequestSent) => {
-    setOpenDialog(false);
-    const requestToUpdate = requests.find((request) => request.shortId === selectedRequestId);
+  // Handle "AssignTransporter" dialog close and updating request if necessary
+  const handleDialogClose = async (wasRequestSent) => {
+    // set state of dialog to false "close" 
+    toggleDialog("assignTransporterDialog", false);
+    //If the transport request is sent successfully, the status updates to "accepted".
     if (wasRequestSent) {
-      try {
-        const updatedRequest = await updateRawMaterialRequestStatus(selectedRequestId, "accepted"); // استلام الرد
-        // تحديث الحالة في الواجهة الأمامية بعد نجاح التحديث في قاعدة البيانات
-        setData((prevRequests) =>
-          prevRequests.map((request) =>
-            request.shortId === selectedRequestId ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` } : request
-          )
-        );
-      } catch (error) {
-        console.error("Error updating the status:", error);
-      }
-    } else {
-      // إرجاع الحالة إلى Pending إذا لم يتم إرسال الطلب
-      if (requestToUpdate) {
-        setData((prevRequests) =>
-          prevRequests.map((request) =>
-            request.shortId === selectedRequestId
-              ? { ...request, status: requestToUpdate.status, statusClass: `status-${requestToUpdate.status}` }
-              : request
-          )
-        );
-      }
-
+      updateRequestStatus(selectedRequestId, "accepted");
     }
-    setSelectedRequestId(null); // Reset the selected request ID
   };
 
-  const handleOpenMessageDialog = (id) => {
-    setSelectedRequestId(id);
-    setOpenMessageDialog(true);
-  };
+  //If there are no requests in DB, the message is displayed.
+  if (!requests.length) {
+    return <div className='background-message'>No results found</div>;
+  }
 
-  const handleTrackingDialog = (id, status) => {
-    setSelectedRequestId(id);
-    setSelectedStatus(status); // حفظ الحالة المختارة
-    setOpenTrackingDialog(true);
-  };
-
-  const handleCloseDialogs = () => {
-    setOpenConfirmationDialog(false)
-    setOpenMessageDialog(false);
-    setOpenTrackingDialog(false);
-    setSelectedRequestId(null);
-  };
-
+  // Define columns for the DataGrid
   const columns = [
-    {
-      field: 'shortId', headerName: 'ID', width: 120, headerAlign: 'left', renderCell: (params) => (
-        <div>
-          #{params.value} {/* إضافة مربع '#' قبل القيمة */}
-        </div>
-      ),
-    },// إضافة مربع '#' قبل كل ID},
+    { field: 'shortId', headerName: 'ID', width: 120, headerAlign: 'left', renderCell: (params) => `#${params.value}` },
     { field: 'manufacturerName', headerName: 'Manufacturer Name', width: 200, headerAlign: 'left' },
     {
-      field: 'createdAt',
-      headerName: 'Request Date',
-      width: 140,
-      headerAlign: 'left',
-      renderCell: (params) => {
-        return moment(params.row.createdAt).format('YYYY-MM-DD HH:mm:ss'); // تنسيق التاريخ هنا
-      }
+      field: 'createdAt', headerName: 'Request Date', width: 140, headerAlign: 'left',
+      renderCell: (params) => moment(params.row.createdAt).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       field: 'supplyingItems', headerName: 'Supplying Items', width: 170, headerAlign: 'left',
       renderCell: (params) => (
         <div className="cell-content">
-          {params.row.supplyingItems && params.row.supplyingItems.map((item, index) => (
-            <div
-              key={index}
-              className={`supplying-item ${index !== params.row.supplyingItems.length - 1 ? 'item-with-border' : ''}`}>
+          {params.row.supplyingItems.map((item, index) => (
+            <div key={index} className={`supplying-item ${index !== params.row.supplyingItems.length - 1 ? 'item-with-border' : ''}`}>
               {item}
             </div>
           ))}
         </div>
-      )
+      ),
     },
     {
       field: 'quantity', headerName: 'Quantity', type: 'number', width: 90, headerAlign: 'left',
       renderCell: (params) => (
         <div className="cell-content">
-          {params.row.quantity && params.row.quantity.map((item, index) => (
-            <div key={index}
-              className={`supplying-item ${index !== params.row.quantity.length - 1 ? 'item-with-border' : ''}`}>
+          {params.row.quantity.map((item, index) => (
+            <div key={index} className={`supplying-item ${index !== params.row.quantity.length - 1 ? 'item-with-border' : ''}`}>
               {item}
             </div>
           ))}
         </div>
-      )
+      ),
     },
     { field: 'price', headerName: 'Price', type: 'number', width: 70, headerAlign: 'left' },
     {
       field: 'status', headerName: 'Status', width: 130, headerAlign: 'left',
       renderCell: (params) => {
-        const statusClass = `status-${params.row.status}`;// Define class based on status
-
-        if (!(params.row.status == 'rejected' || params.row.status == 'delivered')) {
-          return (
-            <div>
-              <select name="status" id="status" onChange={(e) => handleStatusChange(params.row.shortId, e.target.value)}
-                value={params.row.status}
-                className={`status-select ${statusClass}`}// Apply class based on status
-              >
-                <option value="pending" className="status-pending">Pending</option>
-                <option value="accepted" className="status-accepted">Accepted </option>
-                <option value="inProgress" className="status-inProgress">In Progress</option>
-                <option value="delivered" className="status-delivered">Delivered</option>
-                <option value="rejected" className="status-rejected">Rejected</option>
-              </select>
-            </div>
-          );
-        } else {
-          return (
-            <div className={`status-text ${statusClass}`}>
-              {params.row.status === "rejected" && "Rejected"}
-              {params.row.status === "delivered" && "Delivered"}
-            </div>
-          );
+        const statusClass = `status-${params.row.status}`;
+        if (params.row.status === 'rejected' || params.row.status === 'delivered') {
+          return <div className={`status-text ${statusClass}`}>{params.row.status}</div>;
         }
-      }
+        return (
+          <select
+            value={params.row.status}
+            className={`status-select ${statusClass}`}
+            onChange={(e) => handleStatusChange(params.row.shortId, e.target.value)}
+          >
+            <option value="pending">Pending</option>
+            <option value="accepted">Accepted</option>
+            <option value="inProgress">In Progress</option>
+            <option value="delivered">Delivered</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        );
+      },
     },
     { field: 'arrivalCity', headerName: 'Arrival city', width: 140, headerAlign: 'left' },
     {
-      field: 'action', headerName: 'Action', width: 140, headerAlign: 'left', renderCell: (params) => {
-        return (
-          <div>
-            <div className="action-buttons">
-              <MessageOutlined className='table-icon message-icon' onClick={() => handleOpenMessageDialog(params.row.shortId)} />
-              <div >
-                <button className='tracking-icon' onClick={() => handleTrackingDialog(params.row.shortId, params.row.status)}></button>
-              </div>
-            </div>
-          </div>
-        );
-      }
+      field: 'action', headerName: 'Action', width: 140, headerAlign: 'left',
+      renderCell: (params) => (
+        <div className="action-buttons">
+          <MessageOutlined className='table-icon message-icon' onClick={() => toggleDialog("messageDialog", true, params.row.shortId)} />
+          <button className='tracking-icon' onClick={() => toggleDialog("trackingDialog", true, params.row.shortId, params.row.status)}></button>
+        </div>
+      ),
     },
   ];
-
-  const paginationModel = { page: 0, pageSize: 10 };
 
   return (
     <div className='RequestsTable'>
       <DataGrid
-        rows={requests} disableRowSelectionOnClick
+        rows={requests}
+        disableRowSelectionOnClick
         getRowHeight={() => 'auto'}
         columns={columns}
-        getRowId={(row) => row.shortId} // تحديد أن الـ shortId هو id الفريد
+        getRowId={(row) => row.shortId}
         autoHeight
-        initialState={{ pagination: { paginationModel } }}
+        initialState={{ pagination: { paginationModel: { page: 0, pageSize: 10 } } }}
         pageSizeOptions={[5, 10]}
         sx={{
           '& .MuiDataGrid-cell': { textAlign: 'left' },
@@ -287,48 +193,40 @@ function RequestsTable({ data }) {
           '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': { py: '22px' },
         }}
       />
-      {openConfirmationDialog && (
+      {dialogState.confirmationDialog && (
         <ConfirmationDialog
-          title={`Confirm ${selectedStatus === "rejected" ? "Rejection" : "Delivery"}`} // تغيير العنوان بناءً على العملية
-          message={`Are you sure you want to ${selectedStatus === "rejected" ? "reject" : "mark as delivered"} this request?`} // تغيير الرسالة بناءً على العملية
-          onConfirm={() => handleConfirmAction(selectedRequestId, selectedStatus)} // تمرير العملية المختارة مع الطلب
-          onCancel={() => setOpenConfirmationDialog(false)}
+          title={`Confirm ${selectedStatus === "rejected" ? "Rejection" : "Delivery"}`}
+          message={`Are you sure you want to ${selectedStatus === "rejected" ? "reject" : "mark as delivered"} this request?`}
+          onConfirm={handleConfirmAction}
+          onCancel={() => toggleDialog("confirmationDialog", false)}
         />
       )}
-
-      {/* إضافة مكون AssignTransporter هنا ليظهر كـ Dialog */}
-      {openDialog && (
+      {dialogState.assignTransporterDialog && (
         <AssignTransporter
           requestId={selectedRequestId}
-          onClose={() => handleCloseDialog(false)}// تمرير false إذا أغلق المستخدم الـ Dialog بدون إرسال 
-          onRequestSent={() => handleCloseDialog(true)} // تمرير true إذا تم إرسال الطلب بنجاح
+          onClose={() => handleDialogClose(false)}
+          onRequestSent={() => handleDialogClose(true)}
         />
       )}
-
-      {openMessageDialog && (
+      {dialogState.messageDialog && (
         <MessageDialog
           requestId={selectedRequestId}
-          onClose={handleCloseDialogs}
+          onClose={() => toggleDialog("messageDialog", false)}
         />
       )}
-
-      {openTrackingDialog && (
+      {dialogState.trackingDialog && (
         <TrackingDialog
           requestId={selectedRequestId}
-          onClose={handleCloseDialogs}
-          currentStatus={selectedStatus} // تمرير الحالة المختارة 
+          onClose={() => toggleDialog("trackingDialog", false)}
+          currentStatus={selectedStatus}
         />
       )}
-
     </div>
   );
 }
 
 RequestsTable.propTypes = {
-  data: PropTypes.array.isRequired,
-  // title: PropTypes.string.isRequired,
-  isPrevious: PropTypes.bool,
-  showTitleAndSearch: PropTypes.bool // New prop for controlling title and search box visibility
+  data: PropTypes.array.isRequired,// Ensures that Prop 'data' is an array and is required to be provided.
 };
 
 export default RequestsTable;

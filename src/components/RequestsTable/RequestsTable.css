@@ -1,15 +1,13 @@
-.RequestsTable{
-    font-family: 'Poppins', sans-serif;
+.RequestsTable,.search {
+    font-family: "Poppins", sans-serif;
     color: #1c2229;
     padding: 20px;
 }
 
 .action-buttons {
     display: flex;
-   /* لضمان محاذاة الأيقونات عموديًا */
 }
 
-/* Format the dropdown list */
 .status-select {
     padding: 5px;
     border-radius: 8px;
@@ -21,17 +19,17 @@
 .status-select:hover {
     background-color: #3d3c3c3c;
     color: #0b0b0b;
-    border: none; /* إزالة أي تنسيق حدود */
+    border: none;
 }
+
 .status-select option:hover {
     background-color: #3d3c3c3c;
-    color: #0b0b0b; /* لون النص */
-     /* حجم الخط للخيار */
+    color: #0b0b0b;
 }
 
 .status-pending {
     background-color: #ff990059;
-    color: #5e3902; 
+    color: #5e3902;
 }
 
 .status-accepted {
@@ -39,10 +37,11 @@
     color: #03477f;
 }
 
-.status-delivered{
+.status-delivered {
     background-color: #4caf4f71;
     color: #023404;
 }
+
 .status-inProgress {
     background-color: #7a4caf71;
     color: #400188;
@@ -82,12 +81,12 @@
 .tracking-icon {
     margin-top: 5px;
     margin-left: 20px;
-    height: 30px; 
-    width: 30px;  
-    background: url('../images/tracking.png') no-repeat center center; /* تحديد الصورة كمصدر الخلفية */
-    background-size: contain; /* التأكد من أن الصورة يتم احتواؤها ضمن مساحة الزر */
-    border: none; /* إزالة الحدود الافتراضية */
-    cursor: pointer; /* تغيير شكل المؤشر عند التحويم */
+    height: 30px;
+    width: 30px;
+    background: url("../images/tracking.png") no-repeat center center;
+    background-size: contain;
+    border: none;
+    cursor: pointer;
 }
 
 .table-icon {
@@ -106,56 +105,52 @@
     border: none;
     cursor: pointer;
     text-align: center;
-    transition: background-color 0.3s;   
+    transition: background-color 0.3s;
 }
 
 .tableButton:hover {
-    background-color:#595a5b;
+    background-color: #595a5b;
 }
 
 .cell-content div {
-    line-height: 2; /* مسافة بين السطور بنسبة 1.5 */
+    line-height: 2;
     text-align: left;
 }
 
-/* تنسيق سطر العنوان والبحث */
 .header-row {
     display: flex;
-    flex-direction: row; /* لجعل العنوان والبحث في نفس المستوى */
-    justify-content: space-between; /* توزيع المسافة بين العنوان والبحث */
-    align-items: center; /* محاذاة العناصر عموديًا */
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 50px;
     margin-top: 25px;
 }
 
-/* تنسيق عنوان الجدول */
 .title {
     font-size: 30px;
     font-weight: bold;
-    text-align: left; /* توجيه النص إلى اليسار */
-    margin-bottom: 0; /* إزالة المسافة السفلية */
+    text-align: left;
+    margin-bottom: 0;
 }
 
-/* تنسيق حقل البحث */
 .search-container {
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* لجعل مربع البحث على اليمين */
-    margin-bottom: 0; /* إزالة المسافة السفلية */
+    justify-content: flex-end;
+    margin-bottom: 0;
 }
 
-/* تنسيق نص البحث */
+
 .search-label {
-    margin-right: 15px; /* مسافة صغيرة بين النص ومربع البحث */
+    margin-right: 15px;
     font-size: 14px;
     color: #1c2229;
 }
 
-/* تنسيق مربع البحث */
 .search-container input {
     padding-left: 35px;
     border: 1px solid #ccc;
-    border-radius: 25px; /* إطار دائري */
+    border-radius: 25px;
     outline: none;
     font-size: 14px;
     width: 300px;
@@ -163,24 +158,25 @@
 }
 
 .input-with-icon {
-    padding-right: 40px; /* إفساح المجال للأيقونة داخل الحقل */
+    padding-right: 40px;
     height: 35px;
     width: 250px;
     margin-right: 10px;
-    background: url('../images/iconsSearch.png') no-repeat 8px center;
-    background-size: 15px 15px; /* حجم الأيقونة */
+    background: url("../images/iconsSearch.png") no-repeat 8px center;
+    background-size: 15px 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 .search-container input:focus {
-    border-color: #1c2229; /* تغيير لون الإطار عند التفاعل */
+    border-color: #1c2229;
 }
 
 .search-container input::placeholder {
-    color: #999; /* لون النص داخل مربع البحث */
+    color: #999;
 }
 
-.background-message{
+.background-message {
     color: #999999bd;
     font-size: 25px;
     font-weight: bold;

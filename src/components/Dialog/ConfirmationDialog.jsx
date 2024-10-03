@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'antd';
-import "./style.css";
+import "./DialogStyle.css";
 
 const ConfirmationDialog = ({ title, message, onConfirm, onCancel }) => {
     return (
