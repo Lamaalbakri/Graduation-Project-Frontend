@@ -16,17 +16,16 @@ import AssignTransporter from "./components/AssignTransporter/AssignTransporter"
 import RegisterPage from "./components/Register-Login/RegisterPage";
 import LoginPage from "./components/Register-Login/LoginPage";
 import SCMShomePage from "./components/HomePage/SCMShomePage";
-import AddRawMaterial from './components/ManageRawMaterial/AddRawMaterial';
-import DeleteRawMaterial from './components/ManageRawMaterial/DeleteRawMaterial';
-import ViewRawMaterial from './components/ManageRawMaterial/ViewRawMaterial';
-import UpdateRawMaterial from './components/ManageRawMaterial/UpdateRawMaterial';
-
+import AddRawMaterial from "./components/ManageRawMaterial/AddRawMaterial";
+import DeleteRawMaterial from "./components/ManageRawMaterial/DeleteRawMaterial";
+import ViewRawMaterial from "./components/ManageRawMaterial/ViewRawMaterial";
+import UpdateRawMaterial from "./components/ManageRawMaterial/UpdateRawMaterial";
 
 const { Content } = Layout;
 
 function App() {
   // const userType = "transporter";
-  const userType = "supplier";// على حسب نوع الستيكهولدرز الذي تريد عرضه
+  const userType = "supplier"; // على حسب نوع الستيكهولدرز الذي تريد عرضه
 
   return (
     <Router>
