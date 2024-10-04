@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import RequestsTable from './RequestsTable';
-import { searchPreviousRequestById, fetchAllPreviousRequests, searchPreviousRequestByMName } from '../../api/rawMaterialRequestAPI';
+import {
+  searchPreviousRequestById,
+  fetchAllPreviousRequests,
+  searchPreviousRequestByMName
+} from '../../api/rawMaterialRequestAPI';
 
 function PreviousRequests() {
   const [query, setQuery] = useState('');
@@ -10,41 +14,44 @@ function PreviousRequests() {
   useEffect(() => {
     const getRequests = async () => {
       try {
-        const requests = await fetchAllPreviousRequests(); // استدعاء دالة جلب جميع الطلبات
+        const requests = await fetchAllPreviousRequests(); // Call the fetch all requests function
         setRawMaterialRequests(requests);
         setFilteredRequests(requests);
       } catch (error) {
         console.error('Error fetching requests:', error);
       }
     };
-    getRequests(); // استدعاء الدالة عند تحميل المكون لأول مرة
+    getRequests(); // Call the function when the component is first loaded.
   }, []);
 
   const handleSearch = async (e) => {
     const searchQuery = e.target.value.trim().toLowerCase();
     setQuery(searchQuery);
 
-    // Regex to validate MongoDB 
     const validShortId = /^m?[0-9a-z]{8}$/;
     let foundResult = false;
 
+    //check if it is an id
     if (validShortId.test(searchQuery)) {
+      //check if there are requests
       if (rawMaterialRequests) {
+        //Search by id using data already fetched
         const filtered = rawMaterialRequests.filter((request) =>
           request.shortId?.toLowerCase().includes(searchQuery)
         );
         if (filtered.length > 0) {
           setFilteredRequests(filtered);
-          foundResult = true; // تم العثور على النتيجة
+          foundResult = true; // Result found
         }
       } if (!foundResult) {
         try {
-          const requestData = await searchPreviousRequestById(searchQuery); // استدعاء الدالة من ملف API
+          //search by id in back-end
+          const requestData = await searchPreviousRequestById(searchQuery);// Call search from API if data is not present locally
           if (requestData) {
             setFilteredRequests([requestData]);
-            foundResult = true; // تم العثور على النتيجة
+            foundResult = true; // Result found
           } else {
-            setFilteredRequests([]); // لا توجد نتائج
+            setFilteredRequests([]); // there is no results
           }
         } catch (error) {
           console.error('Error fetching request by id:', error);
@@ -52,18 +59,19 @@ function PreviousRequests() {
         }
       }
     } if (!foundResult) {
-      // البحث بالاسم باستخدام البيانات التي تم جلبها بالفعل
+      // Search by name using data already fetched
       if (rawMaterialRequests) {
         const filtered = rawMaterialRequests.filter((request) =>
           request.manufacturerName?.toLowerCase().includes(searchQuery)
         );
         if (filtered.length > 0) {
           setFilteredRequests(filtered);
-          foundResult = true; // تم العثور على النتيجة
+          foundResult = true; // Result found
         }
       } if (!foundResult) {
         try {
-          const requestData = await searchPreviousRequestByMName(searchQuery); // استدعاء البحث من API إذا لم تكن البيانات موجودة محلياً
+          //Search by name in back-end
+          const requestData = await searchPreviousRequestByMName(searchQuery); // Call search from API if data is not present locally
           setFilteredRequests(requestData ? [requestData] : []);
         } catch (error) {
           console.error('Error fetching request by name:', error);

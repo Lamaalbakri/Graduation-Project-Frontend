@@ -1,4 +1,3 @@
-/* خلفية الـ Dialog */
 .dialog-overlay {
   position: fixed;
   top: 0;
@@ -6,12 +5,10 @@
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  /* لون خلفية شفاف */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  /* للتأكد من الظهور فوق المحتوى الآخر */
 }
 
 .step {
@@ -29,7 +26,6 @@
 
 .dialog-box {
   position: relative;
-  /* لتمكين تثبيت الأيقونة داخل الـ Dialog */
   background-color: #fff;
   border-radius: 8px;
   width: 300px;
@@ -62,7 +58,6 @@ p {
   top: 10px;
   right: 10px;
   z-index: 1000;
-  /* لتكون فوق محتوى الـ Dialog */
   cursor: pointer;
   font-size: 16px;
 }
@@ -71,7 +66,6 @@ p {
   background-color: #595a5b !important;
 }
 
-/* محتوى الـ Dialog */
 .dialog-content {
   padding: 30px;
   text-align: center;
@@ -80,47 +74,36 @@ p {
 
 }
 
-/* لتغيير لون الخطوة في حالة process */
 .ant-steps-item-process .ant-steps-item-icon {
   background-color: #1c2229 !important;
-  /* لون الخلفية المخصص */
   border-color: #1c2229 !important;
-  /* لون الحدود المخصص */
 }
 
 .ant-steps-item-process .ant-steps-item-icon>.ant-steps-icon {
   color: white !important;
-  /* لون الأيقونة داخل الخطوة */
 }
 
 .ant-steps-item-process .ant-steps-item-title {
   color: #1c2229 !important;
-  /* لون العنوان المخصص */
 }
 
 .ant-steps-item-process .ant-steps-item-description {
   color: #1c2229 !important;
-  /* لون الوصف المخصص */
 }
 
 .ant-steps-item-finish .ant-steps-item-tail::after {
   background-color: #1c2229 !important;
-  /* لون الخط بين الخطوات المكتملة */
 }
 
 .ant-steps-item-finish .ant-steps-item-icon {
   background-color: #3d567392 !important;
-  /* لون الخلفية المخصص */
   border-color: #3d567300 !important;
-  /* لون الحدود المخصص */
 }
 
 .ant-steps-item-finish .ant-steps-item-icon>.ant-steps-icon {
   color: #1c2229 !important;
-  /* تغيير اللون للحالة المنتهية */
 }
 
-/* حركة نزول الـ Dialog */
 @keyframes slideDown {
   from {
     transform: translateY(-20px);

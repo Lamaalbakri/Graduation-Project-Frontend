@@ -1,7 +1,12 @@
 import { useState } from 'react';
-import { searchCurrentRequestById, fetchAllCurrentRequests, fetchAllPreviousRequests, searchPreviousRequestById } from '../../api/rawMaterialRequestAPI';
 import RequestsTable from './RequestsTable';
 import "./RequestsTable.css";
+import {
+  searchCurrentRequestById,
+  fetchAllCurrentRequests,
+  fetchAllPreviousRequests,
+  searchPreviousRequestById
+} from '../../api/rawMaterialRequestAPI';
 
 function Search() {
   const [query, setQuery] = useState(""); // Holds the search input
@@ -24,6 +29,7 @@ function Search() {
     try {
       const validShortId = /^m?[0-9a-z]{8}$/;
       let foundResult = false;
+      //fech all data to searsh
       const [currentRequests, previousRequests] = await Promise.all([
         fetchAllCurrentRequests(),
         fetchAllPreviousRequests(),
@@ -40,9 +46,9 @@ function Search() {
           ),
         ];
         if (filtered.length > 0) {
-          // إذا تم العثور على نتائج بالـ ID، عرض النتائج وإيقاف البحث
+          // If results are found by ID, display the results and stop searching.
           setFilteredRequests(filtered);
-          foundResult = true; // تم العثور على نتائج بالـ ID
+          foundResult = true; // result found
         }
       } if (!foundResult) {
         // Filter both collections based on the query
@@ -86,11 +92,7 @@ function Search() {
           <div className="background-message">Loading...</div>
         ) : (
           filteredRequests.length > 0 ? (
-            <RequestsTable
-              data={filteredRequests}
-              title="Filtered Requests"
-              showTitleAndSearch={false}
-            />
+            <RequestsTable data={filteredRequests} />
           ) : (
             <div className="background-message">No results found</div>
           )
@@ -101,6 +103,7 @@ function Search() {
 }
 
 export default Search;
+
 // search by id without fiching all data
 // استخدم Promise.allSettled للبحث في كلا الجدولين في وقت واحد
 // const [currentResult, previousResult] = await Promise.allSettled([

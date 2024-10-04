@@ -4,10 +4,11 @@ import { Steps } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 
 function TrackingDialog({ onClose, currentStatus }) {
+
   const [status, setData] = useState(currentStatus);
 
   useEffect(() => {
-    setData(currentStatus); // تحديث البيانات عندما تتغير
+    setData(currentStatus);
   }, [currentStatus]);
 
   const getCurrentStep = () => {
@@ -23,7 +24,7 @@ function TrackingDialog({ onClose, currentStatus }) {
       case "rejected":
         return 4;
       default:
-        return 0; // الخطوة الافتراضية
+        return 0;
     }
   };
 
@@ -38,7 +39,7 @@ function TrackingDialog({ onClose, currentStatus }) {
           {getCurrentStep() !== 4 ? (
             <Steps
               direction="vertical"
-              current={getCurrentStep()} // تعيين الخطوة الحالية بناءً على الحالة
+              current={getCurrentStep()} // Set the current step based on the status
               items={[
                 {
                   title: "Pending",
