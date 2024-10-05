@@ -19,7 +19,7 @@ function LoginPage() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password, userType } = formData;
 
@@ -28,32 +28,45 @@ function LoginPage() {
       return;
     }
 
-    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-    console.log(storedUsers);
+    try {
+      const response = await fetch("http://localhost:8500/api/v1/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password, userType }),
+      });
 
-    const user = storedUsers.find(
-      (user) => user.email === email && user.userType === userType
-    );
+      const data = await response.json();
 
-    if (!user) {
-      setErrorMessage("No user found with this email and user type.");
-      return;
-    }
+      if (response.ok) {
+        setErrorMessage("");
+        alert("Login successful!");
 
-    if (user.password !== password) {
-      setErrorMessage("Incorrect password.");
-      return;
-    }
-
-    localStorage.setItem("loggedInUser", JSON.stringify(user));
-
-    setErrorMessage("");
-    alert("Login successful!");
-
-    if (userType === "supplier") {
-      navigate("/supplier");
-    } else {
-      navigate("/transport");
+        switch (userType) {
+          case "supplier":
+            navigate("");
+            break;
+          case "transporter":
+            navigate("");
+            break;
+          /*case "manufacturer":
+            navigate("");
+            break;
+          case "distributor":
+            navigate("");
+            break;
+          case "retailer":
+            navigate("");
+            break;
+          default:
+            navigate("");*/
+        }
+      } else {
+        setErrorMessage(data.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      setErrorMessage("An error occurred. Please try again.");
     }
   };
 
