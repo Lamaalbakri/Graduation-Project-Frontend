@@ -3,7 +3,6 @@ import WelcomeCard from "./WelcomeCard ";
 import Actions from "./Actions";
 import Dashboard from "./Dashboard";
 import "./HomeUser.css";
-//mmmm
 function HomeUser({ userType }) {
   const getWelcomeMessage = (userType) => {
     switch (userType) {
