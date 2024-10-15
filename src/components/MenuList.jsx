@@ -8,6 +8,25 @@ import {
 import { Link } from "react-router-dom";
 
 const MenuList = ({ darkTheme, userType }) => {
+
+  const homeLink = () => {
+    switch (userType) {
+      case "supplier":
+        return "/supplier-home";
+      case "transporter":
+        return "/transporter-home";
+      case "manufacturer":
+        return "/manufacturer-home";
+      case "distributor":
+        return "/distributor-home";
+      case "retailer":
+        return "/retailer-home";
+      case "admin":
+        return "/admin-home";
+      default:
+        return "/";
+    }
+  };
   return (
     <Menu
       theme={darkTheme ? "dark" : "light"}
@@ -15,7 +34,7 @@ const MenuList = ({ darkTheme, userType }) => {
       className="menu-bar"
     >
       <Menu.Item key="home" icon={<HomeOutlined />}>
-        <Link to="/home">Home</Link>
+        <Link to={homeLink()}>Home</Link>
       </Menu.Item>
 
       {userType === "supplier" && (

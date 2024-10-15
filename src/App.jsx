@@ -25,14 +25,16 @@ const { Content } = Layout;
 
 function App() {
   // const userType = "transporter";
-  const userType = "supplier"; // على حسب نوع الستيكهولدرز الذي تريد عرضه
+  // const userType = "supplier"; // على حسب نوع الستيكهولدرز الذي تريد عرضه
+  const [userType, setUserType] = useState(null);
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<HomePageLayout />} />
         <Route path="/register" element={<RegisterPageLayout />} />
-        <Route path="/login" element={<LoginPageLayout />} />
+        {/* <Route path="/login" element={<LoginPageLayout />} /> */}
+        <Route path="/login" element={<LoginPageLayout setUserType={setUserType} />} />
         <Route path="*" element={<MainLayout userType={userType} />} />
       </Routes>
     </Router>
@@ -73,15 +75,57 @@ function MainLayout({ userType }) {
         />
         <Content style={{ padding: "0 24px", minHeight: 280 }}>
           <Routes>
-            <Route path="/home" element={<HomeUser userType={userType} />} />
-            <Route path="/assignTransporter" element={<AssignTransporter />} />
-            <Route path="/addRawMaterial" element={<AddRawMaterial />} />
-            <Route path="/viewRawMaterial" element={<ViewRawMaterial />} />
-            <Route path="/updateRawMaterial" element={<UpdateRawMaterial />} />
-            <Route path="/deleteRawMaterial" element={<DeleteRawMaterial />} />
-            <Route path="/currentRequests" element={<CurrentRequests />} />
-            <Route path="/previousRequests" element={<PreviousRequests />} />
-            <Route path="/searchRequests" element={<SearchRequests />} />
+            {userType === "supplier" && (
+              <>
+                <Route path="/supplier-home" element={<HomeUser userType="supplier" />} />
+                <Route path="/assignTransporter" element={<AssignTransporter />} />
+                <Route path="/addRawMaterial" element={<AddRawMaterial />} />
+                <Route path="/viewRawMaterial" element={<ViewRawMaterial />} />
+                <Route path="/updateRawMaterial" element={<UpdateRawMaterial />} />
+                <Route path="/deleteRawMaterial" element={<DeleteRawMaterial />} />
+                <Route path="/currentRequests" element={<CurrentRequests />} />
+                <Route path="/previousRequests" element={<PreviousRequests />} />
+                <Route path="/searchRequests" element={<SearchRequests />} />
+              </>
+            )}
+
+            {userType === "transporter" && (
+              <>
+                <Route path="/transporter-home" element={<HomeUser userType="transporter" />} />
+                {/* يمكنك إضافة المسارات الخاصة بالمستخدم الناقل هنا */}
+              </>
+            )}
+
+            {userType === "manufacturer" && (
+              <>
+                <Route path="/manufacturer-home" element={<HomeUser userType="manufacturer" />} />
+                {/* يمكنك إضافة المسارات الخاصة بالمستخدم المصنع هنا */}
+              </>
+            )}
+
+            {userType === "distributor" && (
+              <>
+                <Route path="/distributor-home" element={<HomeUser userType="distributor" />} />
+                {/* يمكنك إضافة المسارات الخاصة بالمستخدم الموزع هنا */}
+              </>
+            )}
+
+            {userType === "retailer" && (
+              <>
+                <Route path="/retailer-home" element={<HomeUser userType="retailer" />} />
+                {/* يمكنك إضافة المسارات الخاصة بالمستخدم البائع بالتجزئة هنا */}
+              </>
+            )}
+
+            {userType === "admin" && (
+              <>
+                <Route path="/admin-home" element={<HomeUser userType="admin" />} />
+                {/* يمكنك إضافة المسارات الخاصة بالمستخدم الإداري هنا */}
+              </>
+            )}
+
+            {/* يمكنك وضع مسار افتراضي أو صفحة غير موجودة */}
+            <Route path="*" element={<div>Page not found</div>} />
           </Routes>
         </Content>
       </Layout>
@@ -97,8 +141,9 @@ function RegisterPageLayout() {
   return <RegisterPage />;
 }
 
-function LoginPageLayout() {
-  return <LoginPage />;
+function LoginPageLayout({ setUserType }) {
+  return <LoginPage setUserType={setUserType} />;
 }
+
 
 export default App;

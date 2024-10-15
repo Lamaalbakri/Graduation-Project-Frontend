@@ -3,7 +3,7 @@ import { loginUser } from "../../api/authAPI";
 import "./Registration-Login-Style.css";
 import { Link, useNavigate } from "react-router-dom";
 
-function LoginPage() {
+function LoginPage({ setUserType }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -36,24 +36,26 @@ function LoginPage() {
       setSuccessMessage("Login successful!");
       // alert("Login successful!");
 
-      localStorage.setItem("userType", userType);
-      localStorage.setItem("email", email);
+      // localStorage.setItem("userType", userType);
+      // localStorage.setItem("email", email);
+
+      setUserType(userType);
 
       switch (userType) {
         case "supplier":
-          navigate("/supplier");
+          navigate("/supplier-home");
           break;
         case "transporter":
-          navigate("");
+          navigate("/transporter-home");
           break;
         /*case "manufacturer":
-          navigate("");
+          navigate("/manufacturer-home");
           break;
         case "distributor":
-          navigate("");
+          navigate("/distributor-home");
           break;
         case "retailer":
-          navigate("");
+          navigate("/retailer-home");
           break;
         default:
           navigate("");*/
