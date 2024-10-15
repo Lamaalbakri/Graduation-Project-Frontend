@@ -6,7 +6,7 @@ import {
   fetchAllCurrentRequests,
   fetchAllPreviousRequests,
   searchPreviousRequestById
-} from '../../api/rawMaterialRequestAPI';
+} from '../../../api/rawMaterialRequestAPI';
 
 function Search() {
   const [query, setQuery] = useState(""); // Holds the search input

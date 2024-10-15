@@ -8,18 +8,18 @@ import {
 } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import AppHeader from "./components/AppHeader";
-import PreviousRequests from "./components/RequestsTable/PreviousRequests";
-import CurrentRequests from "./components/RequestsTable/CurrentRequests";
+import PreviousRequests from "./components/Suppliers/RequestsTable/PreviousRequests";
+import CurrentRequests from "./components/Suppliers/RequestsTable/CurrentRequests";
 import HomeUser from "./components/HomeUser/HomeUser";
-import SearchRequests from "./components/RequestsTable/SearchRequests";
+import SearchRequests from "./components/Suppliers/RequestsTable/SearchRequests";
 import AssignTransporter from "./components/AssignTransporter/AssignTransporter";
 import RegisterPage from "./components/Register-Login/RegisterPage";
 import LoginPage from "./components/Register-Login/LoginPage";
 import SCMShomePage from "./components/HomePage/SCMShomePage";
-import AddRawMaterial from "./components/ManageRawMaterial/AddRawMaterial";
-import DeleteRawMaterial from "./components/ManageRawMaterial/DeleteRawMaterial";
-import ViewRawMaterial from "./components/ManageRawMaterial/ViewRawMaterial";
-import UpdateRawMaterial from "./components/ManageRawMaterial/UpdateRawMaterial";
+import AddRawMaterial from "./components/Suppliers/ManageRawMaterial/AddRawMaterial";
+import DeleteRawMaterial from "./components/Suppliers/ManageRawMaterial/DeleteRawMaterial";
+import ViewRawMaterial from "./components/Suppliers/ManageRawMaterial/ViewRawMaterial";
+import UpdateRawMaterial from "./components/Suppliers/ManageRawMaterial/UpdateRawMaterial";
 
 const { Content } = Layout;
 

@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import RequestsTable from './RequestsTable';
 import {
-  searchPreviousRequestById,
-  fetchAllPreviousRequests,
-  searchPreviousRequestByMName
-} from '../../api/rawMaterialRequestAPI';
+  searchCurrentRequestById,
+  searchCurrentRequestByMName,
+  fetchAllCurrentRequests
+} from '../../../api/rawMaterialRequestAPI';
 
-function PreviousRequests() {
+function CurrentRequests() {
   const [query, setQuery] = useState('');
   const [rawMaterialRequests, setRawMaterialRequests] = useState(null);
-  const [filteredRequests, setFilteredRequests] = useState(null);
+  const [filteredRequests, setFilteredRequests] = useState([]);
+
 
   useEffect(() => {
     const getRequests = async () => {
       try {
-        const requests = await fetchAllPreviousRequests(); // Call the fetch all requests function
+        const requests = await fetchAllCurrentRequests(); // Call the fetch all requests function
         setRawMaterialRequests(requests);
         setFilteredRequests(requests);
       } catch (error) {
@@ -46,7 +47,7 @@ function PreviousRequests() {
       } if (!foundResult) {
         try {
           //search by id in back-end
-          const requestData = await searchPreviousRequestById(searchQuery);// Call search from API if data is not present locally
+          const requestData = await searchCurrentRequestById(searchQuery); // Call search from API if data is not present locally
           if (requestData) {
             setFilteredRequests([requestData]);
             foundResult = true; // Result found
@@ -69,9 +70,9 @@ function PreviousRequests() {
           foundResult = true; // Result found
         }
       } if (!foundResult) {
+        //Search by name in back-end
         try {
-          //Search by name in back-end
-          const requestData = await searchPreviousRequestByMName(searchQuery); // Call search from API if data is not present locally
+          const requestData = await searchCurrentRequestByMName(searchQuery); // Call search from API if data is not present locally
           setFilteredRequests(requestData ? [requestData] : []);
         } catch (error) {
           console.error('Error fetching request by name:', error);
@@ -82,10 +83,11 @@ function PreviousRequests() {
   };
 
 
+
   return (
     <div className='RequestsTable'>
       <div className="header-row">
-        <div className="title">Previous Requests</div>
+        <div className="title">Current Requests</div>
         <div className="search-container">
           <div className='search-label'>Search by Name / ID</div>
           <input
@@ -97,6 +99,7 @@ function PreviousRequests() {
           />
         </div>
       </div>
+
       {rawMaterialRequests && filteredRequests.length ? ( // Conditional rendering
         <RequestsTable data={filteredRequests} />
       ) : (
@@ -104,8 +107,9 @@ function PreviousRequests() {
           {filteredRequests && filteredRequests.length === 0 ? 'No requests found' : 'Loading requests...'}
         </p> // Display a loading message until data is available
       )}
+
     </div>
   );
 }
 
-export default PreviousRequests;
+export default CurrentRequests

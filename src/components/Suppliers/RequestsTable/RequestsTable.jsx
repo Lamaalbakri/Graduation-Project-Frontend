@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import AssignTransporter from '../AssignTransporter/AssignTransporter';
-import MessageDialog from '../Dialog/MessageDialog';
-import TrackingDialog from '../Dialog/TrackingDialog';
-import ConfirmationDialog from '../Dialog/ConfirmationDialog';
-import { updateRawMaterialRequestStatus, moveCurrentToPrevious } from '../../api/rawMaterialRequestAPI';
+import AssignTransporter from '../../AssignTransporter/AssignTransporter';
+import MessageDialog from '../../Dialog/MessageDialog';
+import TrackingDialog from '../../Dialog/TrackingDialog';
+import ConfirmationDialog from '../../Dialog/ConfirmationDialog';
+import { updateRawMaterialRequestStatus, moveCurrentToPrevious } from '../../../api/rawMaterialRequestAPI';
 import { MessageOutlined } from '@ant-design/icons';
 import { DataGrid } from '@mui/x-data-grid';
 import "./RequestsTable.css";
@@ -163,7 +163,7 @@ function RequestsTable({ data }) {
         );
       },
     },
-    { field: 'arrivalCity', headerName: 'Arrival city', width: 140, headerAlign: 'left' },
+    { field: 'arrivalCity', headerName: 'Arrival city', width: 110, headerAlign: 'left' },
     {
       field: 'action', headerName: 'Action', width: 140, headerAlign: 'left',
       renderCell: (params) => (

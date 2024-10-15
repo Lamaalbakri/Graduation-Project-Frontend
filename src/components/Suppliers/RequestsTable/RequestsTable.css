@@ -83,7 +83,7 @@
     margin-left: 20px;
     height: 30px;
     width: 30px;
-    background: url("../images/tracking.png") no-repeat center center;
+    background: url("../../images/tracking.png") no-repeat center center;
     background-size: contain;
     border: none;
     cursor: pointer;

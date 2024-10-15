@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Registration-Login-Style.css";
 import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../../api/authAPI";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -26,16 +27,16 @@ function RegisterPage() {
   const validatePassword = (password) => {
     const errors = [];
     if (password.length < 8) {
-      errors.push("Password must be at least 8 characters long");
+      errors.push("be at least 8 characters long");
     }
     if (!/[A-Za-z]/.test(password)) {
-      errors.push("Password must contain at least one letter");
+      errors.push("contain at least one letter");
     }
     if (!/[0-9]/.test(password)) {
-      errors.push("Password must contain at least one number");
+      errors.push("contain at least one number");
     }
-    if (!/[^A-Za-z0-9]/.test(password)) {
-      errors.push("Password must contain at least one symbol");
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      errors.push("contain at least one symbol");
     }
     return errors;
   };
@@ -65,7 +66,8 @@ function RegisterPage() {
 
     const passwordErrors = validatePassword(password);
     if (passwordErrors.length > 0) {
-      setErrors(passwordErrors);
+      const combinedPasswordError = `Password must ${passwordErrors.join(", ")}.`;
+      setErrors([combinedPasswordError]);
       return;
     }
 
@@ -75,26 +77,15 @@ function RegisterPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:8500/api/v1/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          full_name,
-          email,
-          phone_number,
-          password,
-          confirm_password,
-          userType,
-        }),
-      });
+      const responseData = await registerUser(
+        full_name,
+        email,
+        phone_number,
+        password,
+        confirm_password,
+        userType
+      );
 
-      if (!response.ok) {
-        const errorData = await response.text(); // Get text response
-        console.error("Error response:", errorData);
-        throw new Error("Error registering user." + errorData);
-      }
-
-      const responseData = await response.json(); // استخراج البيانات بنجاح
       setSuccessMessage(responseData.message);
       setFormData({
         full_name: "",
@@ -108,7 +99,6 @@ function RegisterPage() {
       setErrors([]);
       navigate("/login");
     } catch (error) {
-      console.error("Fetch error:", error);
       setErrors([error.message || "Error registering user."]);
     }
   };
@@ -223,7 +213,10 @@ function RegisterPage() {
             </div>
           )}
 
-          {successMessage && <div className="success">{successMessage}</div>}
+          {successMessage &&
+            <div className="success">
+              {successMessage}
+            </div>}
         </div>
 
         <footer>

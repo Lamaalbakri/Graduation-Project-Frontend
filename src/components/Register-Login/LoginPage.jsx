@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { loginUser } from "../../api/authAPI";
 import "./Registration-Login-Style.css";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -9,7 +10,7 @@ function LoginPage() {
     password: "",
     userType: "",
   });
-
+  const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
@@ -29,44 +30,36 @@ function LoginPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:8500/api/v1/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password, userType }),
-      });
+      const data = await loginUser(email, password, userType);
 
-      const data = await response.json();
+      setErrorMessage("");
+      setSuccessMessage("Login successful!");
+      // alert("Login successful!");
 
-      if (response.ok) {
-        setErrorMessage("");
-        alert("Login successful!");
+      localStorage.setItem("userType", userType);
+      localStorage.setItem("email", email);
 
-        switch (userType) {
-          case "supplier":
-            navigate("");
-            break;
-          case "transporter":
-            navigate("");
-            break;
-          /*case "manufacturer":
-            navigate("");
-            break;
-          case "distributor":
-            navigate("");
-            break;
-          case "retailer":
-            navigate("");
-            break;
-          default:
-            navigate("");*/
-        }
-      } else {
-        setErrorMessage(data.message || "Login failed. Please try again.");
+      switch (userType) {
+        case "supplier":
+          navigate("/supplier");
+          break;
+        case "transporter":
+          navigate("");
+          break;
+        /*case "manufacturer":
+          navigate("");
+          break;
+        case "distributor":
+          navigate("");
+          break;
+        case "retailer":
+          navigate("");
+          break;
+        default:
+          navigate("");*/
       }
     } catch (error) {
-      setErrorMessage("An error occurred. Please try again.");
+      setErrorMessage(error.message);
     }
   };
 
@@ -121,8 +114,17 @@ function LoginPage() {
               <input type="submit" value="Login" />
             </div>
             {errorMessage && (
-              <div className="error-message">{errorMessage}</div>
+              <div className="error-message">
+                <div className="error">
+                  {errorMessage}
+                </div>
+              </div>
             )}
+
+            {successMessage &&
+              <div className="success">
+                {successMessage}
+              </div>}
             <div className="login-signup">
               <span className="text">
                 Don't have an account?{" "}
