@@ -23,7 +23,7 @@ function AssignTransporter({ onClose, onRequestSent }) {
   };
 
   // Handle validation when clicking "Next" in form 1
-  const handleNext = () => {
+  /*const handleNext = () => {
     if (
       !temperature ||
       !weight ||
@@ -41,6 +41,26 @@ function AssignTransporter({ onClose, onRequestSent }) {
       return; // Stop here if fields are incomplete
     }
     setCurrentForm(2); // Move to form 2 if fields are complete
+  };*/
+  const handleNext = () => {
+    let errors = [];
+    if (!temperature) errors.push("Temperature Control");
+    if (!weight) errors.push("Weight Category");
+    if (!distance) errors.push("Distance Category");
+    if (!departureCity) errors.push("Departure City");
+    if (dateRange.length === 0) errors.push("Delivery Date Range");
+
+    if (errors.length > 0) {
+      Modal.error({
+        title: "Error",
+        content: `Please complete the following fields: ${errors.join(", ")}`,
+        okButtonProps: {
+          className: "confirm-button",
+        },
+      });
+      return;
+    }
+    setCurrentForm(2);
   };
 
   // Handle going back to form 1
@@ -59,8 +79,8 @@ function AssignTransporter({ onClose, onRequestSent }) {
           title: "Error",
           content: "Please select the transport company.",
           okButtonProps: {
-            className: "confirm-button"
-          }
+            className: "confirm-button",
+          },
         });
         return; // Stop here if no company is selected
       }
@@ -91,8 +111,8 @@ function AssignTransporter({ onClose, onRequestSent }) {
             title: "Error",
             content: "Failed to send request.",
             okButtonProps: {
-              className: "confirm-button"
-            }
+              className: "confirm-button",
+            },
           });
         }
       } catch (error) {
@@ -100,8 +120,8 @@ function AssignTransporter({ onClose, onRequestSent }) {
           title: "Error",
           content: "An error occurred while sending the request.",
           okButtonProps: {
-            className: "confirm-button"
-          }
+            className: "confirm-button",
+          },
         });
       }
     }
