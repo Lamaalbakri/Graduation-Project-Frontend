@@ -96,7 +96,45 @@ const MenuList = ({ darkTheme, userType }) => {
 
       {userType === "manufacturer" && (
         <React.Fragment>
-          {/* قائمة العناصر التي تخص الـ "manufacturer" */}
+          <Menu.SubMenu
+            key="manageManufacturerGoods"
+            icon={<GoldOutlined />}
+            title="Manage Goods"
+          >
+            <Menu.Item key="addGoods">
+              <Link to="/addGoods">Add Goods</Link>
+            </Menu.Item>
+            <Menu.Item key="viewGoods">
+              <Link to="/viewGoods">View Goods</Link>
+            </Menu.Item>
+            <Menu.Item key="updateGoods">
+              <Link to="/updateGoods">Update Goods</Link>
+            </Menu.Item>
+            <Menu.Item key="deleteGoods">
+              <Link to="/deleteGoods">Delete Goods</Link>
+            </Menu.Item>
+          </Menu.SubMenu>
+          <Menu.SubMenu
+            key="manageRawMaterialOrders"
+            icon={<GoldOutlined />}
+            title="Manage Raw Material Orders"
+          >
+            <Menu.Item key="addSuppliers">
+              <Link to="/addSuppliers">Add Suppliers</Link>
+            </Menu.Item>
+            <Menu.Item key="viewSuppliers">
+              <Link to="/viewSuppliers">View Suppliers</Link>
+            </Menu.Item>
+            <Menu.Item key="viewRawMaterials">
+              <Link to="/viewRawMaterials">View Raw Materials</Link>
+            </Menu.Item>
+            <Menu.Item key="shoppingCarts">
+              <Link to="/shoppingCarts">Shopping Carts</Link>
+            </Menu.Item>
+            <Menu.Item key="viewOrders">
+              <Link to="/viewOrders">View Orders</Link>
+            </Menu.Item>
+          </Menu.SubMenu>
         </React.Fragment>
       )}
 

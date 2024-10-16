@@ -48,17 +48,17 @@ function LoginPage({ setUserType }) {
         case "transporter":
           navigate("/transporter-home");
           break;
-        /*case "manufacturer":
+        case "manufacturer":
           navigate("/manufacturer-home");
           break;
-        case "distributor":
-          navigate("/distributor-home");
-          break;
-        case "retailer":
-          navigate("/retailer-home");
-          break;
-        default:
-          navigate("");*/
+        // case "distributor":
+        //   navigate("/distributor-home");
+        //   break;
+        // case "retailer":
+        //   navigate("/retailer-home");
+        //   break;
+        // default:
+        //   navigate("");*/
       }
     } catch (error) {
       setErrorMessage(error.message);

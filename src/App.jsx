@@ -25,7 +25,8 @@ import SearchRequests from "./components/Suppliers/RequestsTable/SearchRequests"
 import CurrentTransportRequests from "./components/Transporters/TransportRequestsTable/CurrentTransportRequests";
 import PreviousTransportRequests from "./components/Transporters/TransportRequestsTable/PreviousTransportRequests";
 import SearchTransportRequests from "./components/Transporters/TransportRequestsTable/SearchTransportRequests";
-
+//Manufacturers imports
+import ShoppingCart from "./components/Manufacturers/RawMaterialOrder/ShoppingCart";
 const { Content } = Layout;
 
 function App() {
@@ -134,11 +135,12 @@ function MainLayout({ userType }) {
 
             {userType === "manufacturer" && (
               <>
-                <Route
-                  path="/manufacturer-home"
-                  element={<HomeUser userType="manufacturer" />}
-                />
-                {/* يمكنك إضافة المسارات الخاصة بالمستخدم المصنع هنا */}
+                <Route path="/manufacturer-home" element={<HomeUser userType="manufacturer" />} />
+                {/* <Route path="/addSuppliers" element={} />
+                <Route path="/viewSuppliers" element={} />
+                <Route path="/viewRawMaterials" element={} /> */}
+                <Route path="/shoppingCarts" element={<ShoppingCart />} />
+                {/* <Route path="/viewOrders" element={} /> */}
               </>
             )}
 

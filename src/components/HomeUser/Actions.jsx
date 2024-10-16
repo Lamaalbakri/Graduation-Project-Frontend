@@ -71,7 +71,54 @@ const Actions = ({ userType }) => {
         </>
       )}
 
-      {userType === "manufacturer" && <></>}
+      {userType === "manufacturer" && (<>
+        <div className="actions">
+          <Link to="/addGoods">
+            <button>
+              <i className="fas fa-plus"></i> Add Goods
+            </button>
+          </Link>
+          <Link to="/viewGoods">
+            <button>
+              <i className="fas fa-eye"></i> View Goods
+            </button>
+          </Link>
+          <Link to="/updateGoods">
+            <button>
+              <i className="fa-sharp fa-solid fa-pen-to-square"></i> Update
+              Goods
+            </button>
+          </Link>
+          <Link to="/deleteGoods">
+            <button>
+              <i className="fa-sharp fa-solid fa-pen-to-square"></i> Delete
+              Goods
+            </button>
+          </Link>
+          <Link to="/addSuppliers">
+            <button>
+              <i className="fas fa-tachometer-alt"></i> Add Suppliers
+            </button>
+          </Link>
+          <Link to="/viewSuppliers">
+            <button>
+              <i className="fas fa-history"></i> View Suppliers
+            </button>
+          </Link>
+          <Link to="/shoppingCarts">
+            <button>
+              <i className="fas fa-search"></i> Shopping Carts
+            </button>
+          </Link>
+          <Link to="/viewOrders">
+            <button>
+              <i className="fas fa-search"></i> View Orders
+            </button>
+          </Link>
+        </div>
+      </>
+      )}
+
 
       {userType === "distributor" && <></>}
 
