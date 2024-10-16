@@ -1,11 +1,13 @@
 import React from "react";
-import { Layout, Button } from "antd";
+import { Layout, Button, Dropdown, Menu } from "antd";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   LoginOutlined,
+  SettingOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
-import Logo from "./Logo";
+import UserProfile from "./UserProfile";
 
 const { Header } = Layout;
 
@@ -14,7 +16,18 @@ const AppHeader = ({
   setCollapsed,
   handleLogout,
   colorBgContainer,
+  userType,
 }) => {
+  const menu = (
+    <Menu>
+      <Menu.Item key="1" icon={<UserOutlined />}>
+        Edit Account
+      </Menu.Item>
+      <Menu.Item key="2" icon={<LoginOutlined />} onClick={handleLogout}>
+        Logout
+      </Menu.Item>
+    </Menu>
+  );
   return (
     <Header
       style={{
@@ -31,15 +44,23 @@ const AppHeader = ({
         onClick={() => setCollapsed(!collapsed)}
         icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       />
-      <Logo />
-      <Button
-        type="text"
-        className="logout-button"
-        icon={<LoginOutlined />}
-        onClick={handleLogout}
-      >
-        Logout
-      </Button>
+      <div style={{ display: "flex", alignItems: "center", marginRight: "1%" }}>
+        <Dropdown overlay={menu} trigger={["click"]}>
+          <Button
+            type="text"
+            icon={<SettingOutlined />}
+            style={{ marginLeft: 10 }}
+          />
+        </Dropdown>
+        <span
+          style={{
+            borderLeft: "2px solid #d3d3d3",
+            height: "24px",
+            margin: "0 10px",
+          }}
+        ></span>
+        <UserProfile userType={userType} />
+      </div>
     </Header>
   );
 };

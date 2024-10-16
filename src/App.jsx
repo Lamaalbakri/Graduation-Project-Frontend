@@ -78,6 +78,7 @@ function MainLayout({ userType }) {
           setCollapsed={setCollapsed}
           handleLogout={handleLogout}
           colorBgContainer={colorBgContainer}
+          userType={userType}
         />
         <Content style={{ padding: "0 24px", minHeight: 280 }}>
           <Routes>

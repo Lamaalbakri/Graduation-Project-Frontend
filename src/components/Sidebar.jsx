@@ -1,29 +1,12 @@
 import React from "react";
 import { Layout } from "antd";
-import UserLogo from "./UserLogo";
+import Logo from "./Logo";
 import MenuList from "./MenuList";
 import ToggleThemeButton from "./ToggleThemeButton";
 
 const { Sider } = Layout;
 
 const Sidebar = ({ collapsed, darkTheme, toggleTheme, userType }) => {
-  const getUserRole = (userType) => {
-    switch (userType) {
-      case "supplier":
-        return "Supplier";
-      case "transporter":
-        return "Transporter";
-      case "manufacturer":
-        return "Manufacturer";
-      case "distributor":
-        return "Distributor";
-      case "retailer":
-        return "Retailer";
-      default:
-        return "User";
-    }
-  };
-
   return (
     <Sider
       width={266}
@@ -41,8 +24,7 @@ const Sidebar = ({ collapsed, darkTheme, toggleTheme, userType }) => {
           padding: "25px",
         }}
       >
-        <UserLogo />
-        <span className="span">{getUserRole(userType)}</span>
+        <Logo />
       </div>
       <MenuList darkTheme={darkTheme} userType={userType} />
       <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} />
