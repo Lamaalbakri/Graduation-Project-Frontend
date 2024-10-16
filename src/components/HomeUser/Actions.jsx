@@ -32,7 +32,7 @@ const Actions = ({ userType }) => {
                 <i className="fas fa-history"></i> Previous Requests
               </button>
             </Link>
-            <Link to="/searchRequest">
+            <Link to="/searchRequests">
               <button>
                 <i className="fas fa-search"></i> Search for Request
               </button>
@@ -51,18 +51,18 @@ const Actions = ({ userType }) => {
               whiteSpace: "nowrap",
             }}
           >
-            <Link to="/">
+            <Link to="/currentTransportRequests">
               <button>
                 <i className="fas fa-tachometer-alt"></i>
                 Current Transport Requests
               </button>
             </Link>
-            <Link to="/">
+            <Link to="/previousTransportRequests">
               <button>
                 <i className="fas fa-history"></i> Previous Transport Requests
               </button>
             </Link>
-            <Link to="/">
+            <Link to="/searchTransportRequests">
               <button>
                 <i className="fas fa-search"></i> Search for Request
               </button>

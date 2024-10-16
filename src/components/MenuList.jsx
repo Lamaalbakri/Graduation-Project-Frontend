@@ -8,7 +8,6 @@ import {
 import { Link } from "react-router-dom";
 
 const MenuList = ({ darkTheme, userType }) => {
-
   const homeLink = () => {
     switch (userType) {
       case "supplier":
@@ -82,9 +81,15 @@ const MenuList = ({ darkTheme, userType }) => {
             icon={<SnippetsOutlined />}
             title="Manage Requests"
           >
-            <Menu.Item key="tCurrent">Current Requests</Menu.Item>
-            <Menu.Item key="tPrevious">Previous Requests</Menu.Item>
-            <Menu.Item key="tSearchRequest">Search for Request</Menu.Item>
+            <Menu.Item key="tCurrent">
+              <Link to="/currentTransportRequests">Current Requests</Link>
+            </Menu.Item>
+            <Menu.Item key="tPrevious">
+              <Link to="/previousTransportRequests">Previous Requests</Link>
+            </Menu.Item>
+            <Menu.Item key="tSearchRequest">
+              <Link to="/searchTransportRequests">Search for Request</Link>
+            </Menu.Item>
           </Menu.SubMenu>
         </React.Fragment>
       )}

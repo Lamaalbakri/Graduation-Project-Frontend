@@ -1,90 +1,84 @@
-/*import { useState, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import ConfirmationDialog from "../Dialog/ConfirmationDialog";
 import moment from "moment";
-import { updateTransportRequestStatus } from "../api/transportRequestAPI";
+import ConfirmationDialog from "../../Dialog/ConfirmationDialog";
+import { DataGrid } from "@mui/x-data-grid";
+import "./TransportRequestsTable.css";
 
 function TransportRequestsTable({ data }) {
-  const [requests, setData] = useState(() =>
+  const [requests, setRequests] = useState(
     data.map((request) => ({
       ...request,
       statusClass: `status-${request.status}`,
     }))
   );
-  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
+
+  const [dialogState, setDialogState] = useState({
+    confirmationDialog: false,
+  });
   const [selectedRequestId, setSelectedRequestId] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("");
 
   useEffect(() => {
-    setData(data);
+    setRequests(data);
   }, [data]);
 
-  const handleStatusChange = async (id, newStatus) => {
-    if (newStatus === "delivered" || newStatus === "rejected") {
-      handleOpenConfirmationDialog(id, newStatus);
-      return;
-    }
+  // Helper function to toggle dialog states (open or close)
+  const toggleDialog = (dialogName, value, requestId = null, status = "") => {
+    setDialogState((prev) => ({ ...prev, [dialogName]: value }));
+    if (requestId) setSelectedRequestId(requestId);
+    if (status) setSelectedStatus(status);
+  };
 
+  const updateRequestStatus = async (id, newStatus) => {
     try {
-      const updatedRequest = await updateTransportRequestStatus(id, newStatus);
-      setData((prevRequests) =>
+      // Simulate status update (to be replaced with real API call)
+      setRequests((prevRequests) =>
         prevRequests.map((request) =>
-          request._id === id
+          request.id === id
             ? {
                 ...request,
-                status: updatedRequest.data.status,
-                statusClass: `status-${updatedRequest.data.status}`,
+                status: newStatus,
+                statusClass: `status-${newStatus}`,
               }
             : request
         )
       );
     } catch (error) {
-      console.error("Error updating status:", error);
+      console.error("Error updating the status:", error);
     }
   };
 
-  const handleOpenConfirmationDialog = (id, status) => {
-    setSelectedRequestId(id);
-    setSelectedStatus(status);
-    setOpenConfirmationDialog(true);
+  const handleStatusChange = (id, newStatus) => {
+    if (newStatus === "delivered" || newStatus === "rejected") {
+      toggleDialog("confirmationDialog", true, id, newStatus);
+    } else {
+      updateRequestStatus(id, newStatus);
+    }
   };
 
   const handleConfirmAction = async () => {
     try {
-      const updatedRequest = await updateTransportRequestStatus(
-        selectedRequestId,
-        selectedStatus
-      );
-      setData((prevRequests) =>
-        prevRequests.map((request) =>
-          request._id === selectedRequestId
-            ? {
-                ...request,
-                status: updatedRequest.data.status,
-                statusClass: `status-${updatedRequest.data.status}`,
-              }
-            : request
-        )
-      );
-      setOpenConfirmationDialog(false);
-      setSelectedRequestId(null);
+      updateRequestStatus(selectedRequestId, selectedStatus);
     } catch (error) {
-      console.error("Error updating status:", error);
+      console.error("Error during confirmation action:", error);
+    } finally {
+      toggleDialog("confirmationDialog", false);
     }
   };
 
-  const handleCloseConfirmationDialog = () => {
-    setOpenConfirmationDialog(false);
-    setSelectedRequestId(null);
-  };
+  if (!requests.length) {
+    return (
+      <div className="background-message">No transport requests found</div>
+    );
+  }
 
   const columns = [
-    { field: "_id", headerName: "ID", width: 70, headerAlign: "left" },
+    { field: "_id", headerName: "ID", width: 120, headerAlign: "left" },
     {
       field: "transportServiceName",
-      headerName: "Transport Service Name",
-      width: 200,
+      headerName: "Transport Service",
+      width: 170,
       headerAlign: "left",
     },
     {
@@ -96,52 +90,51 @@ function TransportRequestsTable({ data }) {
     {
       field: "distanceCategory",
       headerName: "Distance Category",
-      width: 150,
+      width: 170,
       headerAlign: "left",
     },
     {
       field: "price",
       headerName: "Price",
-      width: 90,
-      headerAlign: "left",
       type: "number",
+      width: 70,
+      headerAlign: "left",
     },
     {
       field: "deliveryDateRange",
       headerName: "Delivery Date Range",
-      width: 200,
+      width: 170,
       headerAlign: "left",
-      renderCell: (params) => {
-        return `${moment(params.row.startDate).format("YYYY-MM-DD")} - ${moment(
-          params.row.endDate
-        ).format("YYYY-MM-DD")}`;
-      },
+      renderCell: (params) =>
+        moment(params.row.deliveryDateRange).format("YYYY-MM-DD"),
     },
     {
       field: "status",
       headerName: "Status",
-      width: 150,
+      width: 130,
       headerAlign: "left",
       renderCell: (params) => {
         const statusClass = `status-${params.row.status}`;
+        if (
+          params.row.status === "rejected" ||
+          params.row.status === "delivered"
+        ) {
+          return (
+            <div className={`status-text ${statusClass}`}>
+              {params.row.status}
+            </div>
+          );
+        }
         return (
           <select
             value={params.row.status}
-            onChange={(e) => handleStatusChange(params.row._id, e.target.value)}
             className={`status-select ${statusClass}`}
+            onChange={(e) => handleStatusChange(params.row.id, e.target.value)}
           >
-            <option value="pending" className="status-pending">
-              Pending
-            </option>
-            <option value="inProgress" className="status-inProgress">
-              In Progress
-            </option>
-            <option value="delivered" className="status-delivered">
-              Delivered
-            </option>
-            <option value="rejected" className="status-rejected">
-              Rejected
-            </option>
+            <option value="pending">Pending</option>
+            <option value="inProgress">In Progress</option>
+            <option value="delivered">Delivered</option>
+            <option value="rejected">Rejected</option>
           </select>
         );
       },
@@ -149,34 +142,42 @@ function TransportRequestsTable({ data }) {
     {
       field: "arrivalCity",
       headerName: "Arrival City",
-      width: 150,
+      width: 110,
       headerAlign: "left",
     },
     {
       field: "departureCity",
       headerName: "Departure City",
-      width: 150,
+      width: 130,
       headerAlign: "left",
     },
   ];
 
-  const paginationModel = { page: 0, pageSize: 10 };
-
   return (
-    <div className="RequestsTable">
+    <div className="TransportRequestsTable">
       <DataGrid
         rows={requests}
-        columns={columns}
-        pageSizeOptions={[5, 10]}
-        getRowId={(row) => row._id}
-        autoHeight
-        initialState={{ pagination: { paginationModel } }}
         disableRowSelectionOnClick
+        getRowHeight={() => "auto"}
+        columns={columns}
+        getRowId={(row) => row.id}
+        autoHeight
+        initialState={{
+          pagination: { paginationModel: { page: 0, pageSize: 10 } },
+        }}
+        pageSizeOptions={[5, 10]}
         sx={{
           "& .MuiDataGrid-cell": { textAlign: "left" },
+          "&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell": { py: "8px" },
+          "&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell": {
+            py: "10px",
+          },
+          "&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell": {
+            py: "22px",
+          },
         }}
       />
-      {openConfirmationDialog && (
+      {dialogState.confirmationDialog && (
         <ConfirmationDialog
           title={`Confirm ${
             selectedStatus === "rejected" ? "Rejection" : "Delivery"
@@ -185,7 +186,7 @@ function TransportRequestsTable({ data }) {
             selectedStatus === "rejected" ? "reject" : "mark as delivered"
           } this transport request?`}
           onConfirm={handleConfirmAction}
-          onCancel={handleCloseConfirmationDialog}
+          onCancel={() => toggleDialog("confirmationDialog", false)}
         />
       )}
     </div>
@@ -196,4 +197,4 @@ TransportRequestsTable.propTypes = {
   data: PropTypes.array.isRequired,
 };
 
-export default TransportRequestsTable; */
+export default TransportRequestsTable;

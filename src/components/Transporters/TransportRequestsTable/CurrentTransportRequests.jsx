@@ -1,62 +1,80 @@
-/*import React, { useState, useEffect } from "react";
-import TransportRequestsTable from "./TransportRequestsTable"; // تعديل اسم الجدول لطلبات النقل
-import {
-  searchTransportRequestById,
-  fetchAllTransportRequests,
-} from "../api/transportRequestAPI"; // تعديل API
+import React, { useState, useEffect } from "react";
+import TransportRequestsTable from "./TransportRequestsTable";
 
 function CurrentTransportRequests() {
   const [query, setQuery] = useState("");
-  const [transportRequests, setTransportRequests] = useState(null);
-  const [filteredRequests, setFilteredRequests] = useState(null);
-
-  const filterRequestsByServiceName = (requests, query) => {
-    const searchQuery = query.toLowerCase();
-    return requests.filter((request) =>
-      request.transportServiceName.toLowerCase().includes(searchQuery)
-    );
-  };
+  const [rawMaterialRequests, setRawMaterialRequests] = useState(null);
+  const [filteredRequests, setFilteredRequests] = useState([]);
 
   useEffect(() => {
     const getRequests = async () => {
       try {
-        const requests = await fetchAllTransportRequests(); // استدعاء دالة جلب جميع الطلبات
-        setTransportRequests(requests);
+        const requests = await fetchAllCurrentRequests(); // Call the fetch all requests function
+        setRawMaterialRequests(requests);
         setFilteredRequests(requests);
       } catch (error) {
-        console.error("Error fetching transport requests:", error);
+        console.error("Error fetching requests:", error);
       }
     };
-    getRequests(); // استدعاء الدالة عند تحميل المكون لأول مرة
+    getRequests(); // Call the function when the component is first loaded.
   }, []);
 
   const handleSearch = async (e) => {
     const searchQuery = e.target.value.trim().toLowerCase();
     setQuery(searchQuery);
 
-    // Regex to validate MongoDB ObjectId
-    const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+    const validShortId = /^m?[0-9a-z]{8}$/;
+    let foundResult = false;
 
-    if (objectIdRegex.test(searchQuery)) {
-      try {
-        const requestData = await searchTransportRequestById(searchQuery); // استدعاء الدالة من ملف API
-        if (requestData === null) {
-          setFilteredRequests([]); // إذا كانت النتيجة null، قم بتعيين مصفوفة فارغة
-        } else {
-          setFilteredRequests([requestData]); // عرض النتيجة التي تم العثور عليها
-        }
-      } catch (error) {
-        console.error("Error fetching transport request by id:", error);
-        setFilteredRequests([]);
-      }
-    } else {
-      // إذا كان البحث باستخدام الاسم
-      if (transportRequests) {
-        const filtered = filterRequestsByServiceName(
-          transportRequests,
-          searchQuery
+    //check if it is an id
+    if (validShortId.test(searchQuery)) {
+      //check if there are requests
+      if (rawMaterialRequests) {
+        //Search by id using data already fetched
+        const filtered = rawMaterialRequests.filter((request) =>
+          request.shortId?.toLowerCase().includes(searchQuery)
         );
-        setFilteredRequests(filtered);
+        if (filtered.length > 0) {
+          setFilteredRequests(filtered);
+          foundResult = true; // Result found
+        }
+      }
+      if (!foundResult) {
+        try {
+          //search by id in back-end
+          const requestData = await searchCurrentRequestById(searchQuery); // Call search from API if data is not present locally
+          if (requestData) {
+            setFilteredRequests([requestData]);
+            foundResult = true; // Result found
+          } else {
+            setFilteredRequests([]); // there is no results
+          }
+        } catch (error) {
+          console.error("Error fetching request by id:", error);
+          setFilteredRequests([]);
+        }
+      }
+    }
+    if (!foundResult) {
+      // Search by name using data already fetched
+      if (rawMaterialRequests) {
+        const filtered = rawMaterialRequests.filter((request) =>
+          request.manufacturerName?.toLowerCase().includes(searchQuery)
+        );
+        if (filtered.length > 0) {
+          setFilteredRequests(filtered);
+          foundResult = true; // Result found
+        }
+      }
+      if (!foundResult) {
+        //Search by name in back-end
+        try {
+          const requestData = await searchCurrentRequestByMName(searchQuery); // Call search from API if data is not present locally
+          setFilteredRequests(requestData ? [requestData] : []);
+        } catch (error) {
+          console.error("Error fetching request by name:", error);
+          setFilteredRequests([]);
+        }
       }
     }
   };
@@ -66,10 +84,10 @@ function CurrentTransportRequests() {
       <div className="header-row">
         <div className="title">Current Transport Requests</div>
         <div className="search-container">
-          <div className="search-label">Search by Service Name / ID</div>{" "}
+          <div className="search-label">Search by ID</div>
           <input
             type="search"
-            placeholder="Search by Service Name / ID"
+            placeholder="Search by ID"
             value={query}
             onChange={handleSearch}
             className="input-with-icon"
@@ -77,17 +95,17 @@ function CurrentTransportRequests() {
         </div>
       </div>
 
-      {transportRequests && filteredRequests.length ? ( // Conditional rendering
+      {rawMaterialRequests && filteredRequests.length ? ( // Conditional rendering
         <TransportRequestsTable data={filteredRequests} />
       ) : (
         <p className="background-message">
           {filteredRequests && filteredRequests.length === 0
-            ? "No transport requests found"
-            : "Loading transport requests..."}
+            ? "No requests found"
+            : "Loading requests..."}
         </p> // Display a loading message until data is available
       )}
     </div>
   );
 }
 
-export default CurrentTransportRequests; */
+export default CurrentTransportRequests;

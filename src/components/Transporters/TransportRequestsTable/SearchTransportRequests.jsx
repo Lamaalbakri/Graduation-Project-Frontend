@@ -1,14 +1,8 @@
 import { useState } from "react";
-import RequestsTable from "./RequestsTable";
-import "./RequestsTable.css";
-import {
-  searchCurrentRequestById,
-  fetchAllCurrentRequests,
-  fetchAllPreviousRequests,
-  searchPreviousRequestById,
-} from "../../../api/rawMaterialRequestAPI";
+import TransportRequestsTable from "./TransportRequestsTable";
+import "./TransportRequestsTable.css";
 
-function Search() {
+function SearchTransportRequests() {
   const [query, setQuery] = useState(""); // Holds the search input
   const [hasSearched, setHasSearched] = useState(false); // Tracks if search has been performed
   const [filteredRequests, setFilteredRequests] = useState([]); // Holds filtered data
@@ -31,8 +25,8 @@ function Search() {
       let foundResult = false;
       //fech all data to searsh
       const [currentRequests, previousRequests] = await Promise.all([
-        fetchAllCurrentRequests(),
-        fetchAllPreviousRequests(),
+        //fetchAllCurrentRequests(),
+        //fetchAllPreviousRequests(),
       ]);
 
       if (validShortId.test(searchQuery)) {
@@ -79,12 +73,12 @@ function Search() {
   return (
     <div className="search">
       <div className="header-row">
-        <div className="title">Search For Requests</div>
+        <div className="title">Search for Requests</div>
         <div className="search-container">
-          <div className="search-label">Search by Name / ID</div>
+          <div className="search-label">Search by ID</div>
           <input
             type="search"
-            placeholder="Search by Name / ID"
+            placeholder="Search by ID"
             value={query}
             onChange={handleSearch}
             className="input-with-icon"
@@ -96,7 +90,7 @@ function Search() {
         (loading ? (
           <div className="background-message">Loading...</div>
         ) : filteredRequests.length > 0 ? (
-          <RequestsTable data={filteredRequests} />
+          <TransportRequestsTable data={filteredRequests} />
         ) : (
           <div className="background-message">No results found</div>
         ))}
@@ -104,23 +98,4 @@ function Search() {
   );
 }
 
-export default Search;
-
-// search by id without fiching all data
-// استخدم Promise.allSettled للبحث في كلا الجدولين في وقت واحد
-// const [currentResult, previousResult] = await Promise.allSettled([
-//   searchCurrentRequestById(searchQuery),
-//   searchPreviousRequestById(searchQuery),
-// ]);
-
-// // تجميع النتائج فقط إذا تم العثور على بيانات
-// const results = [];
-
-// if (currentResult.status === 'fulfilled' && currentResult.value) {
-//   results.push(currentResult.value);
-// }
-
-// if (previousResult.status === 'fulfilled' && previousResult.value) {
-//   results.push(previousResult.value);
-//setFilteredRequests(results.length > 0 ? results : []); // Show results if found
-// }
+export default SearchTransportRequests;
