@@ -146,11 +146,8 @@ function MainLayout({ userType }) {
                 <Route path="/viewSuppliers" element={} />
                 <Route path="/viewRawMaterials" element={} /> */}
                 <Route path="/shoppingCarts" element={<ShoppingCartList />} />
-                <Route
-                  path="/shoppingCart/:id"
-                  element={<ShoppingCartDetail />}
-                />
-                <Route path="/cart/:id/complete" element={<CompleteOrder />} />
+                <Route path="/shoppingCart/:id" element={<ShoppingCartDetail />} />
+                <Route path="/shoppingCart/:id/complete" element={<CompleteOrder />} />
                 {/* <Route path="/viewOrders" element={} /> */}
               </>
             )}

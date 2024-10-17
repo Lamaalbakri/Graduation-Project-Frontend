@@ -11,7 +11,7 @@ function CompleteOrder() {
                 crumbs={[
                     { name: "Shopping Carts", path: "/shoppingCarts" },
                     { name: `Shopping Cart #${id}`, path: `/shoppingCart/${id}` },
-                    { name: "Complete The Order", path: `/cart/${id}/complete` }
+                    { name: "Complete The Order", path: `/shoppingCart/${id}/complete` }
                 ]}
             />
             <h2>Complete The Order for Cart #{id}</h2>

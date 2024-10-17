@@ -18,7 +18,7 @@ const ShoppingCart = ({ cart }) => {
             </div>
             <div className='button-container'>
                 <Link to={`/shoppingCart/${cart.id}`}>
-                    <button>Complete The Order</button>
+                    <button>View Details</button>
                 </Link>
             </div>
         </div>
