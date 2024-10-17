@@ -26,7 +26,10 @@ import CurrentTransportRequests from "./components/Transporters/TransportRequest
 import PreviousTransportRequests from "./components/Transporters/TransportRequestsTable/PreviousTransportRequests";
 import SearchTransportRequests from "./components/Transporters/TransportRequestsTable/SearchTransportRequests";
 //Manufacturers imports
-import ShoppingCart from "./components/Manufacturers/RawMaterialOrder/ShoppingCart";
+import ShoppingCartList from "./components/Manufacturers/RawMaterialOrder/ShoppingCart/ShoppingCartList";
+import ShoppingCartDetail from "./components/Manufacturers/RawMaterialOrder/ShoppingCart/ShoppingCartDetail";
+import CompleteOrder from "./components/Manufacturers/RawMaterialOrder/ShoppingCart/CompleteOrder";
+
 const { Content } = Layout;
 
 function App() {
@@ -139,7 +142,9 @@ function MainLayout({ userType }) {
                 {/* <Route path="/addSuppliers" element={} />
                 <Route path="/viewSuppliers" element={} />
                 <Route path="/viewRawMaterials" element={} /> */}
-                <Route path="/shoppingCarts" element={<ShoppingCart />} />
+                <Route path="/shoppingCarts" element={<ShoppingCartList />} />
+                <Route path="/shoppingCart/:id" element={<ShoppingCartDetail />} />
+                <Route path="/cart/:id/complete" element={<CompleteOrder />} />
                 {/* <Route path="/viewOrders" element={} /> */}
               </>
             )}
