@@ -55,6 +55,7 @@
 }
 .custom-range-picker{
     z-index: 9999;
+    margin-bottom: 20px;
 }
 .ant-picker{
     border-color: #1c2229 !important;
@@ -108,6 +109,7 @@
     bottom: 10px;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-top: 10px;
 }
 .nextButtonStyle:hover , .backButtonStyle:hover , .sendButtonStyle:hover, .confirm-button{
     background-color: #595a5b !important;
