@@ -13,6 +13,7 @@ import AssignTransporter from "./components/AssignTransporter/AssignTransporter"
 import RegisterPage from "./components/Register-Login/RegisterPage";
 import LoginPage from "./components/Register-Login/LoginPage";
 import SCMShomePage from "./components/HomePage/SCMShomePage";
+import EditAccount from "./components/EditAccount/EditAccount";
 // Suppliers imports
 import AddRawMaterial from "./components/Suppliers/ManageRawMaterial/AddRawMaterial";
 import DeleteRawMaterial from "./components/Suppliers/ManageRawMaterial/DeleteRawMaterial";
@@ -40,7 +41,6 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePageLayout />} />
         <Route path="/register" element={<RegisterPageLayout />} />
-        {/* <Route path="/login" element={<LoginPageLayout />} /> */}
         <Route
           path="/login"
           element={<LoginPageLayout setUserType={setUserType} />}
@@ -138,12 +138,18 @@ function MainLayout({ userType }) {
 
             {userType === "manufacturer" && (
               <>
-                <Route path="/manufacturer-home" element={<HomeUser userType="manufacturer" />} />
+                <Route
+                  path="/manufacturer-home"
+                  element={<HomeUser userType="manufacturer" />}
+                />
                 {/* <Route path="/addSuppliers" element={} />
                 <Route path="/viewSuppliers" element={} />
                 <Route path="/viewRawMaterials" element={} /> */}
                 <Route path="/shoppingCarts" element={<ShoppingCartList />} />
-                <Route path="/shoppingCart/:id" element={<ShoppingCartDetail />} />
+                <Route
+                  path="/shoppingCart/:id"
+                  element={<ShoppingCartDetail />}
+                />
                 <Route path="/cart/:id/complete" element={<CompleteOrder />} />
                 {/* <Route path="/viewOrders" element={} /> */}
               </>
@@ -179,6 +185,7 @@ function MainLayout({ userType }) {
               </>
             )}
 
+            <Route path="/edit-account" element={<EditAccountLayout />} />
             {/* يمكنك وضع مسار افتراضي أو صفحة غير موجودة */}
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
@@ -198,6 +205,9 @@ function RegisterPageLayout() {
 
 function LoginPageLayout({ setUserType }) {
   return <LoginPage setUserType={setUserType} />;
+}
+function EditAccountLayout() {
+  return <EditAccount />;
 }
 
 export default App;
