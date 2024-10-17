@@ -25,9 +25,17 @@ function ShoppingCartList() {
                 Shopping Carts
             </div>
             {/* <Breadcrumb crumbs={[{ name: "Shopping Carts", path: "/shoppingCarts" }]} /> */}
-            {carts.map(cart => (
-                <ShoppingCart key={cart.id} cart={cart} />
-            ))}
+            {carts !== null && carts.length > 0 ? (
+                carts.map(cart => (
+
+                    <ShoppingCart key={cart.id} cart={cart} />
+                ))
+            ) : (
+                <div className='background-message'>
+                    Your shopping cart is currently empty.
+                    Please start adding raw materials to proceed with your order.
+                </div>
+            )}
         </div>
     );
 };
