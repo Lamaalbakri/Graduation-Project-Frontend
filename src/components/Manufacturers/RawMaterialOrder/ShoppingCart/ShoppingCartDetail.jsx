@@ -24,8 +24,8 @@ function ShoppingCartDetail() {
             id: 1,
             supplier: 'Grain Harvest Suppliers',
             items: [
-                { name: 'Flour', quantity: 2 },
-                { name: 'Oats', quantity: 3 }
+                { name: 'Flour(1 Liter)', quantity: 2, price: 150 },
+                { name: 'Oats(1 Liter)', quantity: 3, price: 110 }
             ],
             total: 400
         },
@@ -33,7 +33,7 @@ function ShoppingCartDetail() {
             id: 2,
             supplier: 'Diary Supplier Co.',
             items: [
-                { name: 'Milk Cow\'s', quantity: 4, price: 150, },
+                { name: 'Milk Cow\'s', quantity: 4, price: 150 },
                 { name: 'Milk Goat\'s', quantity: 2, price: 200 }
             ],
             total: 850
@@ -45,18 +45,18 @@ function ShoppingCartDetail() {
 
     return (
         <div className='shoppingCart'>
-            <div className='title'>
-                Shopping Cart #{id} Details
-            </div>
             <Breadcrumb
                 crumbs={[
                     { name: "Shopping Carts", path: "/shoppingCarts" },
-                    { name: `Shopping Cart #${id}`, path: `/shoppingCart/${id}` }
+                    { name: `Shopping Cart ${id}`, path: `/shoppingCart/${id}` }
                 ]}
             />
             <div className='detail-container'>
-                <div className='supplier-name'>
-                    {cart.supplier}
+                <div className='detail-container-title'>
+                    <div >Shopping Cart {id}</div>
+                    <div className='supplier-name'>
+                        {cart.supplier}
+                    </div>
                 </div>
                 <div className='cart'>
                     {cart.items.map((item, index) => (
@@ -70,13 +70,21 @@ function ShoppingCartDetail() {
                         />
                     ))}
                 </div>
+                <div className='order-summary'>
+                    {/* <div className='order-summary-title'>
+                        Order Summary
+                    </div> */}
+                    <div className='order-total'>
+                        <span>Order Total:</span>
+                        930$
+                    </div>
+                    <div>
+                        <Link to={`/shoppingCart/${id}/complete`}>
+                            <button className='order-summary-button'>Checkout</button>
+                        </Link>
+                    </div>
+                </div>
             </div>
-            <div className='button-container'>
-                <Link to={`/shoppingCart/${id}/complete`}>
-                    <button>Complete The Order</button>
-                </Link>
-            </div>
-            {/* باقي محتوى صفحة السلة المفصلة */}
         </div>
     );
 }

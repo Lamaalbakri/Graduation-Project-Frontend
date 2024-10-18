@@ -118,27 +118,50 @@ button:hover {
     text-decoration: none; /* إزالة الخط السفلي */
 }
 
+.detail-container{
+    border: 0.5px solid #d6d6d7;
+    margin: 50px;
+    z-index: 1;
+}
+.detail-container-title{
+    font-size: 20px;
+    font-weight:bold ;
+    text-align: left;
+    padding:10px 30px;
+    margin-bottom: 20px;
+}
+.supplier-name{
+    color: #595a5b;
+    font-size: 16px;
+    font-weight:normal ;
+    margin-left: 10px;
+}
+/* The style of the displayed items on the shopping cart details page. */
 .cart {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
     gap: 16px;
-  }
-  .cart-item {
+    padding: 0px 50px;
+}
+
+.cart-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 16px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 0px;
     background-color: #f9f9f9;
 }
 
 .cart-item-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 4px;
-    margin-right: 16px;
+    border:1px solid #1c2229;
+    width: 150px;
+    height: 150px;
+    border-radius: 0px;
+    margin-right: 50px;
+    margin-bottom: auto;
 }
 
 .cart-item-details {
@@ -153,14 +176,30 @@ button:hover {
     font-weight: bold;
 }
 
-.cart-item-price, .cart-item-total {
+.cart-item-price{
     font-size: 16px;
-    font-weight: bold;
+    color: #555;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    margin-left: 10px;
 }
-
-.cart-item-type, .cart-item-quantity {
+.cart-item-total{
+    margin-left: auto; /* يجعل الزر يظهر في اليمين */
+    margin-top: 0px; /* إضافة مسافة بين الزر والمحتوى */
+    padding: 0px;
+    font-size: 18px;
+    
+}
+.required {
+    color: red; /* تغيير لون النجمة إلى الأحمر */
+    margin-right: 4px; /* إضافة مسافة صغيرة بعد النجمة */
+}
+.cart-item-type, .cart-item-quantity {  
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: start;
+    margin-bottom: 10px;
+    margin-left: 10px;
     gap: 8px;
 }
 
@@ -170,17 +209,30 @@ button:hover {
     border: 1px solid #ccc;
 }
 
-.quantity-button {
+.quantity-button-container{
     background-color: #f0f0f0;
     border: 1px solid #ccc;
+}
+.quantity-value{
+    background-color: #f5f4f4;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 13px;
+    padding-top: 3.5px;
+    padding-bottom: 6px;
+    font-size: 16px;
+}
+.quantity-button {
+    background-color: #f0f0f0;
+    color: #1c2229;
     padding: 6px 10px;
-    border-radius: 4px;
     cursor: pointer;
 }
 
-.quantity-value {
-    padding: 0 10px;
-    font-size: 16px;
+.quantity-button:hover{
+    background-color: #cbcaca;
+    border-radius: 0px;
+    color: #1c2229;
 }
 
 .remove-button {
@@ -189,8 +241,59 @@ button:hover {
     color: red;
     font-size: 24px;
     cursor: pointer;
+    padding: 0px;
+    margin-bottom: auto;
+    
 }
 
 .remove-button:hover {
-    color: darkred;
+    color: black;
+    background-color: white
+}
+
+/* Order summary in Shopping cart detail */
+.order-summary{
+    justify-content: space-between;
+    align-items: end;
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    background-color: #f9f9f9;
+    margin: 10px 50px;
+    display: flex; 
+    flex-direction: column; 
+}
+.order-summary-title{
+    font-weight: bold;
+    font-size: 17px;
+    margin: 20px;
+    margin-bottom: 0px;
+    
+}
+.order-total{
+    font-weight: bold;
+    font-size: 20px;
+    margin: 20px;
+    margin-bottom: 0px;
+    align-self: center;
+    
+}
+.order-total span{
+    color: #555;
+    padding-right: 300px;
+}
+
+
+.order-summary-button{
+    font-size: 16px;
+    align-self: end;
+    margin-top: 50px;
+    padding: 10px 20px;
+    background-color: #1c2229;
+    color: #fff;
+}
+
+
+.order-summary-button button:hover {
+    background-color: #595a5b;
 }
