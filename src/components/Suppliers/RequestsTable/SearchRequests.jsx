@@ -2,10 +2,8 @@ import { useState } from "react";
 import RequestsTable from "./RequestsTable";
 import "./RequestsTable.css";
 import {
-  searchCurrentRequestById,
   fetchAllCurrentRequests,
   fetchAllPreviousRequests,
-  searchPreviousRequestById,
 } from "../../../api/rawMaterialRequestAPI";
 
 function Search() {
@@ -105,22 +103,3 @@ function Search() {
 }
 
 export default Search;
-
-// search by id without fiching all data
-// استخدم Promise.allSettled للبحث في كلا الجدولين في وقت واحد
-// const [currentResult, previousResult] = await Promise.allSettled([
-//   searchCurrentRequestById(searchQuery),
-//   searchPreviousRequestById(searchQuery),
-// ]);
-
-// // تجميع النتائج فقط إذا تم العثور على بيانات
-// const results = [];
-
-// if (currentResult.status === 'fulfilled' && currentResult.value) {
-//   results.push(currentResult.value);
-// }
-
-// if (previousResult.status === 'fulfilled' && previousResult.value) {
-//   results.push(previousResult.value);
-//setFilteredRequests(results.length > 0 ? results : []); // Show results if found
-// }
