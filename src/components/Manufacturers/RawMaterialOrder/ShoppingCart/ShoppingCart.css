@@ -86,7 +86,7 @@ button {
 }
 
 button:hover {
-    background-color: #FFD700;
+    background-color: #f4d53f;
     color: #1c2229;
 }
 
@@ -303,7 +303,7 @@ button:hover {
     transition: background-color 0.3s;
 }
 .Checkout-button:hover {
-    background-color: #FFD700;
+    background-color: #f4d53f;
     color: #1c2229;
 }
 
@@ -476,6 +476,6 @@ height: 20px;
 }
 
 .Checkout-button:hover {
-    background-color: #FFD700;
+    background-color: #f4d53f;
     color: #1c2229;
 }
