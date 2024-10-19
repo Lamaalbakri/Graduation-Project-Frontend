@@ -71,16 +71,16 @@ function ShoppingCartDetail() {
                     ))}
                 </div>
                 <div className='order-summary'>
-                    {/* <div className='order-summary-title'>
+                    <div className='order-summary-title'>
                         Order Summary
-                    </div> */}
-                    <div className='order-total'>
-                        <span>Order Total:</span>
-                        930$
                     </div>
-                    <div>
+                    <div className='order-total'>
+                        <div className='total-title'>Order Total:</div>
+                        <div className='total-price'>930$</div>
+                    </div>
+                    <div className='order-summary-button'>
                         <Link to={`/shoppingCart/${id}/complete`}>
-                            <button className='order-summary-button'>Checkout</button>
+                            <button className='Checkout-button'>Checkout</button>
                         </Link>
                     </div>
                 </div>

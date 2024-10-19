@@ -86,7 +86,8 @@ button {
 }
 
 button:hover {
-    background-color: #595a5b;
+    background-color: #FFD700;
+    color: #1c2229;
 }
 
 .breadcrumb {
@@ -156,9 +157,10 @@ button:hover {
 }
 
 .cart-item-image {
-    border:1px solid #1c2229;
-    width: 150px;
-    height: 150px;
+    border:1px solid #555;
+    background-color: #555;
+    width: 200px;
+    height: 200px;
     border-radius: 0px;
     margin-right: 50px;
     margin-bottom: auto;
@@ -203,10 +205,11 @@ button:hover {
     gap: 8px;
 }
 
-.cart-item-select {
-    padding: 4px;
+.cart-item-select{
+    padding: 0px;
     border-radius: 4px;
     border: 1px solid #ccc;
+
 }
 
 .quantity-button-container{
@@ -250,50 +253,229 @@ button:hover {
     color: black;
     background-color: white
 }
-
-/* Order summary in Shopping cart detail */
-.order-summary{
-    justify-content: space-between;
-    align-items: end;
-    padding: 16px;
+.order-summary {
     border: 1px solid #ccc;
     border-radius: 0px;
     background-color: #f9f9f9;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     margin: 10px 50px;
-    display: flex; 
-    flex-direction: column; 
 }
-.order-summary-title{
+
+.order-summary-title {
+    text-align: start;
+    font-size: 19px;
     font-weight: bold;
-    font-size: 17px;
-    margin: 20px;
-    margin-bottom: 0px;
-    
 }
-.order-total{
-    font-weight: bold;
-    font-size: 20px;
-    margin: 20px;
-    margin-bottom: 0px;
-    align-self: center;
-    
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 18px;
 }
-.order-total span{
+
+.total-title {
+    font-size: 18px;
+    font-weight: normal;
     color: #555;
-    padding-right: 300px;
 }
 
+.total-price {
+    font-size: 18px;
+    font-weight: bold;
+}
 
-.order-summary-button{
-    font-size: 16px;
-    align-self: end;
-    margin-top: 50px;
-    padding: 10px 20px;
+.order-summary-button {
+    width: 100%;
+    padding: 0px 18px;
+}
+
+.Checkout-button {
+    width: 100%;
+    padding: 8px 12px;
     background-color: #1c2229;
-    color: #fff;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.Checkout-button:hover {
+    background-color: #FFD700;
+    color: #1c2229;
+}
+
+/* Complate order file */
+.complate-page-container{
+    margin: 50px;
 }
 
 
-.order-summary-button button:hover {
-    background-color: #595a5b;
+.user-info{
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 10px 50px;
+}
+.user-info-step{
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    background-color: #cccccc4d;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    margin: 10px 50px;
+}
+.step-num{
+    width: 15%;
+    justify-content: start;
+    align-items: start;
+    
+}
+.step-num p{
+    width: 40px;
+    height: 40px;
+    color: #fff;
+    background-color: #1c2229; 
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    margin: 0px;
+}
+.step-content{
+    width: 75%;
+}
+.step-title{
+    color: #1c2229;
+    font-weight: bold;
+    font-size: 18px;
+}
+.adress-detail{
+    border: 1px solid #ccc;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-left: 3px;
+    color: #555;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    
+}
+.address{
+    width: 80%;
+    display: flex;
+    justify-content:left;
+    align-items: center;
+    padding-left:20px ;
+
+}
+.edit-address {
+    display: flex;
+    justify-content: flex-end;
+    /* align-items: center; */
+    margin: 10px;
+    width: 20%;
+}
+.edit-address button{
+    height:30px;
+    background-color: #d6d5d5;
+    border: 0.5px solid #555;
+    color: #555;
+    padding: 0px 10px;
+    cursor: pointer;
+}
+
+.edit-address button:hover {
+    background-color: #c7c6c6;
+    border: 0.5px solid #000000b1;
+    color: #000000b1;
+}
+
+.step-detail {
+    color: #555;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* مسافة بين الأقسام */
+}
+
+.pay-method {
+    background-color: #fff;
+    padding: 8px 10px;
+    border:  1px solid #595a5b57;
+    width: 25%;
+    border-radius: 9px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* مسافة بين الراديو والصورة */
+}
+.pay-method input{
+    width: 18px;
+    height: 18px;
+
+}
+.pay-method img{
+width: 60px;
+height: 20px;
+}
+.card-form{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    width: 100%;
+}
+
+.card-form label{
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: #1c2229;
+}
+
+.card-form input{
+    padding: 8px;
+    color: #555;
+    margin-top: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 1px;
+}
+.card-num{
+    width: 50%;
+}
+.card-date{
+    width: 30%;
+}
+.card-code{
+    width: 18%;
+}
+.pay-button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.Checkout-button {
+    width: 100%; /* البوتون يأخذ العرض الكامل */
+    padding: 10px;
+    background-color: #1c2229;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.Checkout-button:hover {
+    background-color: #FFD700;
+    color: #1c2229;
 }
