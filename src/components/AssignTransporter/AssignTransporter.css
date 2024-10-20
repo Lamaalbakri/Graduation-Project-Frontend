@@ -4,13 +4,13 @@
     font-family: 'Poppins', sans-serif;
     color: #1c2229;
 }
-.AssignTransporter .closeButtonStyle{
+.closeButtonStyle{
     position: absolute;
     top: 10px;
     right: 15px;
     cursor: pointer;
 }
-.AssignTransporter .transporterDialog{
+.transporterDialog , .companyDialog{
     z-index: 999;
     position: fixed;
     top: 0;
@@ -22,7 +22,7 @@
     justify-content: center;
     align-items: center;
 }
-.transporterDialog .transporterDialogContent{
+.transporterDialogContent , .companyDialogContent{
     background: #fff;
     border-radius: 10px;
     position: relative;
@@ -67,27 +67,6 @@
     color: #1c2229 !important; 
 }
 
-.companyDialog{
-    z-index: 999;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.companyDialog .companyDialogContent{
-    background: #fff;
-    border-radius: 10px;
-    position: relative;
-    padding-top: 25px;
-    padding-bottom: 15px;
-    padding-left: 40px;
-    padding-right: 40px;
-}
 .companyDialogContent label{
     display: flex;
     justify-content: space-between; /* توزيع المساحة بين العناصر */
@@ -100,18 +79,17 @@
     border: 0.5px solid #9c9995;
     width: 100%; 
 }
-.companyDialogContent .price{
+.price{
     margin-left: auto; /* دفع السعر إلى اليمين */
     margin-right: 10px;
 }
-.AssignTransporter .button-container{
+.button-container{
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
     padding: 10px 0px;
 }
-.AssignTransporter .backButtonStyle,
-.AssignTransporter .sendButtonStyle{
+.backButtonStyle , .sendButtonStyle{
     background-color: #1c2229;
     color: white;
     padding: 8px 20px;
@@ -120,7 +98,7 @@
     cursor: pointer;
     transition: background-color 0.3s;
 }
-.AssignTransporter .nextButtonStyle{
+.nextButtonStyle{
     position: absolute;
     background-color: #1c2229;
     color: #fff;
@@ -134,8 +112,7 @@
     margin-top: 10px;
 }
 .nextButtonStyle:hover , .backButtonStyle:hover , .sendButtonStyle:hover, .confirm-button{
-    background-color: #f4d53f !important;
-    color: #1c2229;
+    background-color: #595a5b !important;
 }
 .ant-btn-primary{
     background-color: #1c2229!important;

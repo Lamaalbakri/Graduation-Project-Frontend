@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from "react";
 import TransportRequestsTable from "./TransportRequestsTable";
-import {
-  fetchAllPreviousTransportRequests,
-  searchTransportPreviousRequestById,
-} from "../../../api/transportRequestsAPI";
 
 function PreviousTransportRequests() {
   const [query, setQuery] = useState("");
-  const [transportRequests, setTransportRequests] = useState(null);
+  const [rawMaterialRequests, setRawMaterialRequests] = useState(null);
   const [filteredRequests, setFilteredRequests] = useState([]);
 
   useEffect(() => {
     const getRequests = async () => {
       try {
-        const requests = await fetchAllPreviousTransportRequests(); // Call the fetch all requests function
-        setTransportRequests(requests);
+        const requests = await fetchAllCurrentRequests(); // Call the fetch all requests function
+        setRawMaterialRequests(requests);
         setFilteredRequests(requests);
       } catch (error) {
         console.error("Error fetching requests:", error);
@@ -33,9 +29,9 @@ function PreviousTransportRequests() {
     //check if it is an id
     if (validShortId.test(searchQuery)) {
       //check if there are requests
-      if (transportRequests) {
+      if (rawMaterialRequests) {
         //Search by id using data already fetched
-        const filtered = transportRequests.filter((request) =>
+        const filtered = rawMaterialRequests.filter((request) =>
           request.shortId?.toLowerCase().includes(searchQuery)
         );
         if (filtered.length > 0) {
@@ -46,9 +42,7 @@ function PreviousTransportRequests() {
       if (!foundResult) {
         try {
           //search by id in back-end
-          const requestData = await searchTransportPreviousRequestById(
-            searchQuery
-          ); // Call search from API if data is not present locally
+          const requestData = await searchCurrentRequestById(searchQuery); // Call search from API if data is not present locally
           if (requestData) {
             setFilteredRequests([requestData]);
             foundResult = true; // Result found
@@ -60,8 +54,28 @@ function PreviousTransportRequests() {
           setFilteredRequests([]);
         }
       }
-    } else {
-      setFilteredRequests([]);
+    }
+    if (!foundResult) {
+      // Search by name using data already fetched
+      if (rawMaterialRequests) {
+        const filtered = rawMaterialRequests.filter((request) =>
+          request.manufacturerName?.toLowerCase().includes(searchQuery)
+        );
+        if (filtered.length > 0) {
+          setFilteredRequests(filtered);
+          foundResult = true; // Result found
+        }
+      }
+      if (!foundResult) {
+        //Search by name in back-end
+        try {
+          const requestData = await searchCurrentRequestByMName(searchQuery); // Call search from API if data is not present locally
+          setFilteredRequests(requestData ? [requestData] : []);
+        } catch (error) {
+          console.error("Error fetching request by name:", error);
+          setFilteredRequests([]);
+        }
+      }
     }
   };
 
@@ -81,12 +95,12 @@ function PreviousTransportRequests() {
         </div>
       </div>
 
-      {transportRequests && filteredRequests.length ? ( // Conditional rendering
+      {rawMaterialRequests && filteredRequests.length ? ( // Conditional rendering
         <TransportRequestsTable data={filteredRequests} />
       ) : (
         <p className="background-message">
           {filteredRequests && filteredRequests.length === 0
-            ? "No transport requests found"
+            ? "No requests found"
             : "Loading requests..."}
         </p> // Display a loading message until data is available
       )}
