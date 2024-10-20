@@ -31,6 +31,10 @@ import ShoppingCartList from "./components/Manufacturers/RawMaterialOrder/Shoppi
 import ShoppingCartDetail from "./components/Manufacturers/RawMaterialOrder/ShoppingCart/ShoppingCartDetail";
 import CompleteOrder from "./components/Manufacturers/RawMaterialOrder/ShoppingCart/CompleteOrder";
 
+import AddSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/AddSupplier"; 
+import ViewSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/ViewSuppliers"; 
+
+
 const { Content } = Layout;
 
 function App() {
@@ -142,9 +146,10 @@ function MainLayout({ userType }) {
                   path="/manufacturer-home"
                   element={<HomeUser userType="manufacturer" />}
                 />
-                {/* <Route path="/addSuppliers" element={} />
-                <Route path="/viewSuppliers" element={} />
-                <Route path="/viewRawMaterials" element={} /> */}
+
+                <Route path="/addSuppliers" element={<AddSupplier />} />
+                <Route path="/viewSuppliers" element={<ViewSupplier />} />
+                {/* <Route path="/viewRawMaterials" element={} /> */}
                 <Route path="/shoppingCarts" element={<ShoppingCartList />} />
                 <Route path="/shoppingCart/:id" element={<ShoppingCartDetail />} />
                 <Route path="/shoppingCart/:id/complete" element={<CompleteOrder />} />
