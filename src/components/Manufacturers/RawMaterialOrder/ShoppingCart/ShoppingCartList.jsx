@@ -1,7 +1,7 @@
 import React from 'react'
 import ShoppingCart from './ShoppingCart';
 import Breadcrumb from "./Breadcrumb";
-
+import './ShoppingCart.css';
 
 function ShoppingCartList() {
     const carts = [

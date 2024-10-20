@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import ConfirmationDialog from "../../Dialog/ConfirmationDialog";
+import {
+  updateTransportRequestStatus,
+  moveTransportRequestCurrentToPrevious,
+} from "../../../api/transportRequestsAPI";
 import { DataGrid } from "@mui/x-data-grid";
 import "./TransportRequestsTable.css";
 
@@ -32,13 +36,18 @@ function TransportRequestsTable({ data }) {
 
   const updateRequestStatus = async (id, newStatus) => {
     try {
-      // Simulate status update (to be replaced with real API call)
+      //update in DB, get the request info after update
+      const updatedTransportRequest = await updateTransportRequestStatus(
+        id,
+        newStatus
+      );
+      //update in front-end
       setRequests((prevRequests) =>
         prevRequests.map((request) =>
-          request.id === id
+          request.shortId === id
             ? {
                 ...request,
-                status: newStatus,
+                status: updatedTransportRequest.data.status,
                 statusClass: `status-${newStatus}`,
               }
             : request
@@ -59,7 +68,15 @@ function TransportRequestsTable({ data }) {
 
   const handleConfirmAction = async () => {
     try {
-      updateRequestStatus(selectedRequestId, selectedStatus);
+      //update in DB
+      await updateRequestStatus(selectedRequestId, selectedStatus);
+      //Move current transport request to previous request table in DB
+      moveTransportRequestCurrentToPrevious(selectedRequestId);
+      //remove current transport request from table in front-end
+      setRequests((prevRequests) =>
+        //filter keeps undelivered or not rejected requests
+        prevRequests.filter((request) => request.shortId !== selectedRequestId)
+      );
     } catch (error) {
       console.error("Error during confirmation action:", error);
     } finally {
@@ -74,7 +91,13 @@ function TransportRequestsTable({ data }) {
   }
 
   const columns = [
-    { field: "_id", headerName: "ID", width: 120, headerAlign: "left" },
+    {
+      field: "shortId",
+      headerName: "ID",
+      width: 120,
+      headerAlign: "left",
+      renderCell: (params) => `#${params.value}`,
+    },
     {
       field: "transportServiceName",
       headerName: "Transport Service",
@@ -129,7 +152,9 @@ function TransportRequestsTable({ data }) {
           <select
             value={params.row.status}
             className={`status-select ${statusClass}`}
-            onChange={(e) => handleStatusChange(params.row.id, e.target.value)}
+            onChange={(e) =>
+              handleStatusChange(params.row.shortId, e.target.value)
+            }
           >
             <option value="pending">Pending</option>
             <option value="inProgress">In Progress</option>
@@ -160,7 +185,7 @@ function TransportRequestsTable({ data }) {
         disableRowSelectionOnClick
         getRowHeight={() => "auto"}
         columns={columns}
-        getRowId={(row) => row.id}
+        getRowId={(row) => row.shortId}
         autoHeight
         initialState={{
           pagination: { paginationModel: { page: 0, pageSize: 10 } },
