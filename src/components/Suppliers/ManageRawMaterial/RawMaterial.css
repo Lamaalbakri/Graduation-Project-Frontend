@@ -6,9 +6,11 @@
     background-color: #ffffff; /* Light gray/white background */
     border-radius: 10px;
 }
+
 .pp{
     display: flex; /* Use flexbox to center items */
 }
+
 .search-instruction p {
     text-align: center; /* Center the text */
     font-size: 16px; /* Slightly larger font size for better visibility */
@@ -18,6 +20,7 @@
 .search-instruction {
     display: none; /* Initially hidden */
 }
+
 /* Show the search instruction when there's no query */
 .container .search-instruction.visible {
     display: block; /* Show when the class is applied */
@@ -28,18 +31,21 @@
     gap: 15px; /* Space between the image preview and the button */
     margin-top: 10px; /* Add some space above the container */
 }
+
 /* Add Page Specific Styles */
 .add-page h2 {
     font-size: 24px;
     font-weight: bold;
-    color: #1c2229; /* Dark text */
+    color: #333333; /* Dark text */
     margin-bottom: 20px; /* Space below the heading */
 }
+
 .add-page .form-group {
     margin-bottom: 15px; /* Space between form groups */
     display: flex;
     flex-direction: column; /* Stack items vertically */
 }
+
 .add-page input,
 .add-page textarea {
     width: 100%; /* Full width input and textarea */
@@ -47,6 +53,7 @@
     border: 1px solid #ced4da; /* Border style */
     border-radius: 6px; /* Rounded corners */
 }
+
 .add-page .material-image {
     margin-top: 10px; /* Space above the image */
     max-width: 150px; /* Limit the width of the image */
@@ -68,16 +75,18 @@
     transition: background-color 0.3s ease; /* Smooth transition on hover */
     background-color: #1c2229;
 }
+
 .add-page .custom-file-upload:hover,
 .cancel-button, .edit-button:hover,
 .submit-button:hover,
 .view-button:hover {
-    background-color:  #f4d53f;
-    color: #1c2229;
+    background-color:  #595a5b; /* Darker blue on hover */
 }
+
 .submit-button {
     background-color:#1c2229;
 }
+
 /* Align buttons to the right */
 .add-page .button-container {
     display: flex; /* Flexbox for button layout */
@@ -85,12 +94,14 @@
     gap: 10px; /* Space between buttons */
     margin-top: 10px; /* Space above button container */
 }
+
 .button-container {
     display: flex; /* Flexbox for button layout */
     justify-content: flex-end; /* Align to the right */
     gap: 10px; /* Space between buttons */
     margin-top: 10px; /* Space above button container */
 }
+
 /* Additional styles (unchanged) */
 .search-input {
     width: 100%; /* Full width input */
@@ -99,11 +110,13 @@
     border-radius: 6px; /* Rounded corners */
     margin-bottom: 20px; /* Space below input */
 }
+
 .materials-list {
     display: flex;
     flex-direction: column;
     gap: 15px; /* Space between cards */
 }
+
 .material-card {
     display: flex; /* Flexbox for horizontal layout */
     align-items: flex-start; /* Align items at the top */
@@ -113,13 +126,16 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
+
 .image-section {
     flex: 0 0 150px; /* Fixed width for the image section */
     margin-right: 20px; /* Space between image and text */
 }
+
 .info-section {
     flex: 1; /* Allow text section to take remaining space */
 }
+
 .info-section p {
     margin: 15px 0; /* Adjust the margin to reduce space between paragraphs */
 }
@@ -128,6 +144,7 @@
     height: auto; /* Maintain aspect ratio */
     border-radius: 4px; /* Slightly rounded corners */
 }
+
 .modal {
     display: flex; /* Flexbox for centering */
     align-items: center; /* Center vertically */
@@ -141,6 +158,7 @@
     z-index: 1000; /* Ensure it appears above other content */
     overflow: auto; /* Allow scrolling if content exceeds the viewport */
 }
+
 .modal-content {
     background: white; /* White background for modal */
     border-radius: 5px; /* Rounded corners */
@@ -151,12 +169,14 @@
     overflow-y: auto; /* Enable vertical scrolling */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
+
 .modal-header {
     display: flex; /* Flexbox for alignment */
     justify-content: flex-end; /* Align to the right */
 }
+
 .close {
-    font-size: 24px; /*Size of the close icon */
+     font-size: 24px; /*Size of the close icon */
     color: #000000; /* Color for the close icon */
     cursor: pointer; /* Pointer cursor on hover */
     transition: color 0.3s ease; /* Smooth transition for color change */
@@ -166,11 +186,19 @@
     z-index: 1000; /* لتكون فوق محتوى الـ Dialog */
     cursor: pointer;
 }
+
+/* .close:hover {
+    color: #007bff; 
+} */
+
+
+
 .material-id {
     font-weight: normal; /* Adjust weight as needed */
     color: #666; /* Change color to match design */
     margin-right: 5px; /* Add some spacing */
 }
+
 /* Table title styles */
 .title {
     font-size: 30px;
@@ -178,9 +206,10 @@
     text-align: left; /* Align text to the left */
     margin-bottom: 0; /* Remove bottom margin */
 }
+
 /* Button styles */
 .edit-button,
-.button-container .delete-button {
+.delete-button {
     margin-top: 10px; /* Space above the button */
     padding: 8px; /* Padding for the button */
     width: 100%; /* Make buttons full width of the container */
@@ -193,31 +222,43 @@
     transition: background-color 0.3s ease; /* Smooth transition on hover */
     background-color: #1c2229; /* Blue for edit button */
 }
-.button-container .delete-button {
+
+.delete-button {
     background-color: red; /* Red background for delete button */
 }
+
+.delete-button:hover {
+    background-color: #595a5b; /* Darker red on hover */
+}
+
+
 
 /* Responsive Styles */
 @media (max-width: 768px) {
     .container {
         padding: 10px; /* Reduce padding on smaller screens */
     }
+
     .add-page .button-container {
         flex-direction: column; /* Stack buttons vertically */
         align-items: stretch; /* Stretch buttons to full width */
     }
+
     .material-card {
         flex-direction: column; /* Stack image and text vertically on small screens */
         align-items: center; /* Center align items */
     }
+
     .image-section {
         margin-right: 0; /* Remove margin on smaller screens */
         margin-bottom: 10px; /* Space below image */
         flex: 1; /* Allow image section to grow */
     }
+
     .info-section {
         text-align: center; /* Center text on smaller screens */
     }
+
     .modal-content {
         width: 95%; /* Make modal width responsive */
     }

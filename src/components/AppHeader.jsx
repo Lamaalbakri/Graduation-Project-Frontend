@@ -6,10 +6,10 @@ import {
   LoginOutlined,
   SettingOutlined,
   UserOutlined,
-  ShoppingCartOutlined,
+  ShoppingCartOutlined
 } from "@ant-design/icons";
 import UserProfile from "./UserProfile";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const { Header } = Layout;
 
 const AppHeader = ({
@@ -24,7 +24,7 @@ const AppHeader = ({
   const menu = (
     <Menu>
       <Menu.Item key="1" icon={<UserOutlined />}>
-        <Link to="/edit-account">Edit Account</Link>
+        Edit Account
       </Menu.Item>
       <Menu.Item key="2" icon={<LoginOutlined />} onClick={handleLogout}>
         Logout
@@ -32,9 +32,7 @@ const AppHeader = ({
     </Menu>
   );
   // Show shopping Cart icon only for users who purchase
-  const showCartButton = ["manufacturer", "distributor", "retailer"].includes(
-    userType
-  );
+  const showCartButton = ["manufacturer", "distributor", "retailer"].includes(userType);
 
   // Function to update an item number in the cart
   const updateCart = () => {
@@ -43,7 +41,7 @@ const AppHeader = ({
 
   // Function to handle navigation to the cart page
   const handleCartClick = () => {
-    navigate("/shoppingCarts"); //
+    navigate("/shoppingCarts"); // 
   };
 
   return (
@@ -63,32 +61,26 @@ const AppHeader = ({
         icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       />
       <div style={{ display: "flex", alignItems: "center", marginRight: "1%" }}>
+
         {showCartButton && (
+
           <Button
             type="text"
-            style={{ marginRight: 5, position: "relative", padding: 10 }}
+            style={{ marginRight: 5, position: 'relative', padding: 10 }}
             onClick={handleCartClick}
           >
-            <Badge
-              count={cartItemCount}
-              overflowCount={99}
-              offset={[6, -1]}
-              style={{
-                fontSize: "10px",
-                height: "14px",
-                minWidth: "14px",
-                lineHeight: "14px",
-              }}
-            >
-              <ShoppingCartOutlined style={{ fontSize: "20px" }} />
+            <Badge count={cartItemCount} overflowCount={99} offset={[6, -1]}
+              style={{ fontSize: '10px', height: '14px', minWidth: '14px', lineHeight: '14px' }}>
+              <ShoppingCartOutlined style={{ fontSize: '20px' }} />
             </Badge>
           </Button>
         )}
 
+
         <Dropdown overlay={menu} trigger={["click"]}>
           <Button
             type="text"
-            icon={<SettingOutlined style={{ fontSize: "20px" }} />}
+            icon={<SettingOutlined style={{ fontSize: '20px' }} />}
             style={{ marginLeft: 10 }}
           />
         </Dropdown>

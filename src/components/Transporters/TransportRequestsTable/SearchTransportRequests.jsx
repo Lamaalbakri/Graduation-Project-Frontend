@@ -1,10 +1,6 @@
 import { useState } from "react";
 import TransportRequestsTable from "./TransportRequestsTable";
 import "./TransportRequestsTable.css";
-import {
-  fetchAllCurrentTransportRequests,
-  fetchAllPreviousTransportRequests,
-} from "../../../api/transportRequestsAPI";
 
 function SearchTransportRequests() {
   const [query, setQuery] = useState(""); // Holds the search input
@@ -29,8 +25,8 @@ function SearchTransportRequests() {
       let foundResult = false;
       //fech all data to searsh
       const [currentRequests, previousRequests] = await Promise.all([
-        fetchAllCurrentTransportRequests(),
-        fetchAllPreviousTransportRequests(),
+        //fetchAllCurrentRequests(),
+        //fetchAllPreviousRequests(),
       ]);
 
       if (validShortId.test(searchQuery)) {
@@ -49,13 +45,7 @@ function SearchTransportRequests() {
           foundResult = true; // result found
         }
       }
-
-      // If no result was found, clear the filtered requests
       if (!foundResult) {
-        setFilteredRequests([]);
-      }
-
-      /*if (!foundResult) {
         // Filter both collections based on the query
         const filtered = [
           ...currentRequests.filter((request) =>
@@ -71,7 +61,7 @@ function SearchTransportRequests() {
         ];
 
         setFilteredRequests(filtered);
-      }*/
+      }
     } catch (error) {
       //console.error("Error fetching requests:", error);
       setFilteredRequests([]); // Handle errors by resetting the filtered requests

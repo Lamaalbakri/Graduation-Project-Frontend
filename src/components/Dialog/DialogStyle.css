@@ -10,10 +10,12 @@
   align-items: center;
   z-index: 1000;
 }
+
 .step {
   margin-top: 30px;
   color: #1c2229;
 }
+
 .dialog-title {
   color: #1c2229;
   font-size: 20px;
@@ -21,6 +23,7 @@
   text-align: start;
   font-weight: bold;
 }
+
 .dialog-box {
   position: relative;
   background-color: #fff;
@@ -29,44 +32,27 @@
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
+
 p {
   margin-top: 20px;
   color: #1c2229;
   font-size: 16px;
   text-align: start;
 }
-.confirm-button{
+
+.cancel-button,
+.confirm-button {
   background-color: #1c2229 !important;
   color: white !important;
-  padding: 8px 28px !important;
-  border: 1px solid #1c2229 !important;
+  padding: 8px 20px !important;
+  border: none !important;
   border-radius: 5px !important;
   cursor: pointer !important;
   transition: background-color 0.3s !important;
   box-shadow: none !important;
   top: 10px;
-  min-width: 100px; /* إضافة عرض أدنى للزر */
 }
-.cancel-button{
-  background-color: white !important;
-  color: #1c2229 !important;
-  padding: 8px 28px !important;
-  border: 1px solid #1c2229 !important;
-  border-radius: 5px !important;
-  cursor: pointer !important;
-  box-shadow: none !important;
-  top: 10px;
-}
-.cancel-button:hover{
-  background-color: white !important;
-  color: #f4d53f!important;
-  border: 1px solid #f4d53f !important;
-}
-.confirm-button:hover{
-  background-color: #f4d53f!important;
-  border: 1px solid #f4d53f !important;
-  color:#1c2229!important;
-}
+
 .close-button {
   position: absolute;
   top: 10px;
@@ -75,6 +61,11 @@ p {
   cursor: pointer;
   font-size: 16px;
 }
+
+.cancel-button:hover,.confirm-button:hover {
+  background-color: #595a5b !important;
+}
+
 .dialog-content {
   padding: 30px;
   text-align: center;
@@ -82,89 +73,37 @@ p {
   color: #333;
 
 }
+
 .ant-steps-item-process .ant-steps-item-icon {
   background-color: #1c2229 !important;
   border-color: #1c2229 !important;
 }
+
 .ant-steps-item-process .ant-steps-item-icon>.ant-steps-icon {
   color: white !important;
 }
+
 .ant-steps-item-process .ant-steps-item-title {
   color: #1c2229 !important;
 }
+
 .ant-steps-item-process .ant-steps-item-description {
   color: #1c2229 !important;
 }
+
 .ant-steps-item-finish .ant-steps-item-tail::after {
   background-color: #1c2229 !important;
 }
+
 .ant-steps-item-finish .ant-steps-item-icon {
   background-color: #3d567392 !important;
   border-color: #3d567300 !important;
 }
+
 .ant-steps-item-finish .ant-steps-item-icon>.ant-steps-icon {
   color: #1c2229 !important;
 }
-.required {
-  color: red; 
-  margin-right: 4px; 
-}
-.dialog-box-address {
-  position: relative;
-  background-color: #fff;
-  border-radius: 8px;
-  width: 50%;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-.form-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  border-radius: 5px;
-}
-.form-group {
-  margin-bottom: 20px;
-  
-}
-.form-container label {
-  display: flex;
-  flex-direction: row;
-  font-weight: bold;
-  margin: 5px;
-  
-}
-.form-group input,
-.form-group select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  font-size: 16px;
-}
-.dialog-content .button-container{
-  margin-top: 50px;
-}
-.save-button{
-  background-color: #1c2229 !important;
-  color: white !important;
-  border: 1px solid #1c2229 !important;
-  border-radius: 5px !important;
-  cursor: pointer !important;
-  transition: background-color 0.3s !important;
-  box-shadow: none !important;
-  top: 10px;
-  margin-top: 0px;
-  height: max-content;
-  align-self: flex-end;
-  padding: 8px 40px;
-  font-size: 14px;
-}
-.save-button:hover{
-  background-color: #f4d53f!important;
-  border: 1px solid #f4d53f !important;
-  color:#1c2229!important;
-}
+
 @keyframes slideDown {
   from {
     transform: translateY(-20px);
