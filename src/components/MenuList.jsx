@@ -117,7 +117,7 @@ const MenuList = ({ darkTheme, userType }) => {
           <Menu.SubMenu
             key="manageRawMaterialOrders"
             icon={<GoldOutlined />}
-            title="Manage Raw Material Orders"
+            title="Manage Orders"
           >
             <Menu.Item key="addSuppliers">
               <Link to="/addSuppliers">Add Suppliers</Link>
@@ -133,6 +133,21 @@ const MenuList = ({ darkTheme, userType }) => {
             </Menu.Item>
             <Menu.Item key="viewOrders">
               <Link to="/viewOrders">View Orders</Link>
+            </Menu.Item>
+          </Menu.SubMenu>
+          <Menu.SubMenu
+            key="manageManufacturerRequests"
+            icon={<SnippetsOutlined />}
+            title="Manage Requests"
+          >
+            <Menu.Item key="mCurrent">
+              <Link to="/currentManufacturerRequests">Current Requests</Link>
+            </Menu.Item>
+            <Menu.Item key="mPrevious">
+              <Link to="/previousManufacturerRequests">Previous Requests</Link>
+            </Menu.Item>
+            <Menu.Item key="mSearchRequest">
+              <Link to="/searchManufacturerRequests">Search for Request</Link>
             </Menu.Item>
           </Menu.SubMenu>
         </React.Fragment>
