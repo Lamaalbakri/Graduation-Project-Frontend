@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import './styling.css';
-import suppliersData from './dummyData'; // Adjust the import path as necessary
+import suppliersData from './dummyData'; 
 
 const AddSupplier = () => {
   const [supplierCategory, setSupplierCategory] = useState('');
   const [supplierName, setSupplierName] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
-  const [suppliers, setSuppliers] = useState(suppliersData); // Initialize state with imported data
+  const [suppliers, setSuppliers] = useState(suppliersData);
+
+  // updated only when "Apply" is clicke
+  const [appliedCategory, setAppliedCategory] = useState('');
+  const [appliedName, setAppliedName] = useState('');
 
   const handleSupplierCategoryChange = (e) => {
     setSupplierCategory(e.target.value);
@@ -14,22 +18,38 @@ const AddSupplier = () => {
 
   const handleSupplierNameChange = (e) => {
     setSupplierName(e.target.value);
-    setIsSearchActive(e.target.value.trim() !== '' || supplierCategory.trim() !== ''); // Activate search when there is input or category selection
   };
 
   const handleClear = () => {
     setSupplierCategory('');
     setSupplierName('');
-    setIsSearchActive(false); // Reset search activation on clear
+    setIsSearchActive(false); 
+    setAppliedCategory('');  
+    setAppliedName('');
   };
 
-  // Filter suppliers based on search input and category selection
+  const handleApply = () => {
+    setAppliedCategory(supplierCategory); 
+    setAppliedName(supplierName);       
+    setIsSearchActive(true);     
+  };
+
+  const handleToggleSupplier = (id) => {
+    setSuppliers((prevSuppliers) =>
+      prevSuppliers.map((supplier) =>
+        supplier.id === id ? { ...supplier, isActive: !supplier.isActive } : supplier
+      )
+    );
+  };
+
+  // Filter suppliers based on the applied search input and category selection
   const filteredSuppliers = suppliers.filter((supplier) => {
-    const matchesCategory = supplierCategory ? supplier.category === supplierCategory : true;
-    const matchesSearch = supplierName ? (
-      supplier.name.toLowerCase().includes(supplierName.toLowerCase()) ||
-      supplier.id.toString().includes(supplierName)
-    ) : true;
+    const matchesCategory = appliedCategory ? supplier.category === appliedCategory : true;
+
+    const matchesSearch = appliedName
+      ? (supplier.name.toLowerCase().includes(appliedName.toLowerCase()) || 
+         supplier.id.toString().includes(appliedName)) 
+      : true;
 
     return matchesCategory && matchesSearch;
   });
@@ -40,9 +60,9 @@ const AddSupplier = () => {
         <h2 className="title">Search for Supplier to Add</h2>
       </div>
 
-      {/* Search Section */}
+
       <div className="card-container">
-        <div className="search-container">
+        <div className="searchcontainer">
           <div className="search-inputs">
             <select name="supplier-category" value={supplierCategory} onChange={handleSupplierCategoryChange}>
               <option value="">Select Supplier Category</option>
@@ -61,12 +81,14 @@ const AddSupplier = () => {
             <button className="clear-button" onClick={handleClear}>
               Clear
             </button>
-            <button className="apply-button">Apply</button>
+            <button className="apply-button" onClick={handleApply}> {/* Activate search on Apply */}
+              Apply
+            </button>
           </div>
         </div>
       </div>
 
-      {/* List View Section */}
+
       {isSearchActive && (
         <>
           <div className="results-header">
@@ -84,8 +106,18 @@ const AddSupplier = () => {
                   <div>
                     <h3>{supplier.name}</h3>
                     <p>{supplier.description}</p>
-                    <p><strong>Category:</strong> {supplier.category}</p> {/* Display supplier category */}
+                    <p><strong>Category:</strong> {supplier.category}</p> 
                   </div>
+                </div>
+                <div className="toggle-switch">
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={supplier.isActive}
+                      onChange={() => handleToggleSupplier(supplier.id)} 
+                    />
+                    <span className="slider round"></span>
+                  </label>
                 </div>
               </div>
             ))

@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import './styling.css';
-import suppliersData from './dummyData'; // Ensure correct import path
+import suppliersData from './dummyData'; 
 
 const ViewSuppliers = () => {
-  // Initialize the suppliers state with the imported data
   const [suppliers, setSuppliers] = useState(suppliersData);
 
-  // Function to toggle the isActive status of a supplier
   const handleToggleSupplier = (id) => {
     setSuppliers((prevSuppliers) =>
       prevSuppliers.map((supplier) =>
@@ -31,7 +29,7 @@ const ViewSuppliers = () => {
               <div>
                 <h3>{supplier.name}</h3>
                 <p>{supplier.description}</p>
-                <p><strong>Category:</strong> {supplier.category}</p> {/* Display supplier category */}
+                <p><strong>Category:</strong> {supplier.category}</p> 
               </div>
             </div>
             <div className="toggle-switch">
@@ -39,7 +37,7 @@ const ViewSuppliers = () => {
                 <input
                   type="checkbox"
                   checked={supplier.isActive}
-                  onChange={() => handleToggleSupplier(supplier.id)} // Make checkbox interactive
+                  onChange={() => handleToggleSupplier(supplier.id)}
                 />
                 <span className="slider round"></span>
               </label>
