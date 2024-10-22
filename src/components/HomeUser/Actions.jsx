@@ -22,6 +22,11 @@ const Actions = ({ userType }) => {
                 Raw Materials
               </button>
             </Link>
+            <Link to="/viewRawMaterial">
+              <button>
+                <i className="fas fa-search"></i>  Search for Raw Materials
+              </button>
+            </Link>
             <Link to="/currentRequests">
               <button>
                 <i className="fas fa-tachometer-alt"></i> Current Requests
@@ -29,7 +34,7 @@ const Actions = ({ userType }) => {
             </Link>
             <Link to="/previousRequests">
               <button>
-                <i className="fas fa-history"></i> Previous Requests
+                <i className="fas fa-history"></i>Previous Requests
               </button>
             </Link>
             <Link to="/searchRequests">

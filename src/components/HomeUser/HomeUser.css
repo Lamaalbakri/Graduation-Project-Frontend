@@ -64,9 +64,34 @@
 }
 
 /* Action buttons below the card */
+
+
+.actions button {
+    flex: 1 1 auto; /* يسمح للزر بالنمو والتمدد */
+    min-width: 150px; /* الحد الأدنى لعرض الزر */
+    max-width: 250px; /* الحد الأقصى لعرض الزر */
+    padding: 15px 20px;
+    border: none;
+    background-color: #f4f4f4;
+    color: #333;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    height: 50px; /* ارتفاع موحد لجميع الأزرار */
+}
+.actions button i {
+    margin-right: 5px; /* مسافة قصيرة بين الأيقونة والنص */
+}
+
 .actions {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap; /* يسمح للعناصر بالنزول إلى السطر التالي عند الحاجة */
+    gap: 10px; /* تباعد بين الأزرار */
+    justify-content:center;
     align-items: center;
     margin-top: 30px;
     margin-bottom: 30px;
@@ -74,7 +99,7 @@
     position: relative;
     z-index: 0;
 }
-.actions button {
+/* .actions button {
     flex-grow: 1;
     padding: 15px 20px;
     border: none;
@@ -90,7 +115,7 @@
     transition: background 0.3s ease, transform 0.2s ease;
     margin: 0 10px;
     max-width: 250px;
-} 
+}  */
 .actions button:hover {
     background-color: #f4d53f;
     transform: translateY(-2px);

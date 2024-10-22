@@ -31,15 +31,14 @@ import ShoppingCartList from "./components/Manufacturers/RawMaterialOrder/Shoppi
 import ShoppingCartDetail from "./components/Manufacturers/RawMaterialOrder/ShoppingCart/ShoppingCartDetail";
 import CompleteOrder from "./components/Manufacturers/RawMaterialOrder/ShoppingCart/CompleteOrder";
 
-import AddSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/AddSupplier"; 
-import ViewSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/ViewSuppliers"; 
+import AddSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/AddSupplier";
+import ViewSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/ViewSuppliers";
 
 
 const { Content } = Layout;
 
 function App() {
   const [userType, setUserType] = useState(null);
-
   return (
     <Router>
       <Routes>
