@@ -16,6 +16,16 @@ function RegisterPage() {
 
   const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -66,7 +76,9 @@ function RegisterPage() {
 
     const passwordErrors = validatePassword(password);
     if (passwordErrors.length > 0) {
-      const combinedPasswordError = `Password must ${passwordErrors.join(", ")}.`;
+      const combinedPasswordError = `Password must ${passwordErrors.join(
+        ", "
+      )}.`;
       setErrors([combinedPasswordError]);
       return;
     }
@@ -148,7 +160,7 @@ function RegisterPage() {
 
             <div className="input-field">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"} // Toggle password field
                 name="password"
                 placeholder="Password"
                 value={formData.password}
@@ -156,11 +168,17 @@ function RegisterPage() {
                 required
               />
               <i className="uil uil-lock icon"></i>
+              <i
+                className={`uil ${
+                  showPassword ? "uil-eye" : "uil-eye-slash"
+                } showHidePw`}
+                onClick={togglePasswordVisibility}
+              ></i>
             </div>
 
             <div className="input-field">
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"} // Toggle confirm password field
                 name="confirm_password"
                 placeholder="Confirm password"
                 value={formData.confirm_password}
@@ -168,6 +186,12 @@ function RegisterPage() {
                 required
               />
               <i className="uil uil-lock icon"></i>
+              <i
+                className={`uil ${
+                  showConfirmPassword ? "uil-eye" : "uil-eye-slash"
+                } showHidePw`}
+                onClick={toggleConfirmPasswordVisibility}
+              ></i>
             </div>
 
             <div className="select-field">
@@ -213,10 +237,7 @@ function RegisterPage() {
             </div>
           )}
 
-          {successMessage &&
-            <div className="success">
-              {successMessage}
-            </div>}
+          {successMessage && <div className="success">{successMessage}</div>}
         </div>
 
         <footer>

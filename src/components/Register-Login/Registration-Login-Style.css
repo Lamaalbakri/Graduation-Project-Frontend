@@ -95,7 +95,8 @@
     transition: all 0.3s ease;
 }
 .button input:hover{
-    background-color: #34373a;
+    background-color: #f4d53f;
+    color: #1c2229;
 }
 .form a.text{
     color: #1c2229;
@@ -144,6 +145,13 @@
     z-index: 9999;
     overflow-y: auto; 
     background-color: transparent;
+}
+.showHidePw {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 @media (max-height: 600px) {

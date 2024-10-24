@@ -12,6 +12,11 @@ function LoginPage({ setUserType }) {
   });
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -84,7 +89,7 @@ function LoginPage({ setUserType }) {
             </div>
             <div className="input-field">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"} // Toggle password field
                 name="password"
                 className="password"
                 placeholder="Password"
@@ -93,6 +98,12 @@ function LoginPage({ setUserType }) {
                 required
               />
               <i className="uil uil-lock icon"></i>
+              <i
+                className={`uil ${
+                  showPassword ? "uil-eye" : "uil-eye-slash"
+                } showHidePw`}
+                onClick={togglePasswordVisibility}
+              ></i>
             </div>
             <div className="select-field">
               <select
@@ -117,16 +128,11 @@ function LoginPage({ setUserType }) {
             </div>
             {errorMessage && (
               <div className="error-message">
-                <div className="error">
-                  {errorMessage}
-                </div>
+                <div className="error">{errorMessage}</div>
               </div>
             )}
 
-            {successMessage &&
-              <div className="success">
-                {successMessage}
-              </div>}
+            {successMessage && <div className="success">{successMessage}</div>}
             <div className="login-signup">
               <span className="text">
                 Don't have an account?{" "}

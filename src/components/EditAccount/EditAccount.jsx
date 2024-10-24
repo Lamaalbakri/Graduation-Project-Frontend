@@ -1,18 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../images/User.png";
+import { EditOutlined } from "@ant-design/icons";
+import Address from "../../components/Dialog/Address";
 import "./EditAccount.css";
 
 const EditAccount = () => {
   const [account, setAccount] = useState({
-    name: "User name",
-    email: "stakeholders@gmail.com",
-    phoneNumber: "+966534389732",
-    address: "285 N Broad St, Jeddah, JD 07208, SA",
+    name: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
   });
+  const [dialogState, setDialogState] = useState({
+    address: false,
+  });
+
+  // جلب بيانات المستخدم من localStorage عند تحميل الصفحة
+  useEffect(() => {
+    const storedUserName = localStorage.getItem("userName");
+    const storedEmail = localStorage.getItem("email"); // Assuming you stored this during registration
+    const storedPhoneNumber = localStorage.getItem("phoneNumber"); // Assuming this as well
+
+    if (storedUserName && storedEmail && storedPhoneNumber) {
+      setAccount({
+        name: storedUserName,
+        email: storedEmail,
+        phoneNumber: storedPhoneNumber,
+        address: "", // يمكنك جلب العنوان من البيانات المخزنة إذا كان متاحاً
+      });
+    }
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setAccount({ ...account, [name]: value });
+  };
+
+  // Helper function to toggle dialog states (open or close)
+  const toggleDialog = (dialogName, value) => {
+    setDialogState((prev) => ({ ...prev, [dialogName]: value }));
+  };
+
+  const handleDialogClose = () => {
+    toggleDialog("address", false);
+    // if () {
+    console.log("add DB ubdate address");
+    // }
+  };
+  const handleEditAddress = () => {
+    toggleDialog("address", true);
   };
 
   const handleSave = () => {
@@ -63,15 +99,15 @@ const EditAccount = () => {
               onChange={handleInputChange}
             />
           </label>
-          <label>
-            Address:
-            <input
-              type="text"
-              name="address"
-              value={account.address}
-              onChange={handleInputChange}
-            />
-          </label>
+          <label> Address: </label>
+          <div className="edit-adress-detail">
+            <div className="edit-address-text">Jedaah, faisaliah ,67584</div>
+            <div className="edit-address-button">
+              <button onClick={handleEditAddress}>
+                Edit <EditOutlined />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <div className="account-buttons">
@@ -82,6 +118,12 @@ const EditAccount = () => {
           Save
         </button>
       </div>
+      {dialogState.address && (
+        <Address
+          onClose={() => handleDialogClose(false)}
+          onRequestSent={() => handleDialogClose(true)}
+        />
+      )}
     </div>
   );
 };
