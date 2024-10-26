@@ -12,12 +12,14 @@ function RegisterPage() {
     password: "",
     confirm_password: "",
     userType: "",
+    category: "",
   });
 
   const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -28,10 +30,15 @@ function RegisterPage() {
   };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+
+    if (name === "userType") {
+      setShowCategoryDropdown(value === "supplier");
+    }
   };
 
   const validatePassword = (password) => {
@@ -60,6 +67,7 @@ function RegisterPage() {
       password,
       confirm_password,
       userType,
+      category,
     } = formData;
 
     if (!/^\d{10}$/.test(phone_number)) {
@@ -88,6 +96,10 @@ function RegisterPage() {
       return;
     }
 
+    if (!category) {
+      setErrors(["Please select a user type."]);
+      return;
+    }
     try {
       const responseData = await registerUser(
         full_name,
@@ -95,7 +107,8 @@ function RegisterPage() {
         phone_number,
         password,
         confirm_password,
-        userType
+        userType,
+        category
       );
 
       setSuccessMessage(responseData.message);
@@ -106,6 +119,7 @@ function RegisterPage() {
         password: "",
         confirm_password: "",
         userType: "",
+        category: "",
       });
 
       setErrors([]);
@@ -160,7 +174,7 @@ function RegisterPage() {
 
             <div className="input-field">
               <input
-                type={showPassword ? "text" : "password"} // Toggle password field
+                type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Password"
                 value={formData.password}
@@ -178,7 +192,7 @@ function RegisterPage() {
 
             <div className="input-field">
               <input
-                type={showConfirmPassword ? "text" : "password"} // Toggle confirm password field
+                type={showConfirmPassword ? "text" : "password"}
                 name="confirm_password"
                 placeholder="Confirm password"
                 value={formData.confirm_password}
@@ -212,6 +226,32 @@ function RegisterPage() {
               </select>
               <i className="uil uil-users-alt"></i>
             </div>
+
+            {showCategoryDropdown && (
+              <div className="select-field">
+                <select
+                  name="category"
+                  className="stakeholders"
+                  value={formData.category}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select category</option>
+                  <option value="electronics">Electronics</option>
+                  <option value="fashion">Fashion and Apparel</option>
+                  <option value="home_garden">Home and Garden</option>
+                  <option value="health_beauty">Health and Beauty</option>
+                  <option value="food_beverages">Food and Beverages</option>
+                  <option value="automotive_parts">Automotive Parts</option>
+                  <option value="office_supplies">Office Supplies</option>
+                  <option value="construction_materials">Construction Materials</option>
+                  <option value="toys_games">Toys and Games</option>
+                  <option value="sporting_goods">Sporting Goods</option>
+                  <option value="other">Other</option>
+                </select>
+                <i className="uil uil-tags"></i>
+              </div>
+            )}
 
             <div className="input-field button">
               <input type="submit" value="Register" />
