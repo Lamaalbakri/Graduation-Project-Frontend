@@ -10,9 +10,11 @@ export const loginUser = async (email, password, userType) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ email, password, userType }),
+            credentials: 'include', // إرسال الكوكيز مع الطلبات
         });
 
         const data = await response.json();
+        console.log(data)
 
         if (!response.ok) {
             throw new Error(data.message || "Login failed. Please try again.");
@@ -41,7 +43,7 @@ export const registerUser = async (full_name, email, phone_number, password, con
                 password,
                 confirm_password,
                 userType,
-                
+
             }),
         });
 

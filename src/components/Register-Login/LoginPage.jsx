@@ -3,7 +3,7 @@ import { loginUser } from "../../api/authAPI";
 import "./Registration-Login-Style.css";
 import { Link, useNavigate } from "react-router-dom";
 
-function LoginPage({ setUserType }) {
+function LoginPage({ setUserType, setUserId }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -36,34 +36,32 @@ function LoginPage({ setUserType }) {
 
     try {
       const data = await loginUser(email, password, userType);
-
+      const { userId, userRole } = data;
       setErrorMessage("");
       setSuccessMessage("Login successful!");
-      // alert("Login successful!");
-
-      // localStorage.setItem("userType", userType);
-      // localStorage.setItem("email", email);
-
-      setUserType(userType);
+      setUserType(userRole);
+      setUserId(userId);
+      console.log(userId)
 
       switch (userType) {
         case "supplier":
-          navigate("/supplier-home");
+
+          navigate(`/supplier-home/${userId}`);
           break;
         case "transporter":
-          navigate("/transporter-home");
+          navigate(`/transporter-home/${userId}`);
           break;
         case "manufacturer":
-          navigate("/manufacturer-home");
+          navigate(`/manufacturer-home/${userId}`);
           break;
         // case "distributor":
-        //   navigate("/distributor-home");
+        //   navigate(`/distributor-home/${userId}`);
         //   break;
         // case "retailer":
-        //   navigate("/retailer-home");
+        //   navigate(`/retailer-home/${userId}`);
         //   break;
-        // default:
-        //   navigate("");*/
+        default:
+          navigate("/");
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -99,9 +97,8 @@ function LoginPage({ setUserType }) {
               />
               <i className="uil uil-lock icon"></i>
               <i
-                className={`uil ${
-                  showPassword ? "uil-eye" : "uil-eye-slash"
-                } showHidePw`}
+                className={`uil ${showPassword ? "uil-eye" : "uil-eye-slash"
+                  } showHidePw`}
                 onClick={togglePasswordVisibility}
               ></i>
             </div>

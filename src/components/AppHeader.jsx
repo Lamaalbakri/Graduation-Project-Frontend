@@ -18,6 +18,7 @@ const AppHeader = ({
   handleLogout,
   colorBgContainer,
   userType,
+  userId,
 }) => {
   const navigate = useNavigate();
   const [cartItemCount, setCartItemCount] = useState(0); //  Number of items in the shopping cart
@@ -43,7 +44,7 @@ const AppHeader = ({
 
   // Function to handle navigation to the cart page
   const handleCartClick = () => {
-    navigate("/shoppingCarts"); //
+    navigate(`/shoppingCarts/${userId}`); //
   };
 
   return (

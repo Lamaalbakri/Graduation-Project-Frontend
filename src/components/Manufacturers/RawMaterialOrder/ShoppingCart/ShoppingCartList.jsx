@@ -3,7 +3,7 @@ import ShoppingCart from './ShoppingCart';
 import Breadcrumb from "./Breadcrumb";
 import './ShoppingCart.css';
 
-function ShoppingCartList() {
+function ShoppingCartList({ userId }) {
     const carts = [
         {
             id: 1,
@@ -28,7 +28,7 @@ function ShoppingCartList() {
             {carts !== null && carts.length > 0 ? (
                 carts.map(cart => (
 
-                    <ShoppingCart key={cart.id} cart={cart} />
+                    <ShoppingCart key={cart.id} cart={cart} userId={userId} />
                 ))
             ) : (
                 <div className='background-message'>

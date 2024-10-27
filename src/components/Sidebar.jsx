@@ -6,7 +6,7 @@ import ToggleThemeButton from "./ToggleThemeButton";
 
 const { Sider } = Layout;
 
-const Sidebar = ({ collapsed, darkTheme, toggleTheme, userType }) => {
+const Sidebar = ({ collapsed, darkTheme, toggleTheme, userType, userId }) => {
   return (
     <Sider
       width={266}
@@ -26,7 +26,7 @@ const Sidebar = ({ collapsed, darkTheme, toggleTheme, userType }) => {
       >
         <Logo />
       </div>
-      <MenuList darkTheme={darkTheme} userType={userType} />
+      <MenuList darkTheme={darkTheme} userType={userType} userId={userId} />
       <ToggleThemeButton darkTheme={darkTheme} toggleTheme={toggleTheme} />
     </Sider>
   );

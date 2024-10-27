@@ -9,7 +9,7 @@ import mada from "../../../images/mada-logo.png";
 import ConfirmationDialog from "../../../Dialog/ConfirmationDialog";
 import Address from "../../../Dialog/Address";
 
-function CompleteOrder() {
+function CompleteOrder({ userId }) {
   const { id } = useParams();
   const [dialogState, setDialogState] = useState({
     confirmationDialog: false,
@@ -58,11 +58,11 @@ function CompleteOrder() {
     <div className="shoppingCart">
       <Breadcrumb
         crumbs={[
-          { name: "Shopping Carts", path: "/shoppingCarts" },
-          { name: `Shopping Cart ${id}`, path: `/shoppingCart/${id}` },
+          { name: "Shopping Carts", path: `/shoppingCarts/${userId}` },
+          { name: `Shopping Cart ${id}`, path: `/shoppingCarts/${userId}/${id}` },
           {
             name: "Payment Confirmation",
-            path: `/shoppingCart/${id}/complete`,
+            path: `/shoppingCarts/${userId}/${id}/complete`,
           },
         ]}
       />
@@ -127,16 +127,14 @@ function CompleteOrder() {
       </div>
       {dialogState.confirmationDialog && (
         <ConfirmationDialog
-          title={`${
-            stepType === "confirmPay"
-              ? "Are you ready to confirm your payment?"
-              : "Your Order Has Been Created"
-          }`}
-          message={` ${
-            stepType === "confirmPay"
-              ? "Once confirmed, you won't be able to cancel your order."
-              : "Would you like to view the Request? "
-          }`}
+          title={`${stepType === "confirmPay"
+            ? "Are you ready to confirm your payment?"
+            : "Your Order Has Been Created"
+            }`}
+          message={` ${stepType === "confirmPay"
+            ? "Once confirmed, you won't be able to cancel your order."
+            : "Would you like to view the Request? "
+            }`}
           onConfirm={handleConfirmAction}
           onCancel={() => toggleDialog("confirmationDialog", false)}
           stepType={stepType} // Pass stepType as a prop to control icon and buttons

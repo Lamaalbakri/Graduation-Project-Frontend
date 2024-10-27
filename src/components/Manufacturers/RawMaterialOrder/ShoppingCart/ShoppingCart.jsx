@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './ShoppingCart.css';
 
-const ShoppingCart = ({ cart }) => {
+const ShoppingCart = ({ cart, userId }) => {
     return (
         <div className='cart-container'>
             <div className='cart-title'><p>Shopping Cart {cart.id}</p></div>
@@ -17,7 +17,7 @@ const ShoppingCart = ({ cart }) => {
                 </div>
             </div>
             <div className='button-container'>
-                <Link to={`/shoppingCart/${cart.id}`}>
+                <Link to={`/shoppingCarts/${userId}/${cart.id}`}>
                     <button>View Details</button>
                 </Link>
             </div>

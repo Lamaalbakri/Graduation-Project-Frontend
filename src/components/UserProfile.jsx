@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "./images/User.png"; // استيراد الشعار
+import { fetchUserData } from "../api/userAPI";
 
 const UserProfile = ({ userType }) => {
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const data = await fetchUserData(); // جلب بيانات المستخدم باستخدام التوكن
+        setUserData(data); // حفظ بيانات المستخدم في الحالة
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+    getUserData();
+  }, []);
   const getUserRole = (userType) => {
     switch (userType) {
       case "supplier":
@@ -24,7 +38,8 @@ const UserProfile = ({ userType }) => {
         <span
           style={{ fontWeight: "bold", color: "#1c2229", marginRight: "10px" }}
         >
-          {getUserRole(userType)}
+          {/* عرض اسم المستخدم إذا كان متوفرًا، وإلا عرض نوع المستخدم */}
+          {userData ? userData.full_name : getUserRole(userType)}
         </span>
       </div>
       <div className="UserIcon" style={{ marginRight: "10px" }}>

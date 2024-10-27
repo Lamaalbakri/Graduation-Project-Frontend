@@ -1,43 +1,43 @@
 import { Link } from "react-router-dom";
 
-const Actions = ({ userType }) => {
+const Actions = ({ userType, userId }) => {
   return (
     <div>
       {userType === "supplier" && (
         <>
           <div className="actions">
-            <Link to="/addRawMaterial">
+            <Link to="/addRawMaterial/:userId">
               <button>
                 <i className="fas fa-plus"></i> Add Raw Materials
               </button>
             </Link>
-            <Link to="/viewRawMaterial">
+            <Link to="/viewRawMaterial/:userId">
               <button>
                 <i className="fas fa-eye"></i> View Raw Materials
               </button>
             </Link>
-            <Link to="/updateRawMaterial">
+            <Link to="/updateRawMaterial/:userId">
               <button>
                 <i className="fa-sharp fa-solid fa-pen-to-square"></i> Update
                 Raw Materials
               </button>
             </Link>
-            <Link to="/viewRawMaterial">
+            <Link to="/viewRawMaterial/:userId">
               <button>
                 <i className="fas fa-search"></i>  Search for Raw Materials
               </button>
             </Link>
-            <Link to="/currentRequests">
+            <Link to="/currentRequests/:userId">
               <button>
                 <i className="fas fa-tachometer-alt"></i> Current Requests
               </button>
             </Link>
-            <Link to="/previousRequests">
+            <Link to="/previousRequests/:userId">
               <button>
                 <i className="fas fa-history"></i>Previous Requests
               </button>
             </Link>
-            <Link to="/searchRequests">
+            <Link to="/searchRequests/:userId">
               <button>
                 <i className="fas fa-search"></i> Search for Request
               </button>
@@ -56,18 +56,18 @@ const Actions = ({ userType }) => {
               whiteSpace: "nowrap",
             }}
           >
-            <Link to="/currentTransportRequests">
+            <Link to="/currentTransportRequests/:userId">
               <button>
                 <i className="fas fa-tachometer-alt"></i>
                 Current Transport Requests
               </button>
             </Link>
-            <Link to="/previousTransportRequests">
+            <Link to="/previousTransportRequests/:userId">
               <button>
                 <i className="fas fa-history"></i> Previous Transport Requests
               </button>
             </Link>
-            <Link to="/searchTransportRequests">
+            <Link to="/searchTransportRequests/:userId">
               <button>
                 <i className="fas fa-search"></i> Search for Request
               </button>
@@ -79,33 +79,38 @@ const Actions = ({ userType }) => {
       {userType === "manufacturer" && (
         <>
           <div className="actions">
-            <Link to="/addGoods">
+            <Link to="/addGoods/:userId">
               <button>
                 <i className="fas fa-plus"></i> Add Goods
               </button>
             </Link>
-            <Link to="/viewGoods">
+            <Link to="/viewGoods/:userId">
               <button>
                 <i className="fas fa-eye"></i> View Goods
               </button>
             </Link>
-            <Link to="/updateGoods">
+            <Link to="/updateGoods/:userId">
               <button>
                 <i className="fa-sharp fa-solid fa-pen-to-square"></i> Update
                 Goods
               </button>
             </Link>
-            <Link to="/addSuppliers">
+            <Link to="/addSuppliers/:userId">
               <button>
                 <i className="fas fa-tachometer-alt"></i> Add Suppliers
               </button>
             </Link>
-            <Link to="/viewSuppliers">
+            <Link to="/viewSuppliers/:userId">
               <button>
-                <i className="fas fa-history"></i> Create Order
+                <i className="fas fa-history"></i> View Suppliers
               </button>
             </Link>
-            <Link to="/viewOrders">
+            <Link to="/shoppingCarts/:userId">
+              <button>
+                <i className="fas fa-history"></i> Shopping Carts
+              </button>
+            </Link>
+            <Link to="/viewOrders/:userId">
               <button>
                 <i className="fas fa-search"></i> View Orders
               </button>

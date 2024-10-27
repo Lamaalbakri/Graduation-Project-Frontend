@@ -39,6 +39,8 @@ const { Content } = Layout;
 
 function App() {
   const [userType, setUserType] = useState(null);
+  const [userId, setUserId] = useState(null);
+
   return (
     <Router>
       <Routes>
@@ -46,15 +48,16 @@ function App() {
         <Route path="/register" element={<RegisterPageLayout />} />
         <Route
           path="/login"
-          element={<LoginPageLayout setUserType={setUserType} />}
+          element={<LoginPageLayout setUserType={setUserType} setUserId={setUserId} />}
         />
-        <Route path="*" element={<MainLayout userType={userType} />} />
+        <Route path="*" element={<MainLayout userType={userType} userId={userId} />} />
       </Routes>
     </Router>
   );
 }
 
-function MainLayout({ userType }) {
+function MainLayout({ userType, userId }) {
+  console.log("Main Layout - User ID:", userId, "User Type:", userType);
   const [darkTheme, setDarkTheme] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
   const toggleTheme = () => setDarkTheme(!darkTheme);
@@ -77,6 +80,7 @@ function MainLayout({ userType }) {
           darkTheme={darkTheme}
           toggleTheme={toggleTheme}
           userType={userType}
+          userId={userId}
         />
       )}
       <Layout>
@@ -86,55 +90,56 @@ function MainLayout({ userType }) {
           handleLogout={handleLogout}
           colorBgContainer={colorBgContainer}
           userType={userType}
+          userId={userId}
         />
         <Content style={{ padding: "0 24px", minHeight: 280 }}>
           <Routes>
             {userType === "supplier" && (
               <>
                 <Route
-                  path="/supplier-home"
-                  element={<HomeUser userType="supplier" />}
+                  path="/supplier-home/:userId"
+                  element={<HomeUser userType="supplier" userId={userId} />}
                 />
                 <Route
-                  path="/assignTransporter"
-                  element={<AssignTransporter />}
+                  path="/assignTransporter/:userId"
+                  element={<AssignTransporter userId={userId} />}
                 />
-                <Route path="/addRawMaterial" element={<AddRawMaterial />} />
-                <Route path="/viewRawMaterial" element={<ViewRawMaterial />} />
+                <Route path="/addRawMaterial/:userId" element={<AddRawMaterial userId={userId} />} />
+                <Route path="/viewRawMaterial/:userId" element={<ViewRawMaterial userId={userId} />} />
                 <Route
-                  path="/updateRawMaterial"
-                  element={<UpdateRawMaterial />}
+                  path="/updateRawMaterial/:userId"
+                  element={<UpdateRawMaterial userId={userId} />}
                 />
                 <Route
-                  path="/deleteRawMaterial"
-                  element={<DeleteRawMaterial />}
+                  path="/deleteRawMaterial/:userId"
+                  element={<DeleteRawMaterial userId={userId} />}
                 />
-                <Route path="/currentRequests" element={<CurrentRequests />} />
+                <Route path="/currentRequests/:userId" element={<CurrentRequests userId={userId} />} />
                 <Route
-                  path="/previousRequests"
+                  path="/previousRequests/:userId"
                   element={<PreviousRequests />}
                 />
-                <Route path="/searchRequests" element={<SearchRequests />} />
+                <Route path="/searchRequests/:userId" element={<SearchRequests userId={userId} />} />
               </>
             )}
 
             {userType === "transporter" && (
               <>
                 <Route
-                  path="/transporter-home"
-                  element={<HomeUser userType="transporter" />}
+                  path="/transporter-home/:userId"
+                  element={<HomeUser userType="transporter" userId={userId} />}
                 />
                 <Route
-                  path="/currentTransportRequests"
-                  element={<CurrentTransportRequests />}
+                  path="/currentTransportRequests/:userId"
+                  element={<CurrentTransportRequests userId={userId} />}
                 />
                 <Route
-                  path="/previousTransportRequests"
-                  element={<PreviousTransportRequests />}
+                  path="/previousTransportRequests/:userId"
+                  element={<PreviousTransportRequests userId={userId} />}
                 />
                 <Route
-                  path="/searchTransportRequests"
-                  element={<SearchTransportRequests />}
+                  path="/searchTransportRequests/:userId"
+                  element={<SearchTransportRequests userId={userId} />}
                 />
               </>
             )}
@@ -142,16 +147,16 @@ function MainLayout({ userType }) {
             {userType === "manufacturer" && (
               <>
                 <Route
-                  path="/manufacturer-home"
-                  element={<HomeUser userType="manufacturer" />}
+                  path="/manufacturer-home/:userId"
+                  element={<HomeUser userType="manufacturer" userId={userId} />}
                 />
 
-                <Route path="/addSuppliers" element={<AddSupplier />} />
-                <Route path="/viewSuppliers" element={<ViewSupplier />} />
+                <Route path="/addSuppliers/:userId" element={<AddSupplier userId={userId} />} />
+                <Route path="/viewSuppliers/:userId" element={<ViewSupplier userId={userId} />} />
                 {/* <Route path="/viewRawMaterials" element={} /> */}
-                <Route path="/shoppingCarts" element={<ShoppingCartList />} />
-                <Route path="/shoppingCart/:id" element={<ShoppingCartDetail />} />
-                <Route path="/shoppingCart/:id/complete" element={<CompleteOrder />} />
+                <Route path="/shoppingCarts/:userId" element={<ShoppingCartList userId={userId} />} />
+                <Route path="/shoppingCarts/:userId/:id" element={<ShoppingCartDetail userId={userId} />} />
+                <Route path="/shoppingCarts/:userId/:id/complete" element={<CompleteOrder userId={userId} />} />
                 {/* <Route path="/viewOrders" element={} /> */}
               </>
             )}
@@ -159,8 +164,8 @@ function MainLayout({ userType }) {
             {userType === "distributor" && (
               <>
                 <Route
-                  path="/distributor-home"
-                  element={<HomeUser userType="distributor" />}
+                  path="/distributor-home/:userId"
+                  element={<HomeUser userType="distributor" userId={userId} />}
                 />
                 {/* يمكنك إضافة المسارات الخاصة بالمستخدم الموزع هنا */}
               </>
@@ -169,8 +174,8 @@ function MainLayout({ userType }) {
             {userType === "retailer" && (
               <>
                 <Route
-                  path="/retailer-home"
-                  element={<HomeUser userType="retailer" />}
+                  path="/retailer-home/:userId"
+                  element={<HomeUser userType="retailer" userId={userId} />}
                 />
                 {/* يمكنك إضافة المسارات الخاصة بالمستخدم البائع بالتجزئة هنا */}
               </>
@@ -179,14 +184,14 @@ function MainLayout({ userType }) {
             {userType === "admin" && (
               <>
                 <Route
-                  path="/admin-home"
-                  element={<HomeUser userType="admin" />}
+                  path="/admin-home/:userId"
+                  element={<HomeUser userType="admin" userId={userId} />}
                 />
                 {/* يمكنك إضافة المسارات الخاصة بالمستخدم الإداري هنا */}
               </>
             )}
 
-            <Route path="/edit-account" element={<EditAccountLayout />} />
+            <Route path="/edit-account/:userId" element={<EditAccountLayout userId={userId} />} />
             {/* يمكنك وضع مسار افتراضي أو صفحة غير موجودة */}
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
@@ -204,8 +209,8 @@ function RegisterPageLayout() {
   return <RegisterPage />;
 }
 
-function LoginPageLayout({ setUserType }) {
-  return <LoginPage setUserType={setUserType} />;
+function LoginPageLayout({ setUserType, setUserId }) {
+  return <LoginPage setUserType={setUserType} setUserId={setUserId} />;
 }
 function EditAccountLayout() {
   return <EditAccount />;

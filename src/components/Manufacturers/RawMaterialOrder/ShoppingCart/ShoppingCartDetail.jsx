@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import CartItem from "./CartItem";
 import "./ShoppingCart.css";
 
-function ShoppingCartDetail() {
+function ShoppingCartDetail({ userId }) {
   const { id } = useParams();
 
   const handleIncrement = (item) => {
@@ -47,8 +47,8 @@ function ShoppingCartDetail() {
     <div className="shoppingCart">
       <Breadcrumb
         crumbs={[
-          { name: "Shopping Carts", path: "/shoppingCarts" },
-          { name: `Shopping Cart ${id}`, path: `/shoppingCart/${id}` },
+          { name: "Shopping Carts", path: `/shoppingCarts/${userId}` },
+          { name: `Shopping Cart ${id}`, path: `/shoppingCarts/${userId}/${id}` },
         ]}
       />
       <div className="detail-container">
@@ -74,7 +74,7 @@ function ShoppingCartDetail() {
             <div className="total-price">930$</div>
           </div>
           <div className="order-summary-button">
-            <Link to={`/shoppingCart/${id}/complete`}>
+            <Link to={`/shoppingCarts/${userId}/${id}/complete`}>
               <button className="Checkout-button">CHECkOUT</button>
             </Link>
           </div>

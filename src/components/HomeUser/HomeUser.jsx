@@ -1,9 +1,11 @@
 import React from "react";
+import { useParams } from 'react-router-dom';
 import WelcomeCard from "./WelcomeCard ";
 import Actions from "./Actions";
 import Dashboard from "./Dashboard";
 import "./HomeUser.css";
-function HomeUser({ userType }) {
+function HomeUser({ userType, userId }) {
+
   const getWelcomeMessage = (userType) => {
     switch (userType) {
       case "supplier":
@@ -24,7 +26,7 @@ function HomeUser({ userType }) {
   return (
     <div className="main-content">
       <WelcomeCard welcomeText={getWelcomeMessage(userType)} />
-      <Actions userType={userType} />
+      <Actions userType={userType} userId={userId} />
       <Dashboard />
     </div>
   );
