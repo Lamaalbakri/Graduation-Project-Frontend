@@ -1,34 +1,51 @@
 import React, { useState, useEffect } from "react";
 import logo from "../images/User.png";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { notification } from "antd";
 import Address from "../../components/Dialog/Address";
+import { fetchUserData, updateUserData } from "../../api/userAPI";
 import "./EditAccount.css";
 
 const EditAccount = () => {
+  const [originalAccount, setOriginalAccount] = useState(null);
   const [account, setAccount] = useState({
-    name: "",
+    id: "",
+    full_name: "",
     email: "",
-    phoneNumber: "",
+    phone_number: "",
     address: "",
+    userType: "",
   });
   const [dialogState, setDialogState] = useState({
     address: false,
   });
 
-  // جلب بيانات المستخدم من localStorage عند تحميل الصفحة
   useEffect(() => {
-    const storedUserName = localStorage.getItem("userName");
-    const storedEmail = localStorage.getItem("email"); // Assuming you stored this during registration
-    const storedPhoneNumber = localStorage.getItem("phoneNumber"); // Assuming this as well
+    const loadUserData = async () => {
+      try {
+        const userData = await fetchUserData();
+        setAccount({
+          id: userData._id,
+          full_name: userData.full_name || "",
+          email: userData.email || "",
+          phone_number: userData.phone_number || "",
+          address: userData.address || "",
+          userType: userData.userType || "",
+        });
+        setOriginalAccount({
+          id: userData._id,
+          full_name: userData.full_name || "",
+          email: userData.email || "",
+          phone_number: userData.phone_number || "",
+          address: userData.address || "",
+          userType: userData.userType || "",
+        });
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
 
-    if (storedUserName && storedEmail && storedPhoneNumber) {
-      setAccount({
-        name: storedUserName,
-        email: storedEmail,
-        phoneNumber: storedPhoneNumber,
-        address: "", // يمكنك جلب العنوان من البيانات المخزنة إذا كان متاحاً
-      });
-    }
+    loadUserData();
   }, []);
 
   const handleInputChange = (e) => {
@@ -51,14 +68,48 @@ const EditAccount = () => {
     toggleDialog("address", true);
   };
 
-  const handleSave = () => {
-    console.log("Profile saved:", account);
-    // Add your save logic (e.g., API call) here
+  const handleSave = async () => {
+    const userData = {
+      id: account.id,
+      full_name: account.full_name,
+      email: account.email,
+      phone_number: account.phone_number,
+      address: account.address,
+    };
+
+    const userType = account.userType;
+    if (!userType) {
+      console.error("User type is not defined");
+      return;
+    }
+
+    try {
+      const response = await updateUserData(userData, userType);
+      if (response && response.data) {
+        console.log("Account updated successfully:", response.data);
+
+        notification.success({
+          message: "Update Successful!",
+          description: "Your account information has been updated",
+          placement: "top",
+        });
+      } else {
+        console.log("Unexpected response format:", response);
+      }
+    } catch (error) {
+      console.error("Failed to update account:", error);
+    }
   };
 
   const handleCancel = () => {
     console.log("Account editing cancelled");
-    // Add cancel logic (e.g., reset to original profile values) here
+    setAccount(originalAccount);
+    notification.info({
+      message: "Edit Cancelled",
+      description: "The original account data has been restored.",
+      placement: "top",
+      icon: <InfoCircleOutlined style={{ color: "#f4d53f" }} />,
+    });
   };
 
   return (
@@ -67,8 +118,6 @@ const EditAccount = () => {
       <div className="account-container">
         <div className="account-picture">
           <img src={logo} alt="Avatar" className="account-avatar" />
-          {/* امكن نحذفه */}
-          <button className="upload-button">Change Photo</button>
         </div>
 
         <div className="account-details">
@@ -76,8 +125,8 @@ const EditAccount = () => {
             Name:
             <input
               type="text"
-              name="name"
-              value={account.name}
+              name="full_name"
+              value={account.full_name}
               onChange={handleInputChange}
             />
           </label>
@@ -94,8 +143,8 @@ const EditAccount = () => {
             Phone Number:
             <input
               type="text"
-              name="phoneNumber"
-              value={account.phoneNumber}
+              name="phone_number"
+              value={account.phone_number}
               onChange={handleInputChange}
             />
           </label>

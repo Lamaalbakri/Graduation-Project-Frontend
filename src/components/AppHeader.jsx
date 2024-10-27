@@ -25,7 +25,7 @@ const AppHeader = ({
   const menu = (
     <Menu>
       <Menu.Item key="1" icon={<UserOutlined />}>
-        <Link to="/edit-account">Edit Account</Link>
+        <Link to="/edit-account/:userId">Edit Account</Link>
       </Menu.Item>
       <Menu.Item key="2" icon={<LoginOutlined />} onClick={handleLogout}>
         Logout

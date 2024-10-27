@@ -1,11 +1,11 @@
 const API_URL = 'http://localhost:8500/api/v1';
 
-// جلب بيانات المستخدم
+// Fetch user data
 export const fetchUserData = async () => {
     try {
         const response = await fetch(`${API_URL}/login/getMe`, {
             method: "GET",
-            credentials: 'include', // إرسال الكوكيز مع الطلبات
+            credentials: 'include', // Sending cookies with orders
         });
 
         const data = await response.json();
@@ -15,8 +15,31 @@ export const fetchUserData = async () => {
         }
         console.log(data);
         console.log(data.data);
-        return data.data; // إرجاع بيانات المستخدم
+        return data.data; // Returns user data
     } catch (error) {
-        throw error; // إعادة رمي الخطأ للتعامل معه في المكون
+        throw error;
+    }
+};
+
+// Update user data
+export const updateUserData = async (userData, userType) => {
+    try {
+      const response = await fetch(`${API_URL}/user/update/${userData.id}?userType=${userType}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+  
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to update user data.");
+      }
+      return data;
+    } catch (error) {
+      throw error;
     }
 };

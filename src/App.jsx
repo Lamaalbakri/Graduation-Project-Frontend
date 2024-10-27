@@ -34,7 +34,6 @@ import CompleteOrder from "./components/Manufacturers/RawMaterialOrder/ShoppingC
 import AddSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/AddSupplier";
 import ViewSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/ViewSuppliers";
 
-
 const { Content } = Layout;
 
 function App() {
@@ -48,9 +47,14 @@ function App() {
         <Route path="/register" element={<RegisterPageLayout />} />
         <Route
           path="/login"
-          element={<LoginPageLayout setUserType={setUserType} setUserId={setUserId} />}
+          element={
+            <LoginPageLayout setUserType={setUserType} setUserId={setUserId} />
+          }
         />
-        <Route path="*" element={<MainLayout userType={userType} userId={userId} />} />
+        <Route
+          path="*"
+          element={<MainLayout userType={userType} userId={userId} />}
+        />
       </Routes>
     </Router>
   );
@@ -104,8 +108,14 @@ function MainLayout({ userType, userId }) {
                   path="/assignTransporter/:userId"
                   element={<AssignTransporter userId={userId} />}
                 />
-                <Route path="/addRawMaterial/:userId" element={<AddRawMaterial userId={userId} />} />
-                <Route path="/viewRawMaterial/:userId" element={<ViewRawMaterial userId={userId} />} />
+                <Route
+                  path="/addRawMaterial/:userId"
+                  element={<AddRawMaterial userId={userId} />}
+                />
+                <Route
+                  path="/viewRawMaterial/:userId"
+                  element={<ViewRawMaterial userId={userId} />}
+                />
                 <Route
                   path="/updateRawMaterial/:userId"
                   element={<UpdateRawMaterial userId={userId} />}
@@ -114,12 +124,18 @@ function MainLayout({ userType, userId }) {
                   path="/deleteRawMaterial/:userId"
                   element={<DeleteRawMaterial userId={userId} />}
                 />
-                <Route path="/currentRequests/:userId" element={<CurrentRequests userId={userId} />} />
+                <Route
+                  path="/currentRequests/:userId"
+                  element={<CurrentRequests userId={userId} />}
+                />
                 <Route
                   path="/previousRequests/:userId"
                   element={<PreviousRequests />}
                 />
-                <Route path="/searchRequests/:userId" element={<SearchRequests userId={userId} />} />
+                <Route
+                  path="/searchRequests/:userId"
+                  element={<SearchRequests userId={userId} />}
+                />
               </>
             )}
 
@@ -151,12 +167,27 @@ function MainLayout({ userType, userId }) {
                   element={<HomeUser userType="manufacturer" userId={userId} />}
                 />
 
-                <Route path="/addSuppliers/:userId" element={<AddSupplier userId={userId} />} />
-                <Route path="/viewSuppliers/:userId" element={<ViewSupplier userId={userId} />} />
+                <Route
+                  path="/addSuppliers/:userId"
+                  element={<AddSupplier userId={userId} />}
+                />
+                <Route
+                  path="/viewSuppliers/:userId"
+                  element={<ViewSupplier userId={userId} />}
+                />
                 {/* <Route path="/viewRawMaterials" element={} /> */}
-                <Route path="/shoppingCarts/:userId" element={<ShoppingCartList userId={userId} />} />
-                <Route path="/shoppingCarts/:userId/:id" element={<ShoppingCartDetail userId={userId} />} />
-                <Route path="/shoppingCarts/:userId/:id/complete" element={<CompleteOrder userId={userId} />} />
+                <Route
+                  path="/shoppingCarts/:userId"
+                  element={<ShoppingCartList userId={userId} />}
+                />
+                <Route
+                  path="/shoppingCarts/:userId/:id"
+                  element={<ShoppingCartDetail userId={userId} />}
+                />
+                <Route
+                  path="/shoppingCarts/:userId/:id/complete"
+                  element={<CompleteOrder userId={userId} />}
+                />
                 {/* <Route path="/viewOrders" element={} /> */}
               </>
             )}
@@ -191,7 +222,11 @@ function MainLayout({ userType, userId }) {
               </>
             )}
 
-            <Route path="/edit-account/:userId" element={<EditAccountLayout userId={userId} />} />
+            <Route
+              path="/edit-account/:userId"
+              element={<EditAccountLayout userId={userId} />}
+            />
+
             {/* يمكنك وضع مسار افتراضي أو صفحة غير موجودة */}
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
