@@ -33,6 +33,7 @@ import CompleteOrder from "./components/Manufacturers/RawMaterialOrder/ShoppingC
 
 import AddSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/AddSupplier";
 import ViewSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/ViewSuppliers";
+import ViewRawMaterials from "./components/Manufacturers/RawMaterialOrder/ViewMaterials/ViewRawMaterials";
 
 const { Content } = Layout;
 
@@ -175,7 +176,10 @@ function MainLayout({ userType, userId }) {
                   path="/viewSuppliers/:userId"
                   element={<ViewSupplier userId={userId} />}
                 />
-                {/* <Route path="/viewRawMaterials" element={} /> */}
+                <Route
+                  path="/viewRawMaterials/:userId"
+                  element={<ViewRawMaterials userId={userId} />}
+                />
                 <Route
                   path="/shoppingCarts/:userId"
                   element={<ShoppingCartList userId={userId} />}
@@ -226,7 +230,6 @@ function MainLayout({ userType, userId }) {
               path="/edit-account/:userId"
               element={<EditAccountLayout userId={userId} />}
             />
-
             {/* يمكنك وضع مسار افتراضي أو صفحة غير موجودة */}
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
