@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import logo from "./images/User.png"; // استيراد الشعار
 import { fetchUserData } from "../api/userAPI";
+import { useUserContext } from "./EditAccount/UserContext";
 
 const UserProfile = ({ userType }) => {
-  const [userData, setUserData] = useState(null);
+  //const [userData, setUserData] = useState(null);
+  const { userData, setUserData } = useUserContext();
 
   useEffect(() => {
     const getUserData = async () => {
       try {
         const data = await fetchUserData(); // جلب بيانات المستخدم باستخدام التوكن
+        console.log("User data fetched:", data);
         setUserData(data); // حفظ بيانات المستخدم في الحالة
       } catch (error) {
         console.error("Failed to fetch user data:", error);

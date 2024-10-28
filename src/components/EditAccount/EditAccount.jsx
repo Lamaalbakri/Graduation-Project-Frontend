@@ -4,9 +4,11 @@ import { EditOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { notification } from "antd";
 import Address from "../../components/Dialog/Address";
 import { fetchUserData, updateUserData } from "../../api/userAPI";
+import { useUserContext } from "./UserContext";
 import "./EditAccount.css";
 
 const EditAccount = () => {
+  const { userData, setUserData } = useUserContext();
   const [originalAccount, setOriginalAccount] = useState(null);
   const [account, setAccount] = useState({
     id: "",
@@ -24,22 +26,16 @@ const EditAccount = () => {
     const loadUserData = async () => {
       try {
         const userData = await fetchUserData();
-        setAccount({
+        const accountData = {
           id: userData._id,
           full_name: userData.full_name || "",
           email: userData.email || "",
           phone_number: userData.phone_number || "",
           address: userData.address || "",
           userType: userData.userType || "",
-        });
-        setOriginalAccount({
-          id: userData._id,
-          full_name: userData.full_name || "",
-          email: userData.email || "",
-          phone_number: userData.phone_number || "",
-          address: userData.address || "",
-          userType: userData.userType || "",
-        });
+        };
+        setAccount(accountData);
+        setOriginalAccount(accountData);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       }
@@ -88,6 +84,9 @@ const EditAccount = () => {
       if (response && response.data) {
         console.log("Account updated successfully:", response.data);
 
+        setUserData(response.data);
+        setOriginalAccount(response.data);
+
         notification.success({
           message: "Update Successful!",
           description: "Your account information has been updated",
@@ -102,7 +101,7 @@ const EditAccount = () => {
   };
 
   const handleCancel = () => {
-    console.log("Account editing cancelled");
+    console.log("Account editing cancelled.");
     setAccount(originalAccount);
     notification.info({
       message: "Edit Cancelled",

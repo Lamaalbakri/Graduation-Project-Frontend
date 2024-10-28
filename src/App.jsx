@@ -14,6 +14,7 @@ import RegisterPage from "./components/Register-Login/RegisterPage";
 import LoginPage from "./components/Register-Login/LoginPage";
 import SCMShomePage from "./components/HomePage/SCMShomePage";
 import EditAccount from "./components/EditAccount/EditAccount";
+import { UserProvider } from "./components/EditAccount/UserContext";
 // Suppliers imports
 import AddRawMaterial from "./components/Suppliers/ManageRawMaterial/AddRawMaterial";
 import DeleteRawMaterial from "./components/Suppliers/ManageRawMaterial/DeleteRawMaterial";
@@ -42,22 +43,27 @@ function App() {
   const [userId, setUserId] = useState(null);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<HomePageLayout />} />
-        <Route path="/register" element={<RegisterPageLayout />} />
-        <Route
-          path="/login"
-          element={
-            <LoginPageLayout setUserType={setUserType} setUserId={setUserId} />
-          }
-        />
-        <Route
-          path="*"
-          element={<MainLayout userType={userType} userId={userId} />}
-        />
-      </Routes>
-    </Router>
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePageLayout />} />
+          <Route path="/register" element={<RegisterPageLayout />} />
+          <Route
+            path="/login"
+            element={
+              <LoginPageLayout
+                setUserType={setUserType}
+                setUserId={setUserId}
+              />
+            }
+          />
+          <Route
+            path="*"
+            element={<MainLayout userType={userType} userId={userId} />}
+          />
+        </Routes>
+      </Router>
+    </UserProvider>
   );
 }
 
