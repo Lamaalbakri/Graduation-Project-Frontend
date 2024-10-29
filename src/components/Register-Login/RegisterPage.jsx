@@ -12,12 +12,25 @@ function RegisterPage() {
     password: "",
     confirm_password: "",
     userType: "",
+    category: "",
   });
 
   const [errors, setErrors] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const categories = [
+    "Agriculture and Food Products",
+    "Pharmaceuticals and Medical Supplies",
+    "Chemicals and Metals",
+    "Fast-Moving Consumer Goods (FMCG)",
+    "Electronics and Electrical Equipment",
+    "Textiles and Apparel",
+    "Renewable Energy and Advanced Technology",
+    "Construction and Building Materials",
+    "Automotive and Transportation Equipment",
+    "Paper and Packaging Products",
+  ];
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -28,9 +41,14 @@ function RegisterPage() {
   };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name !== "full_name" && name !== "category" && !/^[A-Za-z0-9@.]*$/.test(value)) {
+      return; // يمنع أي مدخلات غير مطابقة للحروف والأرقام الإنجليزية
+    }
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
@@ -38,6 +56,9 @@ function RegisterPage() {
     const errors = [];
     if (password.length < 8) {
       errors.push("be at least 8 characters long");
+    }
+    if (!/^[A-Za-z0-9!@#$%^&*(),.?":{}|<>]+$/.test(password)) {
+      errors.push("contain only English letters, numbers, or allowed symbols");
     }
     if (!/[A-Za-z]/.test(password)) {
       errors.push("contain at least one letter");
@@ -60,6 +81,7 @@ function RegisterPage() {
       password,
       confirm_password,
       userType,
+      category,
     } = formData;
 
     if (!/^\d{10}$/.test(phone_number)) {
@@ -88,6 +110,11 @@ function RegisterPage() {
       return;
     }
 
+    if (["manufacturer", "supplier", "distributor"].includes(userType) && !category) {
+      setErrors(["Please select a category for this user type."]);
+      return;
+    }
+
     try {
       const responseData = await registerUser(
         full_name,
@@ -95,7 +122,8 @@ function RegisterPage() {
         phone_number,
         password,
         confirm_password,
-        userType
+        userType,
+        category
       );
 
       setSuccessMessage(responseData.message);
@@ -106,6 +134,7 @@ function RegisterPage() {
         password: "",
         confirm_password: "",
         userType: "",
+        category: "",
       });
 
       setErrors([]);
@@ -169,9 +198,8 @@ function RegisterPage() {
               />
               <i className="uil uil-lock icon"></i>
               <i
-                className={`uil ${
-                  showPassword ? "uil-eye" : "uil-eye-slash"
-                } showHidePw`}
+                className={`uil ${showPassword ? "uil-eye" : "uil-eye-slash"
+                  } showHidePw`}
                 onClick={togglePasswordVisibility}
               ></i>
             </div>
@@ -187,9 +215,8 @@ function RegisterPage() {
               />
               <i className="uil uil-lock icon"></i>
               <i
-                className={`uil ${
-                  showConfirmPassword ? "uil-eye" : "uil-eye-slash"
-                } showHidePw`}
+                className={`uil ${showConfirmPassword ? "uil-eye" : "uil-eye-slash"
+                  } showHidePw`}
                 onClick={toggleConfirmPasswordVisibility}
               ></i>
             </div>
@@ -212,6 +239,25 @@ function RegisterPage() {
               </select>
               <i className="uil uil-users-alt"></i>
             </div>
+            {/* Display the classification category only if userType is appropriate */}
+            {["manufacturer", "supplier", "distributor"].includes(formData.userType) && (
+              <div className="select-field">
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((cat, index) => (
+                    <option key={index} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+                <i className="uil uil-list-ul"></i>
+              </div>
+            )}
 
             <div className="input-field button">
               <input type="submit" value="Register" />
