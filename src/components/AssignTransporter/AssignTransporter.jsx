@@ -1,53 +1,76 @@
 import { useState } from "react";
-import { CloseOutlined } from "@ant-design/icons";
-import { DatePicker } from "antd";
-import { Modal } from "antd";
-import "./AssignTransporter.css"; // تأكد من الاستيراد الصحيح
+import {
+  EditOutlined,
+  CloseOutlined,
+  InfoCircleOutlined,
+} from "@ant-design/icons";
+import Address from "../Dialog/Address";
+import { DatePicker, Modal } from "antd";
+import "./AssignTransporter.css";
+import { calculatePrice } from "./TransportationServicesPrice";
 
 function AssignTransporter({ onClose, onRequestSent }) {
   const [temperature, setTemperature] = useState("");
   const [weight, setWeight] = useState("");
   const [distance, setDistance] = useState("");
   const [departureCity, setDepartureCity] = useState("");
+  const [dialogState, setDialogState] = useState({
+    address: false,
+  });
   const [dateRange, setDateRange] = useState([]);
   const [company, setCompany] = useState("");
   const [currentForm, setCurrentForm] = useState(1);
   const { RangePicker } = DatePicker;
+  const [isPriceModalVisible, setIsPriceModalVisible] = useState(false);
 
   const handleRadioChange = (setter) => (event) => {
     setter(event.target.value);
+  };
+
+  // Helper function to toggle dialog states (open or close)
+  const toggleDialog = (dialogName, value) => {
+    setDialogState((prev) => ({ ...prev, [dialogName]: value }));
+  };
+
+  const handleEditAddress = () => {
+    toggleDialog("address", true);
+  };
+
+  const handleDialogClose = (newAddress) => {
+    toggleDialog("address", false);
+    if (newAddress) {
+      setDepartureCity(newAddress); // Save new address
+    }
   };
 
   const onDateChange = (dates) => {
     setDateRange(dates ? dates.map((date) => date.startOf("day")) : []);
   };
 
-  // Handle validation when clicking "Next" in form 1
-  /*const handleNext = () => {
-    if (
-      !temperature ||
-      !weight ||
-      !distance ||
-      !departureCity ||
-      dateRange.length === 0
-    ) {
-      Modal.error({
-        title: "Error",
-        content: "Please complete all fields before proceeding.",
-        okButtonProps: {
-          className: "confirm-button"
-        }
-      });
-      return; // Stop here if fields are incomplete
-    }
-    setCurrentForm(2); // Move to form 2 if fields are complete
-  };*/
+  const calculatedPrice = calculatePrice({ temperature, weight, distance });
+
+  // View the dialog to confirm the price
+  const showPriceConfirmation = () => {
+    setIsPriceModalVisible(true);
+  };
+
+  // Close the dialog without moving to the next form
+  const handleCancelPrice = () => {
+    setIsPriceModalVisible(false); // Hide the dialog and return to editing
+  };
+
+  // Confirm the price and move to the next dialog
+  const handleConfirmPrice = () => {
+    setIsPriceModalVisible(false);
+    setCurrentForm(2);
+  };
+
   const handleNext = () => {
     let errors = [];
     if (!temperature) errors.push("Temperature Control");
     if (!weight) errors.push("Weight Category");
     if (!distance) errors.push("Distance Category");
-    if (!departureCity) errors.push("Departure City");
+    /*if (!departureCity) errors.push("Departure City");*/
     if (dateRange.length === 0) errors.push("Delivery Date Range");
 
     if (errors.length > 0) {
@@ -55,12 +78,12 @@ function AssignTransporter({ onClose, onRequestSent }) {
         title: "Error",
         content: `Please complete the following fields: ${errors.join(", ")}`,
         okButtonProps: {
-          className: "confirm-button",
+          className: "confirm-buttonn",
         },
       });
       return;
     }
-    setCurrentForm(2);
+    showPriceConfirmation();
   };
 
   // Handle going back to form 1
@@ -79,7 +102,7 @@ function AssignTransporter({ onClose, onRequestSent }) {
           title: "Error",
           content: "Please select the transport company.",
           okButtonProps: {
-            className: "confirm-button",
+            className: "confirm-buttonn",
           },
         });
         return; // Stop here if no company is selected
@@ -97,8 +120,9 @@ function AssignTransporter({ onClose, onRequestSent }) {
               weight,
               distance,
               departureCity,
-              dateRange: dateRange.map((date) => date.format("YYYY-MM-DD")), // التأكد من تنسيق التاريخ
+              dateRange: dateRange.map((date) => date.format("YYYY-MM-DD")),
               company,
+              price: calculatedPrice,
             }),
           }
         );
@@ -111,7 +135,7 @@ function AssignTransporter({ onClose, onRequestSent }) {
             title: "Error",
             content: "Failed to send request.",
             okButtonProps: {
-              className: "confirm-button",
+              className: "confirm-buttonn",
             },
           });
         }
@@ -120,7 +144,7 @@ function AssignTransporter({ onClose, onRequestSent }) {
           title: "Error",
           content: "An error occurred while sending the request.",
           okButtonProps: {
-            className: "confirm-button",
+            className: "confirm-buttonn",
           },
         });
       }
@@ -227,19 +251,16 @@ function AssignTransporter({ onClose, onRequestSent }) {
                 <div className="category">
                   <strong>Departure City</strong>
                   <hr />
-                  <select
-                    value={departureCity}
-                    onChange={(e) => setDepartureCity(e.target.value)}
-                  >
-                    <option value="">Select city</option>
-                    <option value="Jeddah">Jeddah</option>
-                    <option value="Makkah">Makkah</option>
-                    <option value="Taif">Taif</option>
-                    <option value="Riyadh">Riyadh</option>
-                    <option value="Al-Khobar">Al-Khobar</option>
-                    <option value="Abha">Abha</option>
-                  </select>
-                  <br />
+                  <div className="supplier-editAdress-detail">
+                    <div className="supplier-editAddress-text">
+                      {departureCity || "Enter the address"}
+                    </div>
+                    <div className="supplier-editAddress-button">
+                      <button onClick={handleEditAddress}>
+                        Edit <EditOutlined />
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 <div className="category">
                   <strong>Delivery Date Range</strong>
@@ -255,6 +276,12 @@ function AssignTransporter({ onClose, onRequestSent }) {
                     Next
                   </button>
                 </div>
+                {dialogState.address && (
+                  <Address
+                    onClose={() => handleDialogClose(false)}
+                    onRequestSent={() => handleDialogClose(true)}
+                  />
+                )}
                 <div className="closeButtonStyle" onClick={onClose}>
                   <CloseOutlined />
                 </div>
@@ -330,6 +357,42 @@ function AssignTransporter({ onClose, onRequestSent }) {
           </form>
         </div>
       </div>
+      <Modal
+        title={
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <InfoCircleOutlined
+              style={{ marginRight: "8px", color: "#f4d53f", fontSize: "23px" }}
+            />{" "}
+            Estimated Price
+          </div>
+        }
+        visible={isPriceModalVisible}
+        onCancel={handleCancelPrice}
+        footer={[
+          <div>
+            <button
+              key="cancel"
+              onClick={handleCancelPrice}
+              className="cancel-buttonn"
+              style={{ marginRight: "5px" }}
+            >
+              Cancel
+            </button>
+            <button
+              key="confirm"
+              onClick={handleConfirmPrice}
+              className="confirm-buttonn"
+            >
+              Confirm
+            </button>
+          </div>,
+        ]}
+      >
+        <p style={{ marginBottom: "30px" }}>
+          The estimated price based on your selections is:{" "}
+          <strong>{calculatedPrice} SAR</strong>
+        </p>
+      </Modal>
     </div>
   );
 }
