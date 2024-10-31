@@ -32,6 +32,7 @@ export const updateRawMaterialRequestStatus = async (id, newStatus) => {
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify({ status: newStatus }) // إرسال الحالة الجديدة
         });
 
@@ -48,7 +49,8 @@ export const updateRawMaterialRequestStatus = async (id, newStatus) => {
 
 export const deleteCurrentRequestById = async (id) => {
     const response = await fetch(`${API_URL}/rawMaterialCurrentRequest/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        credentials: 'include'
     });
 
     if (!response.ok) {

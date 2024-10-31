@@ -12,6 +12,7 @@ const ConfirmationDialog = ({
 }) => {
   return (
     <Modal
+      className="confirmation-dialog"
       title={
         <>
           {stepType === "viewOrder" && ( // Show checkmark only for viewOrder
@@ -34,10 +35,10 @@ const ConfirmationDialog = ({
       okText={stepType === "viewOrder" ? "Ok" : "Confirm"}
       cancelText="Cancel"
       okButtonProps={{
-        className: "confirm-button",
+        className: "confirmation-dialog-confirm-button",
       }}
       cancelButtonProps={{
-        className: "cancel-button",
+        className: "confirmation-dialog-cancel-button",
       }}
     >
       <p>{message}</p>

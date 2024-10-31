@@ -147,12 +147,12 @@ function RequestsTable({ data }) {
       headerAlign: 'left',
       renderCell: (params) => (
         <div className="cell-content">
-          {params.row.supplyingRawMaterials.map((item) => (
-            <div key={item.rawMaterial_id} className="supplying-item">
+          {params.row.supplyingRawMaterials.map((item, index) => (
+            <div key={`${item.rawMaterial_id}-${index}`} className="supplying-item">
               {item.options && item.options.length > 0 ? (
                 // If options exist, display them
-                item.options.map((option, index) => (
-                  <span key={option.optionType}>
+                item.options.map((option, optionIndex) => (
+                  <span key={`${option.optionType}-${optionIndex}`}>
                     <strong>{option.optionType}:</strong> {option.values.join(", ")} {/* Format name and values */}
                     {index < item.options.length - 1 && ", "} {/* Add a comma between options */}
                   </span>
@@ -235,6 +235,8 @@ function RequestsTable({ data }) {
           message={`Are you sure you want to ${selectedStatus === "rejected" ? "reject" : "mark as delivered"} this request?`}
           onConfirm={handleConfirmAction}
           onCancel={() => toggleDialog("confirmationDialog", false)}
+          stepType={selectedStatus === "viewOrder" ? "viewOrder" : "default"}
+
         />
       )}
       {dialogState.assignTransporterDialog && (
