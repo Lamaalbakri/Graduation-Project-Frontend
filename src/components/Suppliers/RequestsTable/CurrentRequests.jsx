@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { notification } from "antd";
 import RequestsTable from './RequestsTable';
 import {
   searchCurrentRequestById,
@@ -48,15 +50,21 @@ function CurrentRequests() {
         try {
           //search by id in back-end
           const requestData = await searchCurrentRequestById(searchQuery); // Call search from API if data is not present locally
-          if (requestData) {
+          if (requestData.error) {
+            if (requestData.error.includes('problem with the server')) {
+              notification.error({
+                message: "Error",
+                description: "There is a problem with the server. Please contact customer service.",
+                placement: "top",
+                icon: <InfoCircleOutlined style={{ color: "#f4d53f" }} />,
+              });
+            }
+          } else {
             setFilteredRequests([requestData]);
             foundResult = true; // Result found
-          } else {
-            setFilteredRequests([]); // there is no results
           }
         } catch (error) {
-          console.error('Error fetching request by id:', error);
-          setFilteredRequests([]);
+          setFilteredRequests([]); // Reset requests on error
         }
       }
     } if (!foundResult) {
@@ -73,9 +81,26 @@ function CurrentRequests() {
         //Search by name in back-end
         try {
           const requestData = await searchCurrentRequestByMName(searchQuery); // Call search from API if data is not present locally
-          setFilteredRequests(requestData ? [requestData] : []);
+          if (requestData.error) {
+            if (requestData.error.includes('problem with the server')) {
+              notification.error({
+                message: "Error",
+                description: "There is a problem with the server. Please contact customer service.",
+                placement: "top",
+                icon: <InfoCircleOutlined style={{ color: "#f4d53f" }} />,
+              });
+            }
+          } else {
+            setFilteredRequests([requestData]);
+            // foundResult = true; // Result found
+          }
         } catch (error) {
-          console.error('Error fetching request by name:', error);
+          // notification.error({
+          //   message: "Error",
+          //   description: error.message || "There is a problem with the server. Please contact customer service.",
+          //   placement: "top",
+          //   icon: <InfoCircleOutlined style={{ color: "#f4d53f" }} />,
+          // });
           setFilteredRequests([]);
         }
       }

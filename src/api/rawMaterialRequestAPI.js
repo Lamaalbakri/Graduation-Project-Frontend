@@ -3,7 +3,11 @@ const API_URL = 'http://localhost:8500/api/v1';
 //get request 
 
 export const fetchAllCurrentRequests = async () => {
-    const response = await fetch(`${API_URL}/rawMaterialCurrentRequest`);
+    const response = await fetch(`${API_URL}/rawMaterialCurrentRequest`, {
+        method: 'GET',
+        credentials: 'include'
+    });
+
     if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
     }
@@ -63,38 +67,49 @@ export const deleteCurrentRequestById = async (id) => {
 //search current by id
 export const searchCurrentRequestById = async (id) => {
     try {
-        const response = await fetch(`${API_URL}/rawMaterialCurrentRequest/${id}`);
+        const response = await fetch(`${API_URL}/rawMaterialCurrentRequest/${id}`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+
         if (!response.ok) {
             if (response.status === 404) {
-                // console.warn(`Request with ID ${id} not found.`);
-                return null; // إعادة null في حالة عدم العثور على البيانات
+                return { error: `No requests found for manufacturer name: ${id}` }; // رسالة مخصصة لعدم العثور
+            } else if (response.status === 401) {
+                return { error: 'Unauthorized access. Please check your permissions.' }; // رسالة مخصصة للوصول غير المصرح به
             }
-            throw new Error(`Error: ${response.status}`);
+            // return { error: 'problem with the server' }; // رسالة عامة
         }
+
         const json = await response.json();
         return json.data; // إعادة البيانات المستردة
     } catch (error) {
-        console.error(`Failed to fetch current request: ${error.message}`);
-        throw error; // إرسال الخطأ لمزيد من المعالجة في حالة وجود مشكلة أخرى
+        return { error: "problem with the server" };
     }
 };
+
 
 //search current by manufacturer name
 export const searchCurrentRequestByMName = async (MName) => {
     try {
-        const response = await fetch(`${API_URL}/rawMaterialCurrentRequest/manufacturerName/${MName}`);
+        const response = await fetch(`${API_URL}/rawMaterialCurrentRequest/manufacturerName/${MName}`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+
         if (!response.ok) {
             if (response.status === 404) {
-                // console.warn(`Request with ID ${id} not found.`);
-                return null; // إعادة null في حالة عدم العثور على البيانات
+                return { error: `No requests found for manufacturer name: ${MName}` }; // رسالة مخصصة لعدم العثور
+            } else if (response.status === 401) {
+                return { error: 'Unauthorized access. Please check your permissions.' }; // رسالة مخصصة للوصول غير المصرح به
             }
-            throw new Error(`Error: ${response.status}`);
+            // return { error: 'problem with the server' }; // رسالة عامة
         }
+
         const json = await response.json();
         return json.data; // إعادة البيانات المستردة
     } catch (error) {
-        console.error(`Failed to fetch current request: ${error.message}`);
-        throw error; // إرسال الخطأ لمزيد من المعالجة في حالة وجود مشكلة أخرى
+        return { error: "problem with the server" };
     }
 };
 
@@ -119,19 +134,22 @@ export const searchPreviousRequestById = async (id) => {
 //search Previous by manufacturer name
 export const searchPreviousRequestByMName = async (MName) => {
     try {
-        const response = await fetch(`${API_URL}/rawMaterialPreviousRequest/manufacturerName/${MName}`);
+        const response = await fetch(`${API_URL}/rawMaterialPreviousRequest/manufacturerName/${MName}`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+
         if (!response.ok) {
             if (response.status === 404) {
                 // console.warn(`Request with ID ${id} not found.`);
                 return null; // إعادة null في حالة عدم العثور على البيانات
             }
-            throw new Error(`Error: ${response.status}`);
+            throw new Error(`There is a problem with the server. Please contact customer service.`);
         }
         const json = await response.json();
         return json.data; // إعادة البيانات المستردة
     } catch (error) {
-        console.error(`Failed to fetch Previous request: ${error.message}`);
-        throw error; // إرسال الخطأ لمزيد من المعالجة في حالة وجود مشكلة أخرى
+        return { error: error.message };
     }
 };
 

@@ -117,12 +117,12 @@ function RequestsTable({ data }) {
       renderCell: (params) => moment(params.row.createdAt).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
-      field: 'supplyingItems', headerName: 'Supplying Items', width: 170, headerAlign: 'left',
+      field: 'supplyingRawMaterials', headerName: 'Supplying Items', width: 170, headerAlign: 'left',
       renderCell: (params) => (
         <div className="cell-content">
-          {params.row.supplyingItems.map((item, index) => (
-            <div key={index} className={`supplying-item ${index !== params.row.supplyingItems.length - 1 ? 'item-with-border' : ''}`}>
-              {item}
+          {params.row.supplyingRawMaterials.map((item, index) => (
+            <div key={item.rawMaterial_id} className={`supplying-item ${index !== params.row.supplyingRawMaterials.length - 1 ? 'item-with-border' : ''}`}>
+              {item.rawMaterial_name}
             </div>
           ))}
         </div>
@@ -132,15 +132,41 @@ function RequestsTable({ data }) {
       field: 'quantity', headerName: 'Quantity', type: 'number', width: 90, headerAlign: 'left',
       renderCell: (params) => (
         <div className="cell-content">
-          {params.row.quantity.map((item, index) => (
-            <div key={index} className={`supplying-item ${index !== params.row.quantity.length - 1 ? 'item-with-border' : ''}`}>
-              {item}
+          {params.row.supplyingRawMaterials.map((item, index) => (
+            <div key={item.rawMaterial_id} className="supplying-item">
+              {item.quantity} {item.unit}
             </div>
           ))}
         </div>
       ),
     },
-    { field: 'price', headerName: 'Price', type: 'number', width: 70, headerAlign: 'left' },
+    {
+      field: 'options',
+      headerName: 'Options',
+      width: 200,
+      headerAlign: 'left',
+      renderCell: (params) => (
+        <div className="cell-content">
+          {params.row.supplyingRawMaterials.map((item) => (
+            <div key={item.rawMaterial_id} className="supplying-item">
+              {item.options && item.options.length > 0 ? (
+                // If options exist, display them
+                item.options.map((option, index) => (
+                  <span key={option.optionType}>
+                    <strong>{option.optionType}:</strong> {option.values.join(", ")} {/* Format name and values */}
+                    {index < item.options.length - 1 && ", "} {/* Add a comma between options */}
+                  </span>
+                ))
+              ) : (
+                // If no options, display "No option"
+                <span>No option</span>
+              )}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    { field: 'total_price', headerName: 'Total Price', type: 'number', width: 70, headerAlign: 'left' },
     {
       field: 'status', headerName: 'Status', width: 130, headerAlign: 'left',
       renderCell: (params) => {
@@ -163,7 +189,17 @@ function RequestsTable({ data }) {
         );
       },
     },
-    { field: 'arrivalCity', headerName: 'Arrival city', width: 110, headerAlign: 'left' },
+    {
+      field: 'arrivalAddress', headerName: 'Arrival Address', width: 110, headerAlign: 'left',
+      renderCell: (params) => {
+        const address = params.row.arrivalAddress;
+        return (
+          <div className="cell-content">
+            {address ? `${address.street}, ${address.neighborhood}, ${address.city}, ${address.postal_code}, ${address.country}` : 'No Address'}
+          </div>
+        );
+      }
+    },
     {
       field: 'action', headerName: 'Action', width: 140, headerAlign: 'left',
       renderCell: (params) => (

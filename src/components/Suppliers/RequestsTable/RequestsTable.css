@@ -116,6 +116,22 @@
     line-height: 2;
     text-align: left;
 }
+.cell-content {
+    display: flex; /* Use flex to manage the layout */
+    flex-direction: column; /* Ensure items stack vertically */
+}
+
+.supplying-item {
+    white-space: nowrap; /* Prevents line breaks for the options */
+    overflow: hidden;    /* Hides overflow content */
+    text-overflow: ellipsis; /* Adds ellipsis for overflowed content */
+    margin-bottom: 5px; /* Optional: adds space between items */
+}
+  /* Optional: Style the strong element if you want specific font styles */
+.supplying-item strong {
+    font-weight: bold; /* Ensures bold weight */
+}
+
 
 .header-row {
     display: flex;
