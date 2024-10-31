@@ -43,7 +43,7 @@ function RegisterPage() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name !== "full_name" && name !== "category" && !/^[A-Za-z0-9@.]*$/.test(value)) {
+    if (name !== "full_name" && name !== "category" && !/^[A-Za-z0-9!@#$%^&*(),?":{}|<>.]*$/.test(value)) {
       return; // يمنع أي مدخلات غير مطابقة للحروف والأرقام الإنجليزية
     }
     setFormData({
