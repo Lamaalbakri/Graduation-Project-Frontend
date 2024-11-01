@@ -12,16 +12,20 @@ export const fetchAllCurrentRequests = async () => {
         throw new Error(`Error: ${response.status}`);
     }
     const json = await response.json();
-    return json.data; // إعادة جميع البيانات
+    return json.data; //return all data
 };
 
 export const fetchAllPreviousRequests = async () => {
-    const response = await fetch(`${API_URL}/rawMaterialPreviousRequest`);
+    const response = await fetch(`${API_URL}/rawMaterialPreviousRequest`, {
+        method: 'GET',
+        credentials: 'include'
+    });
+
     if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
     }
     const json = await response.json();
-    return json.data; // إعادة جميع البيانات
+    return json.data; //return all data
 };
 
 // change status
@@ -33,17 +37,16 @@ export const updateRawMaterialRequestStatus = async (id, newStatus) => {
                 'Content-Type': 'application/json'
             },
             credentials: 'include',
-            body: JSON.stringify({ status: newStatus }) // إرسال الحالة الجديدة
+            body: JSON.stringify({ status: newStatus }) // send the new state
         });
 
         if (!response.ok) {
-            throw new Error('Failed to update the status');
+            return { error: "Failed to update the status" };
         }
 
-        return await response.json(); // استلام الرد
+        return await response.json(); // get responce
     } catch (error) {
-        console.error("Error updating the status:", error);
-        throw error; // إعادة الخطأ ليتسنى التعامل معه في مكان آخر
+        return { error: "problem with the server" };
     }
 };
 
@@ -54,17 +57,17 @@ export const deleteCurrentRequestById = async (id) => {
     });
 
     if (!response.ok) {
-        throw new Error(`Error deleting current request: ${response.status}`);
+        return { error: "Error deleting current request" };
     }
-    // إذا كانت الاستجابة 204، فلا تحاول قراءة JSON
 
+    // If the response is 204, do not try to read JSON.
     if (response.status !== 204) {
-        const data = await response.json(); // فقط حاول قراءة JSON إذا لم تكن الاستجابة 204
-        return data; // استلام الرد بعد الحذف
+        const data = await response.json(); // Just try to read the JSON if the response is not 204
+        return data; // Receive responce after deletion
     }
 
-    return { msg: 'Request deleted successfully' }; // رد مناسب عند الحذف بنجاح بدون محتوى
-};
+    return { msg: 'Request deleted successfully' };
+}
 
 //search current by id
 export const searchCurrentRequestById = async (id) => {
@@ -76,15 +79,15 @@ export const searchCurrentRequestById = async (id) => {
 
         if (!response.ok) {
             if (response.status === 404) {
-                return { error: `No requests found for manufacturer name: ${id}` }; // رسالة مخصصة لعدم العثور
+                return { error: `No requests found for this id: ${id}` }; //msg for not found req error
             } else if (response.status === 401) {
-                return { error: 'Unauthorized access. Please check your permissions.' }; // رسالة مخصصة للوصول غير المصرح به
+                return { error: 'Unauthorized access. Please check your permissions.' }; //msg for unauth access error
             }
-            // return { error: 'problem with the server' }; // رسالة عامة
+            // return { error: 'problem with the server' }; //msg for any other error
         }
 
         const json = await response.json();
-        return json.data; // إعادة البيانات المستردة
+        return json.data; // return search result
     } catch (error) {
         return { error: "problem with the server" };
     }
@@ -101,15 +104,15 @@ export const searchCurrentRequestByMName = async (MName) => {
 
         if (!response.ok) {
             if (response.status === 404) {
-                return { error: `No requests found for manufacturer name: ${MName}` }; // رسالة مخصصة لعدم العثور
+                return { error: `No requests found for manufacturer name: ${MName}` }; //msg for not found req error
             } else if (response.status === 401) {
-                return { error: 'Unauthorized access. Please check your permissions.' }; // رسالة مخصصة للوصول غير المصرح به
+                return { error: 'Unauthorized access. Please check your permissions.' }; //msg for unauth access error
             }
-            // return { error: 'problem with the server' }; // رسالة عامة
+            //return { error: 'problem with the server' }; ////msg for any other error
         }
 
         const json = await response.json();
-        return json.data; // إعادة البيانات المستردة
+        return json.data; //return search result
     } catch (error) {
         return { error: "problem with the server" };
     }
@@ -118,18 +121,23 @@ export const searchCurrentRequestByMName = async (MName) => {
 //search Previous by id
 export const searchPreviousRequestById = async (id) => {
     try {
-        const response = await fetch(`${API_URL}/rawMaterialPreviousRequest/${id}`);
+        const response = await fetch(`${API_URL}/rawMaterialPreviousRequest/${id}`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+
         if (!response.ok) {
             if (response.status === 404) {
-                return null; // إعادة null في حالة عدم العثور على البيانات
+                return { error: `No requests found for this id: ${id}` }; //msg for not found req error
+            } else if (response.status === 401) {
+                return { error: 'Unauthorized access. Please check your permissions.' }; //msg for unauth access error
             }
-            throw new Error(`Error: ${response.status}`);
+            //return { error: 'problem with the server' }; //msg for any other error
         }
         const json = await response.json();
-        return json.data; // إعادة البيانات المستردة
+        return json.data; // return search result
     } catch (error) {
-        console.error(`Failed to fetch previous request: ${error.message}`);
-        throw error; // إرسال الخطأ لمزيد من المعالجة في حالة وجود مشكلة أخرى
+        return { error: "problem with the server" };
     }
 };
 
@@ -143,15 +151,16 @@ export const searchPreviousRequestByMName = async (MName) => {
 
         if (!response.ok) {
             if (response.status === 404) {
-                // console.warn(`Request with ID ${id} not found.`);
-                return null; // إعادة null في حالة عدم العثور على البيانات
+                return { error: `No requests found for manufacturer name: ${MName}` }; //msg for not found req error
+            } else if (response.status === 401) {
+                return { error: 'Unauthorized access. Please check your permissions.' }; //msg for unauth access error
             }
-            throw new Error(`There is a problem with the server. Please contact customer service.`);
+            //return { error: 'problem with the server' }; //msg for any other error
         }
         const json = await response.json();
-        return json.data; // إعادة البيانات المستردة
+        return json.data; // return search result
     } catch (error) {
-        return { error: error.message };
+        return { error: "problem with the server" };
     }
 };
 
@@ -159,29 +168,29 @@ export const searchPreviousRequestByMName = async (MName) => {
 export const moveCurrentToPrevious = async (id) => {
 
     try {
-        // الخطوة الثانية: جلب الطلب من الطلبات الحالية
+        // Step 1: Get the request from the current requests
         const currentRequest = await searchCurrentRequestById(id);
 
-        // الخطوة الثالثة: إرسال الطلب إلى قائمة الطلبات السابقة
+        // Step 2: Send the request to the previous requests list
         const response = await fetch(`${API_URL}/rawMaterialPreviousRequest`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(currentRequest) // إرسال الطلب كما هو
+            body: JSON.stringify(currentRequest) // Submit the request as is.
         });
 
         if (!response.ok) {
-            throw new Error(`Error moving request to previous: ${response.status}`);
+            return { error: `Error moving request to previous` };
         }
 
-        // الخطوة الرابعة: حذف الطلب من قائمة الطلبات الحالية (اختياري إذا كان نقل وليس نسخ)
+        // Step 3: Delete the request from the current requests list
         await deleteCurrentRequestById(id);
 
-        return await response.json(); // إرجاع الرد
+        return await response.json(); //return responce
     } catch (error) {
-        console.error("Error moving request to previous:", error);
-        throw error; // إعادة الخطأ ليتسنى التعامل معه في مكان آخر
+        return { error: `Error moving request to previous` };
     }
 };
 

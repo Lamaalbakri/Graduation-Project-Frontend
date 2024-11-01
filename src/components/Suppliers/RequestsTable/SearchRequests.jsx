@@ -14,8 +14,10 @@ function Search() {
 
   // Handle search query change
   const handleSearch = async (e) => {
-    const searchQuery = e.target.value.trim().toLowerCase(); // Trim the input to avoid unnecessary spaces
-    setQuery(searchQuery);
+    const originalQuery = e.target.value;
+    setQuery(originalQuery);
+    const searchQuery = originalQuery.trim().toLowerCase();
+
     setHasSearched(!!searchQuery); // Update hasSearched to true if query is not empty
 
     if (!searchQuery) {
@@ -75,28 +77,28 @@ function Search() {
   };
 
   return (
-    <div className="search">
-      <div className="header-row">
-        <div className="title">Search For Requests</div>
-        <div className="search-container">
-          <div className="search-label">Search by Name / ID</div>
+    <div className="ManageRawMaterial">
+      <div className="ManageRawMaterial-header-row">
+        <div className="ManageRawMaterial-title">Search For Requests</div>
+        <div className="ManageRawMaterial-search-container">
+          <div className="ManageRawMaterial-search-label">Search by Name / ID</div>
           <input
             type="search"
             placeholder="Search by Name / ID"
             value={query}
             onChange={handleSearch}
-            className="input-with-icon"
+            className="ManageRawMaterial-input-with-icon"
           />
         </div>
       </div>
 
       {hasSearched &&
         (loading ? (
-          <div className="background-message">Loading...</div>
+          <div className="ManageRawMaterial-background-message">Loading...</div>
         ) : filteredRequests.length > 0 ? (
           <RequestsTable data={filteredRequests} />
         ) : (
-          <div className="background-message">No results found</div>
+          <div className="ManageRawMaterial-background-message">No results found</div>
         ))}
     </div>
   );

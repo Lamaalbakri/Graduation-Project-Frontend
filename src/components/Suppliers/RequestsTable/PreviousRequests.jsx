@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { notification } from "antd";
 import RequestsTable from './RequestsTable';
 import {
   searchPreviousRequestById,
@@ -25,8 +27,9 @@ function PreviousRequests() {
   }, []);
 
   const handleSearch = async (e) => {
-    const searchQuery = e.target.value.trim().toLowerCase();
-    setQuery(searchQuery);
+    const originalQuery = e.target.value;
+    setQuery(originalQuery);
+    const searchQuery = originalQuery.trim().toLowerCase();
 
     const validShortId = /^m?[0-9a-z]{8}$/;
     let foundResult = false;
@@ -47,14 +50,20 @@ function PreviousRequests() {
         try {
           //search by id in back-end
           const requestData = await searchPreviousRequestById(searchQuery);// Call search from API if data is not present locally
-          if (requestData) {
+          if (requestData.error) {
+            if (requestData.error.includes('problem with the server')) {
+              notification.error({
+                message: "Error",
+                description: "There is a problem with the server. Please contact customer service.",
+                placement: "top",
+                icon: <InfoCircleOutlined style={{ color: "#f4d53f" }} />,
+              });
+            }
+          } else {
             setFilteredRequests([requestData]);
             foundResult = true; // Result found
-          } else {
-            setFilteredRequests([]); // there is no results
           }
         } catch (error) {
-          console.error('Error fetching request by id:', error);
           setFilteredRequests([]);
         }
       }
@@ -72,9 +81,21 @@ function PreviousRequests() {
         try {
           //Search by name in back-end
           const requestData = await searchPreviousRequestByMName(searchQuery); // Call search from API if data is not present locally
-          setFilteredRequests(requestData ? [requestData] : []);
+          if (requestData.error) {
+            if (requestData.error.includes('problem with the server')) {
+              notification.error({
+                message: "Error",
+                description: "There is a problem with the server. Please contact customer service.",
+                placement: "top",
+                icon: <InfoCircleOutlined style={{ color: "#f4d53f" }} />,
+              });
+            }
+          } else {
+            setFilteredRequests([requestData]);
+            // foundResult = true; // Result found
+          }
         } catch (error) {
-          console.error('Error fetching request by name:', error);
+          // console.error('Error fetching request by name:', error);
           setFilteredRequests([]);
         }
       }
@@ -83,24 +104,24 @@ function PreviousRequests() {
 
 
   return (
-    <div className='RequestsTable'>
-      <div className="header-row">
-        <div className="title">Previous Requests</div>
-        <div className="search-container">
-          <div className='search-label'>Search by Name / ID</div>
+    <div className='ManageRawMaterial'>
+      <div className="ManageRawMaterial-header-row">
+        <div className="ManageRawMaterial-title">Previous Requests</div>
+        <div className="ManageRawMaterial-search-container">
+          <div className='ManageRawMaterial-search-label'>Search by Name / ID</div>
           <input
             type="search"
             placeholder="Search by Name / ID"
             value={query}
             onChange={handleSearch}
-            className="input-with-icon"
+            className="ManageRawMaterial-input-with-icon"
           />
         </div>
       </div>
       {rawMaterialRequests && filteredRequests.length ? ( // Conditional rendering
         <RequestsTable data={filteredRequests} />
       ) : (
-        <p className='background-message'>
+        <p className='ManageRawMaterial-background-message'>
           {filteredRequests && filteredRequests.length === 0 ? 'No requests found' : 'Loading requests...'}
         </p> // Display a loading message until data is available
       )}

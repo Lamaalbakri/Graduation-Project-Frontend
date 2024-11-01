@@ -28,14 +28,15 @@ function CurrentRequests() {
   }, []);
 
   const handleSearch = async (e) => {
-    const searchQuery = e.target.value.trim().toLowerCase();
-    setQuery(searchQuery);
+    const originalQuery = e.target.value;
+    setQuery(originalQuery);
+    const searchQuery = originalQuery.trim().toLowerCase();
 
     const validShortId = /^m?[0-9a-z]{8}$/;
     let foundResult = false;
 
     //check if it is an id
-    if (validShortId.test(searchQuery)) {
+    if (searchQuery.length <= 9 && validShortId.test(searchQuery)) {
       //check if there are requests
       if (rawMaterialRequests) {
         //Search by id using data already fetched
@@ -110,17 +111,17 @@ function CurrentRequests() {
 
 
   return (
-    <div className='RequestsTable'>
-      <div className="header-row">
-        <div className="title">Current Requests</div>
-        <div className="search-container">
-          <div className='search-label'>Search by Name / ID</div>
+    <div className='ManageRawMaterial'>
+      <div className="ManageRawMaterial-header-row">
+        <div className="ManageRawMaterial-title">Current Requests</div>
+        <div className="ManageRawMaterial-search-container">
+          <div className='ManageRawMaterial-search-label'>Search by Name / ID</div>
           <input
             type="search"
             placeholder="Search by Name / ID"
             value={query}
             onChange={handleSearch}
-            className="input-with-icon"
+            className="ManageRawMaterial-input-with-icon"
           />
         </div>
       </div>
@@ -128,7 +129,7 @@ function CurrentRequests() {
       {rawMaterialRequests && filteredRequests.length ? ( // Conditional rendering
         <RequestsTable data={filteredRequests} />
       ) : (
-        <p className='background-message'>
+        <p className='ManageRawMaterial-background-message'>
           {filteredRequests && filteredRequests.length === 0 ? 'No requests found' : 'Loading requests...'}
         </p> // Display a loading message until data is available
       )}

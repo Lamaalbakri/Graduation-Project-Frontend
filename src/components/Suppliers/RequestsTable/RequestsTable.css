@@ -1,14 +1,14 @@
-.RequestsTable,.search {
+.ManageRawMaterial{
     font-family: "Poppins", sans-serif;
     color: #1c2229;
     padding: 20px;
 }
 
-.action-buttons {
+.ManageRawMaterial-action-buttons {
     display: flex;
 }
 
-.status-select {
+.ManageRawMaterial-status-select {
     padding: 5px;
     border-radius: 8px;
     outline: none;
@@ -16,49 +16,49 @@
     text-align: center;
 }
 
-.status-select:hover {
+.ManageRawMaterial-status-select:hover {
     background-color: #3d3c3c3c;
     color: #0b0b0b;
     border: none;
 }
 
-.status-select option:hover {
+.ManageRawMaterial-status-select option:hover {
     background-color: #3d3c3c3c;
     color: #0b0b0b;
 }
 
-.status-pending {
+.ManageRawMaterial-status-pending {
     background-color: #ff990059;
     color: #5e3902;
 }
 
-.status-accepted {
+.ManageRawMaterial-status-accepted {
     background-color: #0d62a761;
     color: #03477f;
 }
 
-.status-delivered {
+.ManageRawMaterial-status-delivered {
     background-color: #4caf4f71;
     color: #023404;
 }
 
-.status-inProgress {
+.ManageRawMaterial-status-inProgress {
     background-color: #7a4caf71;
     color: #400188;
 }
 
-.status-rejected {
+.ManageRawMaterial-status-rejected {
     background-color: #f443366d;
     color: #7e0901;
 }
 
-.status-text {
+.ManageRawMaterial-status-text {
     padding: 5px;
     border-radius: 8px;
     display: inline-block;
 }
 
-.status-text.status-rejected {
+.ManageRawMaterial-status-text.status-rejected {
     background-color: #f443366d;
     color: #7e0901;
     padding: 5px;
@@ -68,7 +68,7 @@
     text-align: center;
 }
 
-.status-text.status-delivered {
+.ManageRawMaterial-status-text.status-delivered {
     background-color: #4caf4f71;
     color: #023404;
     padding: 5px;
@@ -78,7 +78,7 @@
     text-align: center;
 }
 
-.action-buttons .tracking-icon {
+.ManageRawMaterial-action-buttons .ManageRawMaterial-tracking-icon {
     margin-top: 5px;
     margin-left: 20px;
     height: 30px;
@@ -89,14 +89,14 @@
     cursor: pointer;
 }
 
-.table-icon {
+.ManageRawMaterial-table-icon {
     margin-bottom: 10px;
     margin-left: 0px;
     font-size: 17px;
     color: #1c2229af;
 }
 
-.tableButton {
+.ManageRawMaterial-tableButton {
     border: none;
     border-radius: 5px;
     padding: 8px 8px;
@@ -108,32 +108,32 @@
     transition: background-color 0.3s;
 }
 
-.tableButton:hover {
+.ManageRawMaterial-tableButton:hover {
     background-color: #595a5b;
 }
 
-.cell-content div {
+.ManageRawMaterial-cell-content div {
     line-height: 2;
     text-align: left;
 }
-.cell-content {
+.ManageRawMaterial-cell-content {
     display: flex; /* Use flex to manage the layout */
     flex-direction: column; /* Ensure items stack vertically */
 }
 
-.supplying-item {
+.ManageRawMaterial-supplying-item {
     white-space: nowrap; /* Prevents line breaks for the options */
     overflow: hidden;    /* Hides overflow content */
     text-overflow: ellipsis; /* Adds ellipsis for overflowed content */
     margin-bottom: 5px; /* Optional: adds space between items */
 }
   /* Optional: Style the strong element if you want specific font styles */
-.supplying-item strong {
+.ManageRawMaterial-supplying-item strong {
     font-weight: bold; /* Ensures bold weight */
 }
 
 
-.header-row {
+.ManageRawMaterial-header-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -142,14 +142,14 @@
     margin-top: 25px;
 }
 
-.title {
+.ManageRawMaterial-title {
     font-size: 30px;
     font-weight: bold;
     text-align: left;
     margin-bottom: 0;
 }
 
-.search-container {
+.ManageRawMaterial-search-container {
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -157,13 +157,13 @@
 }
 
 
-.search-label {
+.ManageRawMaterial-search-label {
     margin-right: 15px;
     font-size: 14px;
     color: #1c2229;
 }
 
-.search-container input {
+.ManageRawMaterial-search-container input {
     padding-left: 35px;
     border: 1px solid #ccc;
     border-radius: 25px;
@@ -173,7 +173,7 @@
     transition: border-color 0.3s ease;
 }
 
-.input-with-icon {
+.ManageRawMaterial-input-with-icon {
     padding-right: 40px;
     height: 35px;
     width: 250px;
@@ -184,18 +184,25 @@
     border-radius: 4px;
 }
 
-.search-container input:focus {
+.ManageRawMaterial-search-container input:focus {
     border-color: #1c2229;
 }
 
-.search-container input::placeholder {
+.ManageRawMaterial-search-container input::placeholder {
     color: #999;
 }
 
-.background-message {
+.ManageRawMaterial-background-message {
     color: #999999bd;
     font-size: 25px;
     font-weight: bold;
     text-align: center;
     margin: 300px;
 }
+
+.MuiDataGrid-columnHeaderTitleContainer {
+    white-space: normal !important; /* للسماح بالتفاف النص */
+    line-height: 1.2 !important; /* للتحكم في ارتفاع السطر */
+    text-overflow: clip !important; /* لمنع الإشارة إلى تجاوز النص */
+    overflow-wrap: break-word !important; /* لتمكين التفاف النص بشكل مناسب */
+  }
