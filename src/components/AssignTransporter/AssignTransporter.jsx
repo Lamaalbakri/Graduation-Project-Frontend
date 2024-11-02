@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   EditOutlined,
   CloseOutlined,
   InfoCircleOutlined,
 } from "@ant-design/icons";
 import Address from "../Dialog/Address";
-import { DatePicker, Modal } from "antd";
+import { DatePicker, Modal, Radio } from "antd";
 import "./AssignTransporter.css";
 import { calculatePrice } from "./TransportationServicesPrice";
+import {
+  fetchCompanies,
+  sendTransportRequest,
+} from "../../api/transportRequestsAPI";
 
 function AssignTransporter({ onClose, onRequestSent }) {
   const [temperature, setTemperature] = useState("");
@@ -19,6 +23,7 @@ function AssignTransporter({ onClose, onRequestSent }) {
   });
   const [dateRange, setDateRange] = useState([]);
   const [company, setCompany] = useState("");
+  const [companyList, setCompanyList] = useState([]);
   const [currentForm, setCurrentForm] = useState(1);
   const { RangePicker } = DatePicker;
   const [isPriceModalVisible, setIsPriceModalVisible] = useState(false);
@@ -86,10 +91,26 @@ function AssignTransporter({ onClose, onRequestSent }) {
     showPriceConfirmation();
   };
 
-  // Handle going back to form 1
-  const handleBack = () => {
-    setCurrentForm(1);
-  };
+  // Fetch company list
+  useEffect(() => {
+    const fetchCompaniesList = async () => {
+      try {
+        const data = await fetchCompanies();
+        setCompanyList(data);
+      } catch (error) {
+        Modal.error({
+          title: "Error",
+          content: "Failed to fetch companies list.",
+          okButtonProps: {
+            className: "confirm-buttonn",
+          },
+        });
+      }
+    };
+
+    // Only fetch companies list when in form 2
+    if (currentForm === 2) fetchCompaniesList();
+  }, [currentForm]);
 
   // Handle sending the request in form 2
   const handleSendRequest = async (event) => {
@@ -109,40 +130,22 @@ function AssignTransporter({ onClose, onRequestSent }) {
       }
 
       try {
-        // Send the request to the backend API
-        const response = await fetch(
-          "http://localhost:8500/api/v1/transportRequest",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              temperature,
-              weight,
-              distance,
-              departureCity,
-              dateRange: dateRange.map((date) => date.format("YYYY-MM-DD")),
-              company,
-              price: calculatedPrice,
-            }),
-          }
-        );
+        const requestData = {
+          temperature,
+          weight,
+          distance,
+          departureCity,
+          dateRange: dateRange.map((date) => date.format("YYYY-MM-DD")),
+          company,
+          price: calculatedPrice,
+        };
 
-        // Handle success and error cases
-        if (response.ok) {
-          onRequestSent(); // Call this function if the request is successful
-        } else {
-          Modal.error({
-            title: "Error",
-            content: "Failed to send request.",
-            okButtonProps: {
-              className: "confirm-buttonn",
-            },
-          });
-        }
+        await sendTransportRequest(requestData); // Send the request to the backend API
+        onRequestSent(); // Call this function if the request is successful
       } catch (error) {
         Modal.error({
           title: "Error",
-          content: "An error occurred while sending the request.",
+          content: "Failed to send request.",
           okButtonProps: {
             className: "confirm-buttonn",
           },
@@ -292,54 +295,29 @@ function AssignTransporter({ onClose, onRequestSent }) {
                 <div className="companyDialog">
                   <div className="companyDialogContent">
                     <h2>Select the transport company</h2>
-                    <label>
-                      SMSA Express
-                      <span className="price">500 SR</span>
-                      <input
-                        type="radio"
-                        value="500 SR"
-                        checked={company === "500 SR"}
-                        onChange={handleRadioChange(setCompany)}
-                      />
-                    </label>
-                    <hr />
-                    <label>
-                      Aramex
-                      <span className="price">350 SR </span>
-                      <input
-                        type="radio"
-                        value="350 SR"
-                        checked={company === "350 SR"}
-                        onChange={handleRadioChange(setCompany)}
-                      />
-                    </label>
-                    <hr />
-                    <label>
-                      Zajil
-                      <span className="price">400 SR </span>
-                      <input
-                        type="radio"
-                        value="400 SR"
-                        checked={company === "400 SR"}
-                        onChange={handleRadioChange(setCompany)}
-                      />
-                    </label>
-                    <hr />
-                    <label>
-                      DHL Express
-                      <span className="price">570 SR </span>
-                      <input
-                        type="radio"
-                        value="570 SR"
-                        checked={company === "570 SR"}
-                        onChange={handleRadioChange(setCompany)}
-                      />
-                    </label>
-                    <hr />
+                    <div className="companyListContainer">
+                      {companyList.length > 0 ? (
+                        <Radio.Group
+                          onChange={(e) => setCompany(e.target.value)}
+                          value={company}
+                        >
+                          {companyList.map((company) => (
+                            <Radio
+                              key={company._id}
+                              value={company._id}
+                              style={{ display: "block", marginBottom: "0px" }}
+                            >
+                              {company.full_name}
+                            </Radio>
+                          ))}
+                        </Radio.Group>
+                      ) : (
+                        <p style={{ marginBottom: "20px" }}>
+                          No transportation companies are available!
+                        </p>
+                      )}
+                    </div>
                     <div className="button-container">
-                      <button className="backButtonStyle" onClick={handleBack}>
-                        Back
-                      </button>
                       <button
                         className="sendButtonStyle"
                         onClick={handleSendRequest}

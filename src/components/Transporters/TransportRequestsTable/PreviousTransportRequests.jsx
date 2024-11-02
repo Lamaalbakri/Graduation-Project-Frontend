@@ -66,7 +66,7 @@ function PreviousTransportRequests() {
   };
 
   return (
-    <div className="RequestsTable">
+    <div className="TransportRequestsTable">
       <div className="header-row">
         <div className="title">Previous Transport Requests</div>
         <div className="search-container">

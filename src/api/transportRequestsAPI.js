@@ -1,5 +1,39 @@
 const API_URL = 'http://localhost:8500/api/v1';
 
+// fetch transportation companies
+export const fetchCompanies = async () => {
+    const response = await fetch(`${API_URL}/transportRequests`, {
+        method: 'GET',
+        credentials: 'include'
+    });
+      
+    if (!response.ok) {
+        const errorDetails = await response.text();
+        throw new Error(`Failed to fetch company list: ${response.status} ${errorDetails}`);
+    }
+    const json = await response.json();
+    return json.data; //return all data
+};
+
+export const sendTransportRequest = async (requestData) => {
+    try {
+      const response = await fetch(`${API_URL}/transportRequest`, {
+        method: "POST",
+        credentials: 'include',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestData),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to send request.");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error sending transport request:", error);
+      throw error;
+    }
+};
+
 // get request 
 export const fetchAllCurrentTransportRequests = async () => {
     const response = await fetch(`${API_URL}/transportCurrentRequest`);

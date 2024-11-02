@@ -39,13 +39,19 @@ const UserProfile = ({ userType }) => {
     <div className="UserProfile">
       <div className="UserInfo">
         <span
-          style={{ fontWeight: "bold", color: "#1c2229", marginRight: "10px" }}
+          style={{
+            fontWeight: "bold",
+            fontSize: "15px",
+            color: "#1c2229",
+            marginRight: "10px",
+            whiteSpace: "nowrap",
+          }}
         >
           {/* عرض اسم المستخدم إذا كان متوفرًا، وإلا عرض نوع المستخدم */}
           {userData ? userData.full_name : getUserRole(userType)}
         </span>
       </div>
-      <div className="UserIcon" style={{ marginRight: "10px" }}>
+      <div className="UserIcon" style={{ marginRight: "20px" }}>
         <img
           src={logo}
           alt="User Logo"

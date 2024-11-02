@@ -54,7 +54,7 @@
   align-items: center;            
 }
 .UserIcon img{
-  max-width: 80%;        
+  max-width: 100%;        
   display: block;           
 }
 .toggle-theme-btn{
