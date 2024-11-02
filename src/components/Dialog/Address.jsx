@@ -58,7 +58,6 @@ function Address({ onClose }) {
     }
   };
 
-
   return (
     <div className="dialog-overlay">
       <div className="dialog-box-address">
@@ -66,7 +65,7 @@ function Address({ onClose }) {
           <div className="close-button" onClick={() => onClose(false)}>
             <CloseOutlined />
           </div>
-          <div className="dialog-title-address">Add Or Update Address</div>
+          <div className="dialog-title-address">Add or Update Address</div>
           <form className="form-container" onSubmit={handleSaveAddress}>
             <div className="form-group">
               <label htmlFor="country">
@@ -74,7 +73,7 @@ function Address({ onClose }) {
               </label>
               <input
                 type="text"
-                value={country}//إذا كانت فارغة، سيظهر placeholder
+                value={country} //إذا كانت فارغة، سيظهر placeholder
                 onChange={(e) => setCountry(e.target.value)}
                 id="country"
                 name="country"
@@ -88,7 +87,7 @@ function Address({ onClose }) {
               </label>
               <input
                 type="text"
-                value={city}//إذا كانت فارغة، سيظهر placeholder
+                value={city} //إذا كانت فارغة، سيظهر placeholder
                 onChange={(e) => setCity(e.target.value)}
                 id="city"
                 name="city"
