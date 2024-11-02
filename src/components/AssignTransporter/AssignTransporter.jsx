@@ -12,7 +12,7 @@ import {
   fetchCompanies,
   sendTransportRequest,
 } from "../../api/transportRequestsAPI";
-
+import { useAddress } from "../../contexts/AddressContext";
 function AssignTransporter({ onClose, onRequestSent }) {
   const [temperature, setTemperature] = useState("");
   const [weight, setWeight] = useState("");
@@ -27,7 +27,7 @@ function AssignTransporter({ onClose, onRequestSent }) {
   const [currentForm, setCurrentForm] = useState(1);
   const { RangePicker } = DatePicker;
   const [isPriceModalVisible, setIsPriceModalVisible] = useState(false);
-
+  const { address } = useAddress();
   const handleRadioChange = (setter) => (event) => {
     setter(event.target.value);
   };
@@ -41,11 +41,11 @@ function AssignTransporter({ onClose, onRequestSent }) {
     toggleDialog("address", true);
   };
 
-  const handleDialogClose = (newAddress) => {
+  const handleDialogClose = () => {
     toggleDialog("address", false);
-    if (newAddress) {
-      setDepartureCity(newAddress); // Save new address
-    }
+    // if (newAddress) {
+    //   setDepartureCity(newAddress); // Save new address
+    // }
   };
 
   const onDateChange = (dates) => {
@@ -255,9 +255,15 @@ function AssignTransporter({ onClose, onRequestSent }) {
                   <strong>Departure City</strong>
                   <hr />
                   <div className="supplier-editAdress-detail">
-                    <div className="supplier-editAddress-text">
-                      {departureCity || "Enter the address"}
-                    </div>
+                    {address ? (
+                      // if address exist , display it
+                      <div className="supplier-editAddress-text">{`${address.country}, ${address.city}, ${address.neighborhood}, ${address.street}.`}</div>
+                    ) : (
+                      // if not exist  , display a message
+                      <div className="supplier-editNoAddress-text">
+                        <p>No address found, Click 'Edit' to add.</p>
+                      </div>
+                    )}
                     <div className="supplier-editAddress-button">
                       <button onClick={handleEditAddress}>
                         Edit <EditOutlined />

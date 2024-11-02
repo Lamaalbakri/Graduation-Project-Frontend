@@ -65,6 +65,20 @@
     justify-content:left;
     align-items: center;
     padding-left:20px ;
+    text-transform: capitalize;
+}
+
+.supplier-editNoAddress-text{
+    width: 80%;
+    display: flex;
+    justify-content:left;
+    align-items: center;
+    padding-left:20px ;
+}
+
+.supplier-editNoAddress-text p{
+    font-size: 14px;
+    margin-top: 0px; 
 }
 .supplier-editAddress-button {
     display: flex;

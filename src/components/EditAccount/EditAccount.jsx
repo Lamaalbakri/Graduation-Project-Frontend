@@ -5,9 +5,11 @@ import { notification } from "antd";
 import Address from "../../components/Dialog/Address";
 import { fetchUserData, updateUserData } from "../../api/userAPI";
 import { useUserContext } from "./UserContext";
+import { useAddress } from "../../contexts/AddressContext";
 import "./EditAccount.css";
 
 const EditAccount = () => {
+  const { address } = useAddress();
   const { userData, setUserData } = useUserContext();
   const [originalAccount, setOriginalAccount] = useState(null);
   const [account, setAccount] = useState({
@@ -56,9 +58,6 @@ const EditAccount = () => {
 
   const handleDialogClose = () => {
     toggleDialog("address", false);
-    // if () {
-    console.log("add DB ubdate address");
-    // }
   };
   const handleEditAddress = () => {
     toggleDialog("address", true);
@@ -149,7 +148,15 @@ const EditAccount = () => {
           </label>
           <label> Address: </label>
           <div className="edit-adress-detail">
-            <div className="edit-address-text">Jedaah, faisaliah ,67584</div>
+            {address ? (
+              // if address exist , display it
+              <div className="edit-address-text">{`${address.country}, ${address.city}, ${address.neighborhood}, ${address.street}.`}</div>
+            ) : (
+              // if not exist  , display a message
+              <div className="edit-no-address-text">
+                <p>No address found, Click 'Edit' to add.</p>
+              </div>
+            )}
             <div className="edit-address-button">
               <button onClick={handleEditAddress}>
                 Edit <EditOutlined />

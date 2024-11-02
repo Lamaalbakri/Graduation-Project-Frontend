@@ -61,6 +61,19 @@
     justify-content:left;
     align-items: center;
     padding-left:20px ;
+    text-transform: capitalize;
+}
+.edit-no-address-text{
+    width: 80%;
+    display: flex;
+    justify-content:left;
+    align-items: center;
+    padding-left:20px ;
+}
+.edit-no-address-text p{
+    /* font-size: 14; */
+    /* color: #595a5b; */
+    margin-top: 0px;
 }
 .edit-address-button {
     display: flex;

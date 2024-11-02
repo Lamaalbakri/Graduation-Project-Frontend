@@ -1,24 +1,63 @@
-import React from "react";
-import { useState } from "react";
-import { CloseOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { CloseOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { notification } from "antd";
 import "./DialogStyle.css";
+import { createAddress, updateAddress } from "../../api/addressApi";
+import { useAddress } from "../../contexts/AddressContext";
 
 function Address({ onClose }) {
+  const { address, setAddress } = useAddress(); // الحصول على العنوان من السياق
   const [city, setCity] = useState("");
   const [street, setStreet] = useState("");
-  const [district, setDistrict] = useState("");
-  const [postalCode, setPostalCode] = useState("");
+  const [neighborhood, setNeighborhood] = useState("");
+  const [postal_code, setPostalCode] = useState("");
+  const [country, setCountry] = useState("");
 
-  const handleSaveAddress = (event) => {
+  // جلب العنوان الموجود عند تحميل المكون
+  useEffect(() => {
+    if (address) {
+      setCity(address.city);
+      setStreet(address.street);
+      setNeighborhood(address.neighborhood);
+      setPostalCode(address.postal_code);
+      setCountry(address.country);
+    }
+  }, [address]); // تنفيذ التأثير عندما يتغير العنوان
+
+  // دالة الحفظ
+  const handleSaveAddress = async (event) => {
     event.preventDefault();
     const newAddress = {
-      city,
       street,
-      district,
-      postalCode,
+      city,
+      neighborhood,
+      postal_code,
+      country,
     };
-    onClose(newAddress); // إعادة العنوان الجديد إلى المكون الرئيسي
+
+    try {
+      let savedAddress;
+      if (address && address._id) {
+        // إذا كان هناك عنوان موجود، قم بالتحديث
+        savedAddress = await updateAddress(address._id, newAddress);
+        // تحديث العنوان في السياق
+      } else {
+        // إذا لم يكن هناك عنوان موجود، قم بإنشاء عنوان جديد
+        savedAddress = await createAddress(newAddress);
+        // تحديث العنوان في السياق
+      }
+      setAddress(savedAddress);
+      onClose(savedAddress);
+    } catch (error) {
+      notification.error({
+        message: "Error",
+        description: "Error saving address, try again",
+        placement: "top",
+        icon: <InfoCircleOutlined style={{ color: "#f4d53f" }} />,
+      });
+    }
   };
+
 
   return (
     <div className="dialog-overlay">
@@ -27,14 +66,29 @@ function Address({ onClose }) {
           <div className="close-button" onClick={() => onClose(false)}>
             <CloseOutlined />
           </div>
-          <div className="dialog-title-address">Add New Address</div>
-          <form className="form-container">
-            <div class="form-group">
-              <label for="city">
+          <div className="dialog-title-address">Add Or Update Address</div>
+          <form className="form-container" onSubmit={handleSaveAddress}>
+            <div className="form-group">
+              <label htmlFor="country">
+                <span className="required">*</span>Country
+              </label>
+              <input
+                type="text"
+                value={country}//إذا كانت فارغة، سيظهر placeholder
+                onChange={(e) => setCountry(e.target.value)}
+                id="country"
+                name="country"
+                placeholder="Enter country"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="city">
                 <span className="required">*</span>City
               </label>
               <input
                 type="text"
+                value={city}//إذا كانت فارغة، سيظهر placeholder
                 onChange={(e) => setCity(e.target.value)}
                 id="city"
                 name="city"
@@ -42,47 +96,48 @@ function Address({ onClose }) {
                 required
               />
             </div>
-            <div class="form-group">
-              <label for="street">
+            <div className="form-group">
+              <label htmlFor="street">
                 <span className="required">*</span>Street
               </label>
               <input
                 type="text"
                 onChange={(e) => setStreet(e.target.value)}
+                value={street} // استخدام القيمة من الحالة
                 id="street"
                 name="street"
                 placeholder="Enter street"
                 required
               />
             </div>
-            <div class="form-group">
-              <label for="district">
-                <span className="required">*</span>District
+            <div className="form-group">
+              <label htmlFor="neighborhood">
+                <span className="required">*</span>Neighborhood
               </label>
               <input
                 type="text"
-                onChange={(e) => setDistrict(e.target.value)}
-                id="district"
-                name="district"
-                placeholder="Enter district"
+                value={neighborhood} // استخدام القيمة من الحالة
+                onChange={(e) => setNeighborhood(e.target.value)}
+                id="neighborhood"
+                name="neighborhood"
+                placeholder="Enter neighborhood"
                 required
               />
             </div>
-            <div class="form-group">
-              <label for="postalCode">Postal Code (Optional)</label>
+            <div className="form-group">
+              <label htmlFor="postal_code">Postal Code (Optional)</label>
               <input
                 type="text"
+                value={postal_code} // استخدام القيمة من الحالة
                 onChange={(e) => setPostalCode(e.target.value)}
-                id="postalCode"
-                name="postalCode"
+                id="postal_code"
+                name="postal_code"
                 placeholder="Enter postal code"
               />
             </div>
             <div
               className="button-container"
-              style={{
-                justifyContent: "flex-end",
-              }}
+              style={{ justifyContent: "flex-end" }}
             >
               <button className="cancel-button" onClick={() => onClose(false)}>
                 Cancel

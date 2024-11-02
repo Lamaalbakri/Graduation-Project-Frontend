@@ -36,6 +36,9 @@ import AddSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSuppl
 import ViewSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/ViewSuppliers";
 import ViewRawMaterials from "./components/Manufacturers/RawMaterialOrder/ViewMaterials/ViewRawMaterials";
 
+//address context 
+import { AddressProvider } from "./contexts/AddressContext"; // تأكد من تحديث المسار بناءً على موقعك الفعلي
+
 const { Content } = Layout;
 
 function App() {
@@ -44,25 +47,27 @@ function App() {
 
   return (
     <UserProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<HomePageLayout />} />
-          <Route path="/register" element={<RegisterPageLayout />} />
-          <Route
-            path="/login"
-            element={
-              <LoginPageLayout
-                setUserType={setUserType}
-                setUserId={setUserId}
-              />
-            }
-          />
-          <Route
-            path="*"
-            element={<MainLayout userType={userType} userId={userId} />}
-          />
-        </Routes>
-      </Router>
+      <AddressProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePageLayout />} />
+            <Route path="/register" element={<RegisterPageLayout />} />
+            <Route
+              path="/login"
+              element={
+                <LoginPageLayout
+                  setUserType={setUserType}
+                  setUserId={setUserId}
+                />
+              }
+            />
+            <Route
+              path="*"
+              element={<MainLayout userType={userType} userId={userId} />}
+            />
+          </Routes>
+        </Router>
+      </AddressProvider>
     </UserProvider>
   );
 }

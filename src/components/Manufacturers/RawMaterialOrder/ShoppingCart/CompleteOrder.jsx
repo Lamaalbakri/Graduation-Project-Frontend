@@ -1,21 +1,21 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { EditOutlined } from "@ant-design/icons";
 import Breadcrumb from "./Breadcrumb";
 import "./ShoppingCart.css";
 import mada from "../../../images/mada-logo.png";
 import ConfirmationDialog from "../../../Dialog/ConfirmationDialog";
 import Address from "../../../Dialog/Address";
+import { useAddress } from "../../../../contexts/AddressContext";
 
 function CompleteOrder({ userId }) {
   const { id } = useParams();
+  const [stepType, setStepType] = useState("");
+  const { address } = useAddress();// استخدام context للحصول على العنوان
   const [dialogState, setDialogState] = useState({
     confirmationDialog: false,
     address: false,
   });
-  const [stepType, setStepType] = useState("");
 
   // Helper function to toggle dialog states (open or close)
   const toggleDialog = (dialogName, value, requestId = null, status = "") => {
@@ -26,12 +26,15 @@ function CompleteOrder({ userId }) {
 
   // Handle confirmation for conferm Payment or View order
   const handleConfirmAction = () => {
+
     if (stepType == "confirmPay") {
       console.log("Put the send order BE logic");
       toggleDialog("confirmationDialog", false);
       setStepType("viewOrder");
       toggleDialog("confirmationDialog", true);
+
     } else if (stepType == "viewOrder") {
+
       console.log("open view order page");
       <Link to={`/viewOrder`} />;
       // set state of dialog to false "close"
@@ -46,10 +49,8 @@ function CompleteOrder({ userId }) {
 
   const handleDialogClose = () => {
     toggleDialog("address", false);
-    // if () {
-    console.log("add DB ubdate address");
-    // }
   };
+
   const handleEditAddress = () => {
     toggleDialog("address", true);
   };
@@ -81,7 +82,15 @@ function CompleteOrder({ userId }) {
             <div className="step-content">
               <div className="step-title">Receiving Address</div>
               <div className="adress-detail">
-                <div className="address">Jedaah, faisaliah ,67584</div>
+                {address ? (
+                  // if address exist , display it
+                  <div className="address">{`${address.country}, ${address.city}, ${address.neighborhood}, ${address.street}.`}</div>
+                ) : (
+                  // if not exist  , display a message
+                  <div className="no-address">
+                    <p>No address found, Click 'Edit' to add.</p>
+                  </div>
+                )}
                 <div className="edit-address">
                   <button onClick={handleEditAddress}>
                     Edit <EditOutlined />

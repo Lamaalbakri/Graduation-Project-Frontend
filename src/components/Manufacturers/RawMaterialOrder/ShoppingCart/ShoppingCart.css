@@ -377,7 +377,19 @@ button:hover {
     justify-content:left;
     align-items: center;
     padding-left:20px ;
-
+    text-transform: capitalize;
+}
+.no-address{
+    width: 80%;
+    display: flex;
+    justify-content:left;
+    align-items: center;
+    padding-left:20px ;
+}
+.no-address p{
+    font-size: 14;
+    color: #595a5b;
+    margin-top: 0px;
 }
 .edit-address {
     display: flex;
