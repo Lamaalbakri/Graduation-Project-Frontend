@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import logo from "./images/User.png"; // استيراد الشعار
 import { fetchUserData } from "../api/userAPI";
-import { useUserContext } from "./EditAccount/UserContext";
+import { useUserContext } from "../contexts/UserContext";
 
 const UserProfile = ({ userType }) => {
-  //const [userData, setUserData] = useState(null);
   const { userData, setUserData } = useUserContext();
 
   useEffect(() => {

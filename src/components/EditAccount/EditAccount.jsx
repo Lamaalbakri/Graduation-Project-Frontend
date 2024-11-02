@@ -4,7 +4,7 @@ import { EditOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { notification } from "antd";
 import Address from "../../components/Dialog/Address";
 import { fetchUserData, updateUserData } from "../../api/userAPI";
-import { useUserContext } from "./UserContext";
+import { useUserContext } from "../../contexts/UserContext";
 import { useAddress } from "../../contexts/AddressContext";
 import "./EditAccount.css";
 

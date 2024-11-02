@@ -86,7 +86,9 @@ function TransportRequestsTable({ data }) {
 
   if (!requests.length) {
     return (
-      <div className="background-message">No transport requests found</div>
+      <div className="TransportRequestsTable-background-message">
+        No transport requests found
+      </div>
     );
   }
 
@@ -143,7 +145,9 @@ function TransportRequestsTable({ data }) {
           params.row.status === "delivered"
         ) {
           return (
-            <div className={`status-text ${statusClass}`}>
+            <div
+              className={`TransportRequestsTable-status-text ${statusClass}`}
+            >
               {params.row.status}
             </div>
           );
@@ -151,7 +155,7 @@ function TransportRequestsTable({ data }) {
         return (
           <select
             value={params.row.status}
-            className={`status-select ${statusClass}`}
+            className={`TransportRequestsTable-status-select ${statusClass}`}
             onChange={(e) =>
               handleStatusChange(params.row.shortId, e.target.value)
             }

@@ -81,28 +81,34 @@ function SearchTransportRequests() {
   };
 
   return (
-    <div className="search">
-      <div className="header-row">
-        <div className="title">Search for Requests</div>
-        <div className="search-container">
-          <div className="search-label">Search by ID</div>
+    <div className="TransportRequestsTable">
+      <div className="TransportRequestsTable-header-row">
+        <div className="TransportRequestsTable-title">Search for Requests</div>
+        <div className="TransportRequestsTable-search-container">
+          <div className="TransportRequestsTable-search-label">
+            Search by ID
+          </div>
           <input
             type="search"
             placeholder="Search by ID"
             value={query}
             onChange={handleSearch}
-            className="input-with-icon"
+            className="TransportRequestsTable-input-with-icon"
           />
         </div>
       </div>
 
       {hasSearched &&
         (loading ? (
-          <div className="background-message">Loading...</div>
+          <div className="TransportRequestsTable-background-message">
+            Loading...
+          </div>
         ) : filteredRequests.length > 0 ? (
           <TransportRequestsTable data={filteredRequests} />
         ) : (
-          <div className="background-message">No results found</div>
+          <div className="TransportRequestsTable-background-message">
+            No results found
+          </div>
         ))}
     </div>
   );

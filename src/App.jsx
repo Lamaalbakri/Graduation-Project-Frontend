@@ -14,7 +14,6 @@ import RegisterPage from "./components/Register-Login/RegisterPage";
 import LoginPage from "./components/Register-Login/LoginPage";
 import SCMShomePage from "./components/HomePage/SCMShomePage";
 import EditAccount from "./components/EditAccount/EditAccount";
-import { UserProvider } from "./components/EditAccount/UserContext";
 // Suppliers imports
 import AddRawMaterial from "./components/Suppliers/ManageRawMaterial/AddRawMaterial";
 import DeleteRawMaterial from "./components/Suppliers/ManageRawMaterial/DeleteRawMaterial";
@@ -31,13 +30,13 @@ import SearchTransportRequests from "./components/Transporters/TransportRequests
 import ShoppingCartList from "./components/Manufacturers/RawMaterialOrder/ShoppingCart/ShoppingCartList";
 import ShoppingCartDetail from "./components/Manufacturers/RawMaterialOrder/ShoppingCart/ShoppingCartDetail";
 import CompleteOrder from "./components/Manufacturers/RawMaterialOrder/ShoppingCart/CompleteOrder";
-
 import AddSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/AddSupplier";
 import ViewSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/ViewSuppliers";
 import ViewRawMaterials from "./components/Manufacturers/RawMaterialOrder/ViewMaterials/ViewRawMaterials";
 
-//address context 
+// Contexts
 import { AddressProvider } from "./contexts/AddressContext"; // تأكد من تحديث المسار بناءً على موقعك الفعلي
+import { UserProvider } from "./contexts/UserContext";
 
 const { Content } = Layout;
 

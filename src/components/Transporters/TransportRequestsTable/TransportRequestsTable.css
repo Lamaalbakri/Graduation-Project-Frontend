@@ -1,46 +1,46 @@
-.TransportRequestsTable, .search {
+.TransportRequestsTable {
     font-family: "Poppins", sans-serif;
     color: #1c2229;
     padding: 20px;
 }
-.status-select {
+.TransportRequestsTable-status-select {
     padding: 5px;
     border-radius: 8px;
     outline: none;
     width: 93%;
     text-align: center;
 }
-.status-select:hover {
+.TransportRequestsTable-status-select:hover {
     background-color: #3d3c3c3c;
     color: #0b0b0b;
     border: none;
 }
-.status-select option:hover {
+.TransportRequestsTable-status-select option:hover {
     background-color: #3d3c3c3c;
     color: #0b0b0b;
 }
-.status-pending {
+.TransportRequestsTable-status-pending {
     background-color: #ff990059;
     color: #5e3902;
 }
-.status-inProgress {
+.TransportRequestsTable-status-inProgress {
     background-color: #7a4caf71;
     color: #400188;
 }
-.status-delivered {
+.TransportRequestsTable-status-delivered {
     background-color: #4caf4f71;
     color: #023404;
 }
-.status-rejected {
+.TransportRequestsTable-status-rejected {
     background-color: #f443366d;
     color: #7e0901;
 }
-.status-text {
+.TransportRequestsTable-status-text {
     padding: 5px;
     border-radius: 8px;
     display: inline-block;
 }
-.status-text.status-rejected {
+.TransportRequestsTable-status-text.status-rejected {
     background-color: #f443366d;
     color: #7e0901;
     padding: 5px;
@@ -49,7 +49,7 @@
     width: 93%;
     text-align: center;
 }
-.status-text.status-delivered {
+.TransportRequestsTable-status-text.status-delivered {
     background-color: #4caf4f71;
     color: #023404;
     padding: 5px;
@@ -58,7 +58,7 @@
     width: 93%;
     text-align: center;
 }
-.header-row {
+.TransportRequestsTable-header-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -66,24 +66,24 @@
     margin-bottom: 50px;
     margin-top: 25px;
 }
-.title {
+.TransportRequestsTable-title {
     font-size: 30px;
     font-weight: bold;
     text-align: left;
     margin-bottom: 0;
 }
-.search-container {
+.TransportRequestsTable-search-container {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     margin-bottom: 0;
 }
-.search-label {
+.TransportRequestsTable-search-label {
     margin-right: 15px;
     font-size: 14px;
     color: #1c2229;
 }
-.search-container input {
+.TransportRequestsTable-search-container input {
     padding-left: 35px;
     border: 1px solid #ccc;
     border-radius: 25px;
@@ -92,7 +92,7 @@
     width: 300px;
     transition: border-color 0.3s ease;
 }
-.input-with-icon {
+.TransportRequestsTable-input-with-icon {
     padding-right: 40px;
     height: 35px;
     width: 250px;
@@ -102,13 +102,13 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-.search-container input:focus {
+.TransportRequestsTable-search-container input:focus {
     border-color: #1c2229;
 }
-.search-container input::placeholder {
+.TransportRequestsTable-search-container input::placeholder {
     color: #999;
 }
-.background-message {
+.TransportRequestsTable-background-message {
     color: #999999bd;
     font-size: 25px;
     font-weight: bold;

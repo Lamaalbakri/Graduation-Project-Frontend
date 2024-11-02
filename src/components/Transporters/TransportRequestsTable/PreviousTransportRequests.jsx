@@ -67,16 +67,20 @@ function PreviousTransportRequests() {
 
   return (
     <div className="TransportRequestsTable">
-      <div className="header-row">
-        <div className="title">Previous Transport Requests</div>
-        <div className="search-container">
-          <div className="search-label">Search by ID</div>
+      <div className="TransportRequestsTable-header-row">
+        <div className="TransportRequestsTable-title">
+          Previous Transport Requests
+        </div>
+        <div className="TransportRequestsTable-search-container">
+          <div className="TransportRequestsTable-search-label">
+            Search by ID
+          </div>
           <input
             type="search"
             placeholder="Search by ID"
             value={query}
             onChange={handleSearch}
-            className="input-with-icon"
+            className="TransportRequestsTable-input-with-icon"
           />
         </div>
       </div>
@@ -84,7 +88,7 @@ function PreviousTransportRequests() {
       {transportRequests && filteredRequests.length ? ( // Conditional rendering
         <TransportRequestsTable data={filteredRequests} />
       ) : (
-        <p className="background-message">
+        <p className="TransportRequestsTable-background-message">
           {filteredRequests && filteredRequests.length === 0
             ? "No transport requests found"
             : "Loading requests..."}
