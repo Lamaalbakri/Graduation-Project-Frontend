@@ -33,6 +33,9 @@ import CompleteOrder from "./components/Manufacturers/RawMaterialOrder/ShoppingC
 import AddSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/AddSupplier";
 import ViewSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/ViewSuppliers";
 import ViewRawMaterials from "./components/Manufacturers/RawMaterialOrder/ViewMaterials/ViewRawMaterials";
+import ViewOrder from './components/Manufacturers/RawMaterialOrder/ManageOrder/ViewOrder';
+import ViewOrderList from './components/Manufacturers/RawMaterialOrder/ManageOrder/ViewOrdersList'
+
 
 // Contexts
 import { AddressProvider } from "./contexts/AddressContext"; // تأكد من تحديث المسار بناءً على موقعك الفعلي
@@ -43,6 +46,21 @@ const { Content } = Layout;
 function App() {
   const [userType, setUserType] = useState(null);
   const [userId, setUserId] = useState(null);
+
+  
+  useEffect(()=>{
+    localStorage.setItem('userType', userType);
+    localStorage.setItem('userId', userId);
+  },[userType,userId])
+
+
+  const clearUserData = () => {
+    setUserType(null);
+    setUserId(null);
+    localStorage.removeItem('userType');
+    localStorage.removeItem('userId');
+  };
+
 
   return (
     <UserProvider>
@@ -202,7 +220,10 @@ function MainLayout({ userType, userId }) {
                   path="/shoppingCarts/:userId/:id/complete"
                   element={<CompleteOrder userId={userId} />}
                 />
-                {/* <Route path="/viewOrders" element={} /> */}
+                
+                <Route path="/ViewOrderList" element={<ViewOrderList userId={userId} />} />
+                <Route path="/ViewOrders" element={<ViewOrder userId={userId} />} />
+
               </>
             )}
 

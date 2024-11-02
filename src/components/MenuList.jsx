@@ -132,7 +132,7 @@ const MenuList = ({ darkTheme, userType, userId }) => {
               <Link to={`/shoppingCarts/${userId}`}>Shopping Carts</Link>
             </Menu.Item>
             <Menu.Item key="viewOrders">
-              <Link to={`/viewOrders/${userId}`}>View Orders</Link>
+              <Link to={`/ViewOrders/`}>View Orders</Link>
             </Menu.Item>
           </Menu.SubMenu>
           <Menu.SubMenu
