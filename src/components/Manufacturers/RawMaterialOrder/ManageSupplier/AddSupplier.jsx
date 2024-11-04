@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./styling.css";
+import "./ManageSupplierStyle.css";
 import { getSearchSupplierCategory } from "../../../../api/CategoryAPI";
 import { fetchUserData, updateUserData } from "../../../../api/userAPI";
 
@@ -93,14 +93,14 @@ const AddSupplier = () => {
   };
 
   return (
-    <div className="Suppliercontainer">
-      <div className="header-row">
-        <h2 className="title">Search for Supplier to Add</h2>
+    <div className="ManageSupplier-Suppliercontainer">
+      <div className="ManageSupplier-header-row">
+        <h2 className="ManageSupplier-title">Search for Supplier to Add</h2>
       </div>
 
-      <div className="card-container">
-        <div className="searchcontainer">
-          <div className="search-inputs">
+      <div className="ManageSupplier-card-container">
+        <div className="ManageSupplier-searchcontainer">
+          <div className="ManageSupplier-search-inputs">
             <select
               name="supplier-category"
               value={supplierCategory}
@@ -141,11 +141,11 @@ const AddSupplier = () => {
               onChange={handleSupplierNameChange}
             />
           </div>
-          <div className="search-buttons">
-            <button className="clear-button" onClick={handleClear}>
+          <div className="ManageSupplier-search-buttons">
+            <button className="ManageSupplier-clear-button" onClick={handleClear}>
               Clear
             </button>
-            <button className="apply-button" onClick={handleApply}>
+            <button className="ManageSupplier-apply-button" onClick={handleApply}>
               Apply
             </button>
           </div>
@@ -154,13 +154,13 @@ const AddSupplier = () => {
 
       {isSearchActive && (
         <>
-          <div className="results-header">
+          <div className="ManageSupplier-results-header">
             <h3>Search Results</h3>
           </div>
           {suppliers?.length > 0 ? (
             suppliers.map((supplier) => (
-              <div key={supplier._id} className="search-result">
-                <div className="supplier-info">
+              <div key={supplier._id} className="ManageSupplier-search-result">
+                <div className="ManageSupplier-supplier-info">
                   <img
                     src="https://media.istockphoto.com/id/931643150/vector/picture-icon.jpg?s=612x612&w=0&k=20&c=St-gpRn58eIa8EDAHpn_yO4CZZAnGD6wKpln9l3Z3Ok="
                     alt="Supplier"
@@ -173,14 +173,14 @@ const AddSupplier = () => {
                     </p>
                   </div>
                 </div>
-                <div className="toggle-switch">
-                  <label className="switch">
+                <div className="ManageSupplier-toggle-switch">
+                  <label className="ManageSupplier-switch">
                     <input
                       type="checkbox"
                       checked={user?.suppliersList.includes(supplier._id)}
                       onChange={() => handleToggleSupplier(supplier._id)}
                     />
-                    <span className="slider round"></span>
+                    <span className="ManageSupplier-slider round"></span>
                   </label>
                 </div>
               </div>
@@ -192,8 +192,8 @@ const AddSupplier = () => {
       )}
 
       {showDialog && (
-        <div className="dialog-overlay">
-          <div className="dialog">
+        <div className="ManageSupplier-dialog-overlay">
+          <div className="ManageSupplier-dialog">
             <p>Are you sure you want to add this supplier?</p>
             <button onClick={() => confirmToggleSupplier(supplierToToggle)}>
               Yes

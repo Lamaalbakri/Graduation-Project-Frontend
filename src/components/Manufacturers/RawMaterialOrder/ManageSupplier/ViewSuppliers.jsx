@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import './styling.css';
-import { fetchUserData,fetchUserDataWithSupplier, updateUserData } from "../../../../api/userAPI";
+import './ManageSupplierStyle.css';
+import { fetchUserData, fetchUserDataWithSupplier, updateUserData } from "../../../../api/userAPI";
 
 const ViewSuppliers = () => {
-  const [user, setUser] = useState()
+  const [user, setUser] = useState();
+  const [suppliers, setSuppliers] = useState();
+
   useEffect(() => {
     fetchUserData().then(x => {
-      setUser(x)
-    })
-  }, [])
+      setUser(x);
+    });
+  }, []);
 
   useEffect(() => {
     fetchUserDataWithSupplier().then(x => {
-      console.log("user: ", x)
-      setSuppliers(x.suppliersList)
-    })
-  }, [])
-
-
-  const [suppliers, setSuppliers] = useState();
+      console.log("user: ", x);
+      setSuppliers(x.suppliersList);
+    });
+  }, []);
 
   const handleToggleSupplier = (id) => {
-
     let updatedUser = { ...user };
     const isSupplierAdded = updatedUser.suppliersList.includes(id);
 
@@ -43,16 +41,15 @@ const ViewSuppliers = () => {
       });
   };
 
-
   return (
-    <div className="Suppliercontainer">
-      <div className="header-row">
-        <h2 className="title">List of Added Suppliers</h2>
+    <div className="ManageSupplier-Suppliercontainer">
+      <div className="ManageSupplier-header-row">
+        <h2 className="ManageSupplier-title">List of Added Suppliers</h2>
       </div>
       {suppliers?.length > 0 ? (
-        suppliers?.map((supplier) => (
-          <div key={supplier._id} className="search-result">
-            <div className="supplier-info">
+        suppliers.map((supplier) => (
+          <div key={supplier._id} className="ManageSupplier-search-result">
+            <div className="ManageSupplier-supplier-info">
               <img
                 src="https://media.istockphoto.com/id/931643150/vector/picture-icon.jpg?s=612x612&w=0&k=20&c=St-gpRn58eIa8EDAHpn_yO4CZZAnGD6wKpln9l3Z3Ok="
                 alt="Supplier"
@@ -63,14 +60,14 @@ const ViewSuppliers = () => {
                 <p><strong>Category:</strong> {supplier?.category}</p>
               </div>
             </div>
-            <div className="toggle-switch">
-              <label className="switch">
+            <div className="ManageSupplier-toggle-switch">
+              <label className="ManageSupplier-switch">
                 <input
                   type="checkbox"
                   checked={user?.suppliersList.includes(supplier._id)}
                   onChange={() => handleToggleSupplier(supplier._id)}
                 />
-                <span className="slider round"></span>
+                <span className="ManageSupplier-slider round"></span>
               </label>
             </div>
           </div>

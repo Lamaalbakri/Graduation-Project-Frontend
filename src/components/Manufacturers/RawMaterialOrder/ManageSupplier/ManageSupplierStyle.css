@@ -1,10 +1,13 @@
-.container {
+/* Prefix all class selectors with .ManageSupplier- */
+
+/* Container Styles */
+.ManageSupplier-container {
   display: flex;
   flex-direction: column;
   padding: 20px;
 }
 
-.header-row {
+.ManageSupplier-header-row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -13,26 +16,24 @@
   margin-top: 15px;
 }
 
-
-
-.results-header {
+.ManageSupplier-results-header {
   display: flex;
   margin-bottom: 18px;
 }
 
-.search-buttons button:hover {
+.ManageSupplier-search-buttons button:hover {
   background-color: #f4d53f;
   color: #0f172a;
 }
 
-.title {
+.ManageSupplier-title {
   font-size: 30px;
   font-weight: bold;
   text-align: left;
   margin-bottom: 0;
 }
 
-.search-container {
+.ManageSupplier-searchcontainer {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -42,14 +43,14 @@
   margin-bottom: 20px;
 }
 
-.search-inputs {
+.ManageSupplier-search-inputs {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.search-inputs select,
-.search-inputs input {
+.ManageSupplier-search-inputs select,
+.ManageSupplier-search-inputs input {
   flex: 1;
   padding: 12px 16px;
   border: 1px solid #d1d5db;
@@ -57,13 +58,13 @@
   font-size: 14px;
 }
 
-.search-buttons {
+.ManageSupplier-search-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 16px;
 }
 
-.search-buttons button {
+.ManageSupplier-search-buttons button {
   padding: 12px 24px;
   background-color: #0f172a;
   color: #fff;
@@ -74,13 +75,17 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
-.search-buttons .clear-button {
+.ManageSupplier-clear-button {
   background-color: #fff;
   color: #0f172a;
   border: 1px solid #0f172a;
 }
 
-.search-result {
+.ManageSupplier-apply-button {
+  /* Inherits styles from button, can add specific styles if needed */
+}
+
+.ManageSupplier-search-result {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -90,49 +95,49 @@
   margin-bottom: 16px;
 }
 
-.supplier-info {
+.ManageSupplier-supplier-info {
   display: flex;
   align-items: center;
 }
 
-.supplier-info img {
+.ManageSupplier-supplier-info img {
   width: 64px;
   height: 64px;
   border-radius: 50%;
   margin-right: 16px;
 }
 
-.supplier-info h3 {
+.ManageSupplier-supplier-info h3 {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
 }
 
-.supplier-info p {
+.ManageSupplier-supplier-info p {
   margin: 4px 0 0 0;
   font-size: 14px;
   color: #6b7280;
 }
 
-.toggle-switch {
+.ManageSupplier-toggle-switch {
   display: flex;
   align-items: center;
 }
 
-.switch {
+.ManageSupplier-switch {
   position: relative;
   display: inline-block;
   width: 44px;
   height: 24px;
 }
 
-.switch input {
+.ManageSupplier-switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.slider {
+.ManageSupplier-slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -144,7 +149,7 @@
   transition: 0.4s;
 }
 
-.slider:before {
+.ManageSupplier-slider:before {
   position: absolute;
   content: "";
   height: 16px;
@@ -156,29 +161,29 @@
   transition: 0.4s;
 }
 
-input:checked + .slider {
+.ManageSupplier-switch input:checked + .ManageSupplier-slider {
   background-color: #0f172a;
 }
 
-input:focus + .slider {
+.ManageSupplier-switch input:focus + .ManageSupplier-slider {
   box-shadow: 0 0 1px #0f172a;
 }
 
-input:checked + .slider:before {
+.ManageSupplier-switch input:checked + .ManageSupplier-slider:before {
   -webkit-transform: translateX(20px);
   -ms-transform: translateX(20px);
   transform: translateX(20px);
 }
 
-.slider.round {
+.ManageSupplier-slider.round {
   border-radius: 34px;
 }
 
-.slider.round:before {
+.ManageSupplier-slider.round:before {
   border-radius: 50%;
 }
 
-.dialog-overlay {
+.ManageSupplier-dialog-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -190,74 +195,75 @@ input:checked + .slider:before {
   justify-content: center;
 }
 
-.dialog {
+.ManageSupplier-dialog {
   background: white;
   padding: 20px;
   border-radius: 5px;
   text-align: center;
 }
-.dialog button{
+
+.ManageSupplier-dialog button {
   margin: 5px;
 }
 
 /* Media Queries for Responsive Design */
 @media (max-width: 768px) {
-  .header-row {
+  .ManageSupplier-header-row {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .search-inputs {
+  .ManageSupplier-search-inputs {
     flex-direction: column;
     gap: 12px;
   }
 
-  .search-buttons {
+  .ManageSupplier-search-buttons {
     justify-content: center;
   }
 
-  .search-result {
+  .ManageSupplier-search-result {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
 
-  .supplier-info img {
+  .ManageSupplier-supplier-info img {
     width: 48px;
     height: 48px;
   }
 
-  .supplier-info h3 {
+  .ManageSupplier-supplier-info h3 {
     font-size: 14px;
   }
 
-  .supplier-info p {
+  .ManageSupplier-supplier-info p {
     font-size: 12px;
   }
 }
 
 @media (max-width: 480px) {
-  .title {
+  .ManageSupplier-title {
     font-size: 24px;
   }
 
-  .search-buttons button {
+  .ManageSupplier-search-buttons button {
     padding: 10px 20px;
     font-size: 12px;
   }
 
-  .supplier-info img {
+  .ManageSupplier-supplier-info img {
     width: 40px;
     height: 40px;
   }
 
-  .search-inputs select,
-  .search-inputs input {
+  .ManageSupplier-search-inputs select,
+  .ManageSupplier-search-inputs input {
     padding: 10px;
     font-size: 12px;
   }
 
-  .search-result {
+  .ManageSupplier-search-result {
     padding: 12px;
   }
 }
