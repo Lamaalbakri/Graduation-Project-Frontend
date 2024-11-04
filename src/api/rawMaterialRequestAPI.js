@@ -14,7 +14,7 @@ export const fetchAllCurrentRequests = async () => {
     const json = await response.json();
     return json.data; //return all data
 };
-
+    
 export const fetchAllPreviousRequests = async () => {
     const response = await fetch(`${API_URL}/rawMaterialPreviousRequest`, {
         method: 'GET',

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./ViewMaterials.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { fetchAllCurrentRequests } from "../../../../api/manageRawMaterialApi";
 import { Modal } from "antd";
 import ProductCard from "./ProductCard";
+import { fetchAllCurrentRequests } from "../../../../api/rawMaterialRequestAPI";
 
 
 const ViewRawMaterials = () => {
