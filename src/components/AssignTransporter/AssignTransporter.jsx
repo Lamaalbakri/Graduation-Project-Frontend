@@ -13,11 +13,18 @@ import {
   sendTransportRequest,
 } from "../../api/transportRequestsAPI";
 import { useAddress } from "../../contexts/AddressContext";
-function AssignTransporter({ onClose, onRequestSent }) {
+
+function AssignTransporter({
+  onClose,
+  onRequestSent,
+  requestId,
+  arrivalAddress,
+  receiverId,
+  receiverType,
+}) {
   const [temperature, setTemperature] = useState("");
   const [weight, setWeight] = useState("");
   const [distance, setDistance] = useState("");
-  const [departureCity, setDepartureCity] = useState("");
   const [dialogState, setDialogState] = useState({
     address: false,
   });
@@ -43,9 +50,6 @@ function AssignTransporter({ onClose, onRequestSent }) {
 
   const handleDialogClose = () => {
     toggleDialog("address", false);
-    // if (newAddress) {
-    //   setDepartureCity(newAddress); // Save new address
-    // }
   };
 
   const onDateChange = (dates) => {
@@ -75,7 +79,7 @@ function AssignTransporter({ onClose, onRequestSent }) {
     if (!temperature) errors.push("Temperature Control");
     if (!weight) errors.push("Weight Category");
     if (!distance) errors.push("Distance Category");
-    /*if (!departureCity) errors.push("Departure City");*/
+    if (!address) errors.push("Departure Address");
     if (dateRange.length === 0) errors.push("Delivery Date Range");
 
     if (errors.length > 0) {
@@ -118,7 +122,8 @@ function AssignTransporter({ onClose, onRequestSent }) {
 
     // Ensure we are in the second form and the company field is selected
     if (currentForm === 2) {
-      if (!company) {
+      const selectedCompany = companyList.find((comp) => comp._id === company);
+      if (!selectedCompany) {
         Modal.error({
           title: "Error",
           content: "Please select the transport company.",
@@ -134,15 +139,32 @@ function AssignTransporter({ onClose, onRequestSent }) {
           temperature,
           weight,
           distance,
-          departureCity,
-          dateRange: dateRange.map((date) => date.format("YYYY-MM-DD")),
-          company,
-          price: calculatedPrice,
+          departureAddress: {
+            street: address.street,
+            city: address.city,
+            neighborhood: address.neighborhood,
+            postal_code: address.postal_code,
+            country: address.country,
+          },
+          estimated_delivery_date: dateRange.map((date) =>
+            date.format("YYYY-MM-DD")
+          ),
+          totalPrice: calculatedPrice,
+          transporterId: selectedCompany._id,
+          transporterName: selectedCompany.full_name,
+          request_id: requestId,
+          arrivalAddress: arrivalAddress,
+          receiver_id: receiverId,
+          receiver_type: receiverType,
         };
 
-        await sendTransportRequest(requestData); // Send the request to the backend API
-        onRequestSent(); // Call this function if the request is successful
+        console.log("Request Data:", requestData);
+        await sendTransportRequest(requestData);
+        console.log("Request sent successfully.");
+
+        onRequestSent();
       } catch (error) {
+        console.error("Error details:", error); // Print the error details
         Modal.error({
           title: "Error",
           content: "Failed to send request.",
@@ -252,7 +274,7 @@ function AssignTransporter({ onClose, onRequestSent }) {
                   </label>
                 </div>
                 <div className="category">
-                  <strong>Departure City</strong>
+                  <strong>Departure Address</strong>
                   <hr />
                   <div className="supplier-editAdress-detail">
                     {address ? (

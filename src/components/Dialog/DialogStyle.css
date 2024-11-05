@@ -19,7 +19,7 @@
   cursor: pointer !important;
   transition: background-color 0.3s !important;
   box-shadow: none !important;
-  top: 10px;
+  top: 6px;
   min-width: 100px; /* إضافة عرض أدنى للزر */
   display: block;
 }
@@ -31,7 +31,7 @@
   border-radius: 5px !important;
   cursor: pointer !important;
   box-shadow: none !important;
-  top: 10px;
+  top: 6px;
 }
 .confirmation-dialog-cancel-button:hover{
   background-color: white !important;

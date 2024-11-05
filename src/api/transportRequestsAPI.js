@@ -17,39 +17,52 @@ export const fetchCompanies = async () => {
 
 export const sendTransportRequest = async (requestData) => {
     try {
-      const response = await fetch(`${API_URL}/transportRequest`, {
+      const response = await fetch(`${API_URL}/transportCurrentRequest`, {
         method: "POST",
         credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),
       });
   
+      const jsonResponse = await response.json();
+
       if (!response.ok) {
-        throw new Error("Failed to send request.");
+        console.error('Error response:', jsonResponse);
+        throw new Error(jsonResponse.message || "Failed to send request.");
       }
-      return await response.json();
+
+      return jsonResponse;
+
     } catch (error) {
       console.error("Error sending transport request:", error);
       throw error;
     }
 };
 
-// get request 
+// get current request 
 export const fetchAllCurrentTransportRequests = async () => {
-    const response = await fetch(`${API_URL}/transportCurrentRequest`);
+    const response = await fetch(`${API_URL}/transportCurrentRequest`, {
+        method: 'GET',
+        credentials: 'include'
+    });
     if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
     }
     const json = await response.json();
-    return json.data; // إعادة جميع البيانات
+    return json.data;
 };
+
+// get previous request 
 export const fetchAllPreviousTransportRequests = async () => {
-    const response = await fetch(`${API_URL}/transportPreviousRequest`);
+    const response = await fetch(`${API_URL}/transportPreviousRequest`, {
+        method: 'GET',
+        credentials: 'include'
+    });
     if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
     }
     const json = await response.json();
-    return json.data; // إعادة جميع البيانات
+    return json.data; 
 };
 
 // change status
@@ -60,6 +73,7 @@ export const updateTransportRequestStatus = async (id, newStatus) => {
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify({ status: newStatus }) // إرسال الحالة الجديدة
         });
 
@@ -67,65 +81,71 @@ export const updateTransportRequestStatus = async (id, newStatus) => {
             throw new Error('Failed to update the status');
         }
 
-        return await response.json(); // استلام الرد
+        return await response.json();
     } catch (error) {
         console.error("Error updating the status:", error);
-        throw error; // إعادة الخطأ ليتسنى التعامل معه في مكان آخر
+        throw error; 
     }
 };
 
 // delete
 export const deleteTransportCurrentRequestById = async (id) => {
     const response = await fetch(`${API_URL}/transportCurrentRequest/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        credentials: 'include'
     });
 
     if (!response.ok) {
         throw new Error(`Error deleting current request: ${response.status}`);
     }
-    // إذا كانت الاستجابة 204، فلا تحاول قراءة JSON
 
     if (response.status !== 204) {
-        const data = await response.json(); // فقط حاول قراءة JSON إذا لم تكن الاستجابة 204
-        return data; // استلام الرد بعد الحذف
+        const data = await response.json();
+        return data;
     }
 
-    return { msg: 'Request deleted successfully' }; // رد مناسب عند الحذف بنجاح بدون محتوى
+    return { msg: 'Request deleted successfully' };
 };
 
 // search current by id
 export const searchTransportCurrentRequestById = async (id) => {
     try {
-        const response = await fetch(`${API_URL}/transportCurrentRequest/${id}`);
+        const response = await fetch(`${API_URL}/transportCurrentRequest/${id}`, {
+            method: 'GET',
+            credentials: 'include'
+        });
         if (!response.ok) {
             if (response.status === 404) {
-                return null; // إعادة null في حالة عدم العثور على البيانات
+                return { error: `No requests found for this id: ${id}` }; //msg for not found req error
+            } else if (response.status === 401) {
+                return { error: 'Unauthorized access. Please check your permissions.' }; //msg for unauth access error
             }
-            throw new Error(`Error: ${response.status}`);
         }
         const json = await response.json();
-        return json.data; // إعادة البيانات المستردة
+        return json.data; 
     } catch (error) {
-        console.error(`Failed to fetch current request: ${error.message}`);
-        throw error; // إرسال الخطأ لمزيد من المعالجة في حالة وجود مشكلة أخرى
+        return { error: "problem with the server" };
     }
 };
 
 // search previous by id
 export const searchTransportPreviousRequestById = async (id) => {
     try {
-        const response = await fetch(`${API_URL}/transportPreviousRequest/${id}`);
+        const response = await fetch(`${API_URL}/transportPreviousRequest/${id}`, {
+            method: 'GET',
+            credentials: 'include'
+        });
         if (!response.ok) {
             if (response.status === 404) {
-                return null; // إعادة null في حالة عدم العثور على البيانات
+                return { error: `No requests found for this id: ${id}` }; //msg for not found req error
+            } else if (response.status === 401) {
+                return { error: 'Unauthorized access. Please check your permissions.' }; //msg for unauth access error
             }
-            throw new Error(`Error: ${response.status}`);
         }
         const json = await response.json();
-        return json.data; // إعادة البيانات المستردة
+        return json.data;
     } catch (error) {
-        console.error(`Failed to fetch previous request: ${error.message}`);
-        throw error; // إرسال الخطأ لمزيد من المعالجة في حالة وجود مشكلة أخرى
+        return { error: "problem with the server" };
     }
 };
 
@@ -133,28 +153,25 @@ export const searchTransportPreviousRequestById = async (id) => {
 export const moveTransportRequestCurrentToPrevious = async (id) => {
 
     try {
-        // الخطوة الثانية: جلب الطلب من الطلبات الحالية
-        const currentRequest = await searchTransportCurrentRequestById(id);
+        const currentTransportRequest = await searchTransportCurrentRequestById(id);
 
-        // الخطوة الثالثة: إرسال الطلب إلى قائمة الطلبات السابقة
         const response = await fetch(`${API_URL}/transportPreviousRequest`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(currentRequest) // إرسال الطلب كما هو
+            body: JSON.stringify(currentTransportRequest)
         });
 
         if (!response.ok) {
-            throw new Error(`Error moving request to previous: ${response.status}`);
+            return { error: `Error moving request to previous` };
         }
 
-        // الخطوة الرابعة: حذف الطلب من قائمة الطلبات الحالية (اختياري إذا كان نقل وليس نسخ)
         await deleteTransportCurrentRequestById(id);
-
-        return await response.json(); // إرجاع الرد
+        
+        return await response.json();
     } catch (error) {
-        console.error("Error moving request to previous:", error);
-        throw error; // إعادة الخطأ ليتسنى التعامل معه في مكان آخر
+        return { error: `Error moving request to previous` };
     }
 };

@@ -112,7 +112,7 @@ const EditAccount = () => {
 
   return (
     <div className="edit-account">
-      <h1>Edit Account</h1>
+      <h1 className="edit-account-title">Edit Account</h1>
       <div className="account-container">
         <div className="account-picture">
           <img src={logo} alt="Avatar" className="account-avatar" />

@@ -27,7 +27,7 @@ function PreviousTransportRequests() {
     const searchQuery = e.target.value.trim().toLowerCase();
     setQuery(searchQuery);
 
-    const validShortId = /^m?[0-9a-z]{8}$/;
+    const validShortId = /^t?[0-9a-z]{8}$/;
     let foundResult = false;
 
     //check if it is an id

@@ -1,25 +1,34 @@
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
-import AssignTransporter from '../../AssignTransporter/AssignTransporter';
-import MessageDialog from '../../Dialog/MessageDialog';
-import TrackingDialog from '../../Dialog/TrackingDialog';
-import ConfirmationDialog from '../../Dialog/ConfirmationDialog';
-import { InfoCircleOutlined } from "@ant-design/icons";
-import { notification } from "antd";
-import { updateRawMaterialRequestStatus, moveCurrentToPrevious } from '../../../api/rawMaterialRequestAPI';
-import { MessageOutlined } from '@ant-design/icons';
-import { DataGrid } from '@mui/x-data-grid';
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import moment from "moment";
+import AssignTransporter from "../../AssignTransporter/AssignTransporter";
+import MessageDialog from "../../Dialog/MessageDialog";
+import TrackingDialog from "../../Dialog/TrackingDialog";
+import ConfirmationDialog from "../../Dialog/ConfirmationDialog";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  MessageOutlined,
+} from "@ant-design/icons";
+import { Modal } from "antd";
+import {
+  updateRawMaterialRequestStatus,
+  moveCurrentToPrevious,
+} from "../../../api/rawMaterialRequestAPI";
+import { DataGrid } from "@mui/x-data-grid";
 import "./RequestsTable.css";
 
 // The RequestsTable component receives and displays a list of data such as previous and current requests.
 function RequestsTable({ data }) {
-
   //Prepare the state for each request individually.
-  const [requests, setRequests] = useState(data.map(request => ({
-    ...request,//A new object is created containing all the properties in the request.
-    statusClass: `status-${request.status}`,//Add a new property to the object, statusClass to style the drop-down list status.
-  })));
+  const [requests, setRequests] = useState(
+    data.map((request) => ({
+      ...request, //A new object is created containing all the properties in the request.
+      statusClass: `ManageRawMaterial-status-${request.status}`, //Add a new property to the object, statusClass to style the drop-down list status.
+      receiverId: request.manufacturerId,
+      receiverType: request.receiverType || "manufacturer",
+    }))
+  );
 
   // Unified state to manage all dialogs
   const [dialogState, setDialogState] = useState({
@@ -29,6 +38,9 @@ function RequestsTable({ data }) {
     confirmationDialog: false,
   });
   const [selectedRequestId, setSelectedRequestId] = useState(null);
+  const [selectedArrivalAddress, setSelectedArrivalAddress] = useState(null);
+  const [selectedReceiverId, setSelectedReceiverId] = useState(null);
+  const [selectedReceiverType, setSelectedReceiverType] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
 
   useEffect(() => {
@@ -36,44 +48,88 @@ function RequestsTable({ data }) {
   }, [data]);
 
   // Helper function to toggle dialog states (open or close)
-  const toggleDialog = (dialogName, value, requestId = null, status = "") => {
-    setDialogState(prev => ({ ...prev, [dialogName]: value }));
+  const toggleDialog = (
+    dialogName,
+    value,
+    requestId = null,
+    status = "",
+    receiverId = null,
+    receiverType = ""
+  ) => {
+    setDialogState((prev) => ({ ...prev, [dialogName]: value }));
     if (requestId) setSelectedRequestId(requestId);
     if (status) setSelectedStatus(status);
+    if (receiverId) setSelectedReceiverId(receiverId);
+    if (receiverType) setSelectedReceiverType(receiverType);
   };
 
   // Unified method to update request status
   const updateRequestStatus = async (id, newStatus) => {
     try {
       //update in DB, get the request info after update
-      const updatedRequest = await updateRawMaterialRequestStatus(id, newStatus);
+      const updatedRequest = await updateRawMaterialRequestStatus(
+        id,
+        newStatus
+      );
 
       if (!updatedRequest || updatedRequest.error) {
         throw new Error("Failed to update status in the backend");
       }
       //update in front-end
-      setRequests(prevRequests =>
-        prevRequests.map(request =>// Check each request in the list; update if shortId matches, else keep unchanged.
-          request.shortId === id//Check if the shortId of the request matches the ID we want to update.
-            ? { ...request, status: updatedRequest.data.status, statusClass: `status-${updatedRequest.data.status}` }
-            : request//Returns the request as is if the condition is false.
+      setRequests((prevRequests) =>
+        prevRequests.map(
+          (
+            request // Check each request in the list; update if shortId matches, else keep unchanged.
+          ) =>
+            request.shortId === id //Check if the shortId of the request matches the ID we want to update.
+              ? {
+                  ...request,
+                  status: updatedRequest.data.status,
+                  statusClass: `ManageRawMaterial-status-${updatedRequest.data.status}`,
+                }
+              : request //Returns the request as is if the condition is false.
         )
       );
     } catch (error) {
-      notification.error({
-        message: "Error",
-        description: "Failed to update status. Please contact support.",
-        placement: "top",
-        icon: <InfoCircleOutlined style={{ color: "#f4d53f" }} />,
+      Modal.error({
+        title: "Error",
+        content: "Failed to update status. Please contact support.",
+        okButtonProps: {
+          className: "confirm-buttonn",
+        },
       });
     }
   };
 
   // Handle status change from drop-down list (open dialog or update directly)
   const handleStatusChange = (id, newStatus) => {
+    const request = requests.find((req) => req.shortId === id);
+    const arrivalAddress = request ? request.arrivalAddress : null;
+    const receiverId = request ? request.manufacturerId : null;
+    const receiverType = request
+      ? request.receiverType || "manufacturer"
+      : "manufacturer";
+
     switch (newStatus) {
       case "accepted":
-        toggleDialog("assignTransporterDialog", true, id);
+        if (arrivalAddress && receiverId && receiverType) {
+          toggleDialog(
+            "assignTransporterDialog",
+            true,
+            id,
+            arrivalAddress,
+            receiverId,
+            receiverType
+          );
+          setSelectedArrivalAddress(arrivalAddress);
+          setSelectedReceiverId(receiverId);
+          setSelectedReceiverType(receiverType);
+        } else {
+          console.error(
+            "Arrival address, receiverId, or receiverType is null for request ID:",
+            id
+          );
+        }
         break;
       case "rejected":
       case "delivered":
@@ -86,12 +142,17 @@ function RequestsTable({ data }) {
 
   // Handle confirmation for delete or reject, called after clicking confirm in the dialog "onConfirm()"
   const handleConfirmAction = async () => {
-    const previousStatus = requests.find(request => request.shortId === selectedRequestId)?.status;
+    const previousStatus = requests.find(
+      (request) => request.shortId === selectedRequestId
+    )?.status;
     let errorMoveCurrentToPrevious = false;
     let errorUpdateStatus = false;
     try {
       //update state in back-end
-      const statusUpdateResult = await updateRequestStatus(selectedRequestId, selectedStatus);
+      const statusUpdateResult = await updateRequestStatus(
+        selectedRequestId,
+        selectedStatus
+      );
       if (!statusUpdateResult || statusUpdateResult.error) {
         errorUpdateStatus = true;
         throw new Error("Status update failed");
@@ -104,59 +165,69 @@ function RequestsTable({ data }) {
       }
 
       //remove state in front-end
-      setRequests(prevRequests =>
-        prevRequests.filter(request => request.shortId !== selectedRequestId)
+      setRequests((prevRequests) =>
+        prevRequests.filter((request) => request.shortId !== selectedRequestId)
       );
-
     } catch (error) {
       if (errorUpdateStatus) {
         // Restore the original state of the request in the back-end
         await updateRequestStatus(selectedRequestId, previousStatus);
 
         // Restore the original state of the request in the front-end
-        setRequests(prevRequests =>
-          prevRequests.map(request =>
+        setRequests((prevRequests) =>
+          prevRequests.map((request) =>
             request.shortId === selectedRequestId
-              ? { ...request, status: previousStatus, statusClass: `status-${previousStatus}` }
+              ? {
+                  ...request,
+                  status: previousStatus,
+                  statusClass: `ManageRawMaterial-status-${previousStatus}`,
+                }
               : request
           )
         );
-        notification.error({
-          message: "Error",
-          description: "Failed to move request to previous. Please contact support.",
-          placement: "top",
-          icon: <InfoCircleOutlined style={{ color: "#f4d53f" }} />,
+        Modal.error({
+          title: "Error",
+          content:
+            "Failed to move request to previous. Please contact support.",
+          okButtonProps: {
+            className: "confirm-buttonn",
+          },
         });
       }
 
       if (errorMoveCurrentToPrevious) {
-        // Restore the original state of the request in the back-end 
+        // Restore the original state of the request in the back-end
         await updateRequestStatus(selectedRequestId, previousStatus);
         // Restore the original state of the request in the front-end
-        setRequests(prevRequests =>
-          prevRequests.map(request =>
+        setRequests((prevRequests) =>
+          prevRequests.map((request) =>
             request.shortId === selectedRequestId
-              ? { ...request, status: previousStatus, statusClass: `status-${previousStatus}` }
+              ? {
+                  ...request,
+                  status: previousStatus,
+                  statusClass: `ManageRawMaterial-status-${previousStatus}`,
+                }
               : request
           )
         );
-        notification.error({
-          message: "Error",
-          description: "Failed to move request to previous. Please contact support.",
-          placement: "top",
-          icon: <InfoCircleOutlined style={{ color: "#f4d53f" }} />,
+        Modal.error({
+          title: "Error",
+          content:
+            "Failed to move request to previous. Please contact support.",
+          okButtonProps: {
+            className: "confirm-buttonn",
+          },
         });
       }
-
     } finally {
-      // set state of dialog to false "close" 
+      // set state of dialog to false "close"
       toggleDialog("confirmationDialog", false);
     }
   };
 
   // Handle "AssignTransporter" dialog close and updating request if necessary
   const handleDialogClose = async (wasRequestSent) => {
-    // set state of dialog to false "close" 
+    // set state of dialog to false "close"
     toggleDialog("assignTransporterDialog", false);
     //If the transport request is sent successfully, the status updates to "accepted".
     if (wasRequestSent) {
@@ -166,23 +237,52 @@ function RequestsTable({ data }) {
 
   //If there are no requests in DB, the message is displayed.
   if (!requests.length) {
-    return <div className='ManageRawMaterial-background-message'>No results found</div>;
+    return (
+      <div className="ManageRawMaterial-background-message">
+        No results found
+      </div>
+    );
   }
 
   // Define columns for the DataGrid
   const columns = [
-    { field: 'shortId', headerName: 'ID', width: 120, headerAlign: 'left', renderCell: (params) => `#${params.value}` },
-    { field: 'manufacturerName', headerName: 'Manufacturer Name', width: 150, headerAlign: 'left' },
     {
-      field: 'createdAt', headerName: 'Request Date', width: 100, headerAlign: 'left',
-      renderCell: (params) => moment(params.row.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+      field: "shortId",
+      headerName: "ID",
+      width: 120,
+      headerAlign: "left",
+      renderCell: (params) => `#${params.value}`,
     },
     {
-      field: 'supplyingRawMaterials', headerName: 'Supplying Items', width: 140, headerAlign: 'left',
+      field: "manufacturerName",
+      headerName: "Manufacturer Name",
+      width: 150,
+      headerAlign: "left",
+    },
+    {
+      field: "createdAt",
+      headerName: "Request Date",
+      width: 100,
+      headerAlign: "left",
+      renderCell: (params) =>
+        moment(params.row.createdAt).format("YYYY-MM-DD HH:mm:ss"),
+    },
+    {
+      field: "supplyingRawMaterials",
+      headerName: "Supplying Items",
+      width: 140,
+      headerAlign: "left",
       renderCell: (params) => (
         <div className="ManageRawMaterial-cell-content">
           {params.row.supplyingRawMaterials.map((item, index) => (
-            <div key={item.rawMaterial_id} className={`ManageRawMaterial-supplying-item ${index !== params.row.supplyingRawMaterials.length - 1 ? 'item-with-border' : ''}`}>
+            <div
+              key={item.rawMaterial_id}
+              className={`ManageRawMaterial-supplying-item ${
+                index !== params.row.supplyingRawMaterials.length - 1
+                  ? "item-with-border"
+                  : ""
+              }`}
+            >
               {item.rawMaterial_name}
             </div>
           ))}
@@ -190,11 +290,18 @@ function RequestsTable({ data }) {
       ),
     },
     {
-      field: 'quantity', headerName: 'Quantity', type: 'number', width: 80, headerAlign: 'left',
+      field: "quantity",
+      headerName: "Quantity",
+      type: "number",
+      width: 80,
+      headerAlign: "left",
       renderCell: (params) => (
         <div className="ManageRawMaterial-cell-content">
           {params.row.supplyingRawMaterials.map((item, index) => (
-            <div key={item.rawMaterial_id} className="ManageRawMaterial-supplying-item">
+            <div
+              key={item.rawMaterial_id}
+              className="ManageRawMaterial-supplying-item"
+            >
               {item.quantity} {item.unit}
             </div>
           ))}
@@ -202,20 +309,25 @@ function RequestsTable({ data }) {
       ),
     },
     {
-      field: 'options',
-      headerName: 'Options',
+      field: "options",
+      headerName: "Options",
       width: 150,
-      headerAlign: 'left',
+      headerAlign: "left",
       renderCell: (params) => (
         <div className="ManageRawMaterial-cell-content">
           {params.row.supplyingRawMaterials.map((item, index) => (
-            <div key={`${item.rawMaterial_id}-${index}`} className="ManageRawMaterial-supplying-item">
+            <div
+              key={`${item.rawMaterial_id}-${index}`}
+              className="ManageRawMaterial-supplying-item"
+            >
               {item.options && item.options.length > 0 ? (
                 // If options exist, display them
                 item.options.map((option, optionIndex) => (
                   <span key={`${option.optionType}-${optionIndex}`}>
-                    <strong>{option.optionType}:</strong> {option.values.join(", ")} {/* Format name and values */}
-                    {index < item.options.length - 1 && ", "} {/* Add a comma between options */}
+                    <strong>{option.optionType}:</strong>{" "}
+                    {option.values.join(", ")} {/* Format name and values */}
+                    {index < item.options.length - 1 && ", "}{" "}
+                    {/* Add a comma between options */}
                   </span>
                 ))
               ) : (
@@ -228,28 +340,46 @@ function RequestsTable({ data }) {
       ),
     },
     {
-      field: 'total_price', headerName: 'Total Price', type: 'number', width: 70, headerAlign: 'left',
+      field: "total_price",
+      headerName: "Total Price",
+      type: "number",
+      width: 70,
+      headerAlign: "left",
       renderCell: (params) => {
         const price = params.row.total_price;
         return (
           <div className="ManageRawMaterial-cell-content">
-            {price !== undefined ? `${price} SAR` : 'Price not available'}
+            {price !== undefined ? `${price} SAR` : "Price not available"}
           </div>
         );
-      }
+      },
     },
     {
-      field: 'status', headerName: 'Status', width: 130, headerAlign: 'left',
+      field: "status",
+      headerName: "Status",
+      width: 130,
+      headerAlign: "left",
       renderCell: (params) => {
-        const statusClass = `status-${params.row.status}`;
-        if (params.row.status === 'rejected' || params.row.status === 'delivered') {
-          return <div className={`ManageRawMaterial-status-text ${statusClass}`}>{params.row.status}</div>;
+        const statusClass = `ManageRawMaterial-status-${params.row.status}`;
+        if (
+          params.row.status === "rejected" ||
+          params.row.status === "delivered"
+        ) {
+          return (
+            <div
+              className={`ManageRawMaterial-status-text-no-drop-${params.row.status}`}
+            >
+              {params.row.status}
+            </div>
+          );
         }
         return (
           <select
             value={params.row.status}
             className={`ManageRawMaterial-status-select ${statusClass}`}
-            onChange={(e) => handleStatusChange(params.row.shortId, e.target.value)}
+            onChange={(e) =>
+              handleStatusChange(params.row.shortId, e.target.value)
+            }
           >
             <option value="pending">Pending</option>
             <option value="accepted">Accepted</option>
@@ -261,63 +391,119 @@ function RequestsTable({ data }) {
       },
     },
     {
-      field: 'arrivalAddress', headerName: 'Arrival Address', width: 110, headerAlign: 'left',
+      field: "arrivalAddress",
+      headerName: "Arrival Address",
+      width: 110,
+      headerAlign: "left",
       renderCell: (params) => {
         const address = params.row.arrivalAddress;
         return (
           <div className="ManageRawMaterial-cell-content">
-            {address ? `${address.street}, ${address.neighborhood}, ${address.city}, ${address.postal_code}, ${address.country}` : 'No Address'}
+            {address
+              ? `${address.street}, ${address.neighborhood}, ${address.city}, ${address.postal_code}, ${address.country}`
+              : "No Address"}
           </div>
         );
-      }
+      },
     },
     {
-      field: 'action', headerName: 'Action', width: 140, headerAlign: 'left',
+      field: "action",
+      headerName: "Action",
+      width: 140,
+      headerAlign: "left",
       renderCell: (params) => (
         <div className="ManageRawMaterial-action-buttons">
-          <MessageOutlined className='ManageRawMaterial-table-icon message-icon' onClick={() => toggleDialog("messageDialog", true, params.row.shortId)} />
-          <button className='ManageRawMaterial-tracking-icon' onClick={() => toggleDialog("trackingDialog", true, params.row.shortId, params.row.status)}></button>
+          <MessageOutlined
+            className="ManageRawMaterial-table-icon message-icon"
+            onClick={() =>
+              toggleDialog("messageDialog", true, params.row.shortId)
+            }
+          />
+          <button
+            className="ManageRawMaterial-tracking-icon"
+            onClick={() =>
+              toggleDialog(
+                "trackingDialog",
+                true,
+                params.row.shortId,
+                params.row.status
+              )
+            }
+          ></button>
         </div>
       ),
     },
   ];
 
   return (
-    <div className='ManageRawMaterial'>
+    <div className="ManageRawMaterial">
       <DataGrid
         rows={requests}
         disableRowSelectionOnClick
-        getRowHeight={() => 'auto'}
+        getRowHeight={() => "auto"}
         columns={columns}
         getRowId={(row) => row.shortId}
         autoHeight
-        initialState={{ pagination: { paginationModel: { page: 0, pageSize: 10 } } }}
+        initialState={{
+          pagination: { paginationModel: { page: 0, pageSize: 10 } },
+        }}
         pageSizeOptions={[5, 10]}
         sx={{
-          '& .MuiDataGrid-cell': { textAlign: 'left' },
-          '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': { py: '8px' },
-          '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '10px' },
-          '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': { py: '22px' },
-          '& .css-1qb993p-MuiDataGrid-columnHeaderTitle': {
-            whiteSpace: 'normal',
-            lineHeight: '1.2',
-            overflow: 'hidden',
-            textOverflow: 'clip',
-            wordBreak: 'keep-all',
-            overflowWrap: 'normal',
-            wordWrap: 'normal',
-
+          "& .MuiDataGrid-cell": { textAlign: "left" },
+          "&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell": { py: "8px" },
+          "&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell": {
+            py: "10px",
+          },
+          "&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell": {
+            py: "22px",
+          },
+          "& .css-1qb993p-MuiDataGrid-columnHeaderTitle": {
+            whiteSpace: "normal",
+            lineHeight: "1.2",
+            overflow: "hidden",
+            textOverflow: "clip",
+            wordBreak: "keep-all",
+            overflowWrap: "normal",
+            wordWrap: "normal",
           },
         }}
       />
       {dialogState.confirmationDialog && (
         <ConfirmationDialog
-          title={`Confirm ${selectedStatus === "rejected" ? "Rejection" : "Delivery"}`}
-          message={`Are you sure you want to ${selectedStatus === "rejected" ? "reject" : "mark as delivered"} this request?`}
+          title={
+            <>
+              {selectedStatus === "rejected" ? (
+                <CloseCircleOutlined
+                  style={{
+                    color: "red",
+                    marginRight: 8,
+                    fontSize: "35px",
+                    position: "relative",
+                    top: "6px",
+                  }}
+                />
+              ) : (
+                <CheckCircleOutlined
+                  style={{
+                    color: "green",
+                    marginRight: 8,
+                    fontSize: "35px",
+                    position: "relative",
+                    top: "6px",
+                  }}
+                />
+              )}
+              {`Confirm ${
+                selectedStatus === "rejected" ? "Rejection" : "Delivery"
+              }`}
+            </>
+          }
+          message={`Are you sure you want to ${
+            selectedStatus === "rejected" ? "reject" : "mark as delivered"
+          } this request?`}
           onConfirm={handleConfirmAction}
           onCancel={() => toggleDialog("confirmationDialog", false)}
           stepType={selectedStatus === "viewOrder" ? "viewOrder" : "default"}
-
         />
       )}
       {dialogState.assignTransporterDialog && (
@@ -325,6 +511,9 @@ function RequestsTable({ data }) {
           requestId={selectedRequestId}
           onClose={() => handleDialogClose(false)}
           onRequestSent={() => handleDialogClose(true)}
+          arrivalAddress={selectedArrivalAddress}
+          receiverId={selectedReceiverId}
+          receiverType={selectedReceiverType}
         />
       )}
       {dialogState.messageDialog && (
@@ -345,7 +534,7 @@ function RequestsTable({ data }) {
 }
 
 RequestsTable.propTypes = {
-  data: PropTypes.array.isRequired,// Ensures that Prop 'data' is an array and is required to be provided.
+  data: PropTypes.array.isRequired, // Ensures that Prop 'data' is an array and is required to be provided.
 };
 
 export default RequestsTable;

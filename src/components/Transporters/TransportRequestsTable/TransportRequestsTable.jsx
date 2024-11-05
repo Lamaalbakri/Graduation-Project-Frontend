@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import ConfirmationDialog from "../../Dialog/ConfirmationDialog";
+import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import {
   updateTransportRequestStatus,
   moveTransportRequestCurrentToPrevious,
@@ -13,7 +14,7 @@ function TransportRequestsTable({ data }) {
   const [requests, setRequests] = useState(
     data.map((request) => ({
       ...request,
-      statusClass: `status-${request.status}`,
+      statusClass: `TransportRequestsTable-status-${request.status}`,
     }))
   );
 
@@ -41,16 +42,24 @@ function TransportRequestsTable({ data }) {
         id,
         newStatus
       );
+
+      if (!updatedTransportRequest || updatedTransportRequest.error) {
+        throw new Error("Failed to update status in the backend");
+      }
+
       //update in front-end
       setRequests((prevRequests) =>
-        prevRequests.map((request) =>
-          request.shortId === id
-            ? {
-                ...request,
-                status: updatedTransportRequest.data.status,
-                statusClass: `status-${newStatus}`,
-              }
-            : request
+        prevRequests.map(
+          (
+            request // Check each request in the list; update if shortId matches, else keep unchanged.
+          ) =>
+            request.shortId === id
+              ? {
+                  ...request,
+                  status: updatedTransportRequest.data.status,
+                  statusClass: `TransportRequestsTable-status-${updatedTransportRequest.data.status}`,
+                }
+              : request
         )
       );
     } catch (error) {
@@ -84,6 +93,7 @@ function TransportRequestsTable({ data }) {
     }
   };
 
+  // if there are no requests in DB, the message is displayed.
   if (!requests.length) {
     return (
       <div className="TransportRequestsTable-background-message">
@@ -95,58 +105,84 @@ function TransportRequestsTable({ data }) {
   const columns = [
     {
       field: "shortId",
-      headerName: "ID",
+      headerName: "Transport Request ID",
+      width: 110,
+      headerAlign: "left",
+      renderCell: (params) => `#${params.value}`,
+    },
+    {
+      field: "request_id",
+      headerName: "Request ID",
       width: 120,
       headerAlign: "left",
       renderCell: (params) => `#${params.value}`,
     },
     {
-      field: "transportServiceName",
+      field: "temperature",
       headerName: "Transport Service",
-      width: 170,
+      width: 110,
       headerAlign: "left",
     },
     {
-      field: "weightCategory",
+      field: "weight",
       headerName: "Weight Category",
-      width: 150,
+      width: 110,
       headerAlign: "left",
     },
     {
-      field: "distanceCategory",
+      field: "distance",
       headerName: "Distance Category",
-      width: 170,
+      width: 140,
       headerAlign: "left",
     },
     {
-      field: "price",
-      headerName: "Price",
+      field: "totalPrice",
+      headerName: "Total Price",
       type: "number",
-      width: 70,
+      width: 75,
       headerAlign: "left",
+      renderCell: (params) => {
+        const price = params.row.totalPrice;
+        return (
+          <div className="TransportRequestsTable-cell-content">
+            {price !== undefined ? `${price} SAR` : "Price not available"}
+          </div>
+        );
+      },
     },
     {
-      field: "deliveryDateRange",
+      field: "estimated_delivery_date",
       headerName: "Delivery Date Range",
-      width: 170,
+      width: 130,
       headerAlign: "left",
-      renderCell: (params) =>
-        moment(params.row.deliveryDateRange).format("YYYY-MM-DD"),
+      renderCell: (params) => {
+        const dates = Array.isArray(params.row.estimated_delivery_date)
+          ? params.row.estimated_delivery_date
+          : [];
+        const formattedDates = dates
+          .map((date) => moment(date).format("YYYY-MM-DD"))
+          .join(" to ");
+        return (
+          <div className="TransportRequestsTable-cell-content">
+            {formattedDates}
+          </div>
+        );
+      },
     },
     {
       field: "status",
       headerName: "Status",
-      width: 130,
+      width: 135,
       headerAlign: "left",
       renderCell: (params) => {
-        const statusClass = `status-${params.row.status}`;
+        const statusClass = `TransportRequestsTable-status-${params.row.status}`;
         if (
           params.row.status === "rejected" ||
           params.row.status === "delivered"
         ) {
           return (
             <div
-              className={`TransportRequestsTable-status-text ${statusClass}`}
+              className={`TransportRequestsTable-status-text-no-drop-${params.row.status}`}
             >
               {params.row.status}
             </div>
@@ -161,7 +197,7 @@ function TransportRequestsTable({ data }) {
             }
           >
             <option value="pending">Pending</option>
-            <option value="inProgress">In Progress</option>
+            <option value="accepted">Accepted</option>
             <option value="delivered">Delivered</option>
             <option value="rejected">Rejected</option>
           </select>
@@ -169,16 +205,36 @@ function TransportRequestsTable({ data }) {
       },
     },
     {
-      field: "arrivalCity",
-      headerName: "Arrival City",
-      width: 110,
+      field: "arrivalAddress",
+      headerName: "Arrival Address",
+      width: 115,
       headerAlign: "left",
+      renderCell: (params) => {
+        const address = params.row.arrivalAddress;
+        return (
+          <div className="TransportRequestsTable-cell-content">
+            {address
+              ? `${address.street}, ${address.neighborhood}, ${address.city}, ${address.postal_code}, ${address.country}`
+              : "No Address"}
+          </div>
+        );
+      },
     },
     {
-      field: "departureCity",
-      headerName: "Departure City",
-      width: 130,
+      field: "departureAddress",
+      headerName: "Departure Address",
+      width: 115,
       headerAlign: "left",
+      renderCell: (params) => {
+        const address = params.row.departureAddress;
+        return (
+          <div className="TransportRequestsTable-cell-content">
+            {address
+              ? `${address.street}, ${address.neighborhood}, ${address.city}, ${address.postal_code}, ${address.country}`
+              : "No Address"}
+          </div>
+        );
+      },
     },
   ];
 
@@ -204,13 +260,47 @@ function TransportRequestsTable({ data }) {
           "&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell": {
             py: "22px",
           },
+          "& .css-1qb993p-MuiDataGrid-columnHeaderTitle": {
+            whiteSpace: "normal",
+            lineHeight: "1.2",
+            overflow: "hidden",
+            textOverflow: "clip",
+            wordBreak: "keep-all",
+            overflowWrap: "normal",
+            wordWrap: "normal",
+          },
         }}
       />
       {dialogState.confirmationDialog && (
         <ConfirmationDialog
-          title={`Confirm ${
-            selectedStatus === "rejected" ? "Rejection" : "Delivery"
-          }`}
+          title={
+            <>
+              {selectedStatus === "rejected" ? (
+                <CloseCircleOutlined
+                  style={{
+                    color: "red",
+                    marginRight: 8,
+                    fontSize: "35px",
+                    position: "relative",
+                    top: "6px",
+                  }}
+                />
+              ) : (
+                <CheckCircleOutlined
+                  style={{
+                    color: "green",
+                    marginRight: 8,
+                    fontSize: "35px",
+                    position: "relative",
+                    top: "6px",
+                  }}
+                />
+              )}
+              {`Confirm ${
+                selectedStatus === "rejected" ? "Rejection" : "Delivery"
+              }`}
+            </>
+          }
           message={`Are you sure you want to ${
             selectedStatus === "rejected" ? "reject" : "mark as delivered"
           } this transport request?`}

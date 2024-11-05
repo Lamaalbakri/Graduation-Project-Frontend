@@ -52,13 +52,10 @@
     color: #7e0901;
 }
 
-.ManageRawMaterial-status-text {
+.ManageRawMaterial-status-text-no-drop-rejected {
     padding: 5px;
     border-radius: 8px;
     display: inline-block;
-}
-
-.ManageRawMaterial-status-text.status-rejected {
     background-color: #f443366d;
     color: #7e0901;
     padding: 5px;
@@ -68,7 +65,10 @@
     text-align: center;
 }
 
-.ManageRawMaterial-status-text.status-delivered {
+.ManageRawMaterial-status-text-no-drop-delivered {
+    padding: 5px;
+    border-radius: 8px;
+    display: inline-block;
     background-color: #4caf4f71;
     color: #023404;
     padding: 5px;

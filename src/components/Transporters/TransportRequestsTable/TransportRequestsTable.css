@@ -23,9 +23,9 @@
     background-color: #ff990059;
     color: #5e3902;
 }
-.TransportRequestsTable-status-inProgress {
-    background-color: #7a4caf71;
-    color: #400188;
+.TransportRequestsTable-status-accepted {
+    background-color: #0d62a761;
+    color: #03477f;
 }
 .TransportRequestsTable-status-delivered {
     background-color: #4caf4f71;
@@ -35,12 +35,10 @@
     background-color: #f443366d;
     color: #7e0901;
 }
-.TransportRequestsTable-status-text {
+.TransportRequestsTable-status-text-no-drop-rejected {
     padding: 5px;
     border-radius: 8px;
     display: inline-block;
-}
-.TransportRequestsTable-status-text.status-rejected {
     background-color: #f443366d;
     color: #7e0901;
     padding: 5px;
@@ -49,7 +47,10 @@
     width: 93%;
     text-align: center;
 }
-.TransportRequestsTable-status-text.status-delivered {
+.TransportRequestsTable-status-text-no-drop-delivered {
+    padding: 5px;
+    border-radius: 8px;
+    display: inline-block;
     background-color: #4caf4f71;
     color: #023404;
     padding: 5px;
@@ -107,6 +108,10 @@
 }
 .TransportRequestsTable-search-container input::placeholder {
     color: #999;
+}
+.TransportRequestsTable-cell-content {
+    display: flex; 
+    flex-direction: column; 
 }
 .TransportRequestsTable-background-message {
     color: #999999bd;

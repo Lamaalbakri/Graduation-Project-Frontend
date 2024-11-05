@@ -25,7 +25,7 @@ function SearchTransportRequests() {
 
     setLoading(true); // Start loading
     try {
-      const validShortId = /^m?[0-9a-z]{8}$/;
+      const validShortId = /^t?[0-9a-z]{8}$/;
       let foundResult = false;
       //fech all data to searsh
       const [currentRequests, previousRequests] = await Promise.all([
@@ -54,24 +54,6 @@ function SearchTransportRequests() {
       if (!foundResult) {
         setFilteredRequests([]);
       }
-
-      /*if (!foundResult) {
-        // Filter both collections based on the query
-        const filtered = [
-          ...currentRequests.filter((request) =>
-            request.manufacturerName
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase())
-          ),
-          ...previousRequests.filter((request) =>
-            request.manufacturerName
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase())
-          ),
-        ];
-
-        setFilteredRequests(filtered);
-      }*/
     } catch (error) {
       //console.error("Error fetching requests:", error);
       setFilteredRequests([]); // Handle errors by resetting the filtered requests
