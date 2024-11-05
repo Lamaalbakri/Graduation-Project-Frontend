@@ -30,12 +30,7 @@ export const fetchAllCurrentRequests = async () => {
 export const uploadImage = async (image) => {
   const uploadFormData = new FormData();
   uploadFormData.append("image", image);
-  const response = await axios.post(`${API_URL}/manageRawMaterial/image-uploads`, uploadFormData, {
-    withCredentials: true,
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  });
+  const response = await axios.post(`${API_URL}/manageRawMaterial/image-uploads`, uploadFormData);
   if (!response.data.success) {
     console.error(error);
   }
