@@ -1,12 +1,42 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import Breadcrumb from "./Breadcrumb";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import CartItem from "./CartItem";
+import { fetchShoppingBasketDetails } from '../../../../api/shoppingBasket';
+
 import "./ShoppingCart.css";
 
-function ShoppingCartDetail({ userId }) {
-  const { id } = useParams();
+function ShoppingCartDetail() {
+  const navigate = useNavigate();
+  const location = useLocation(); // الحصول على الموقع
+  const { sellerId, sellerName, basketIndex, buyerId } = location.state || {}; // استخدم المتغيرات من state
+
+  const [basket, setBasket] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const getBasket = async () => {
+      try {
+        const data = await fetchShoppingBasketDetails({ sellerId, sellerName }); // استدعاء الدالة من الملف الخارجي
+        setBasket(data); // تحديث حالة السلال بالبيانات التي تم جلبها
+      } catch (err) {
+        setError("Error fetching shopping Baskets");
+      } finally {
+        setLoading(false); // التوقف عن حالة التحميل
+      }
+    };
+    getBasket();
+  }, [sellerId, sellerName]);
+
+  if (loading) {
+    return <div className='background-message'>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className='background-message'>{error}</div>;
+  }
+
 
   const handleIncrement = (item) => {
     // تزيد كمية العنصر بواحد
@@ -19,62 +49,51 @@ function ShoppingCartDetail({ userId }) {
       item.quantity -= 1;
     }
   };
-  const carts = [
-    {
-      id: 1,
-      supplier: "Grain Harvest Suppliers",
-      items: [
-        { name: "Flour(1 Liter)", quantity: 2, price: 150 },
-        { name: "Oats(1 Liter)", quantity: 3, price: 110 },
-      ],
-      total: 400,
-    },
-    {
-      id: 2,
-      supplier: "Diary Supplier Co.",
-      items: [
-        { name: "Milk Cow's", quantity: 4, price: 150 },
-        { name: "Milk Goat's", quantity: 2, price: 200 },
-      ],
-      total: 850,
-    },
-  ];
 
-  // البحث عن السلة المناسبة بناءً على الـ id
-  const cart = carts.find((c) => c.id === parseInt(id));
+  // const handleRemove = (item) => {
+  //   // setBasket((prevBasket) => ({
+  //   //   ...prevBasket,
+  //   //   items: prevBasket.items.filter((basketItem) => basketItem.item_id !== item.item_id),
+  //   // }));
+  // }
 
   return (
     <div className="shoppingCart">
       <Breadcrumb
         crumbs={[
-          { name: "Shopping Carts", path: `/shoppingCarts/${userId}` },
-          { name: `Shopping Cart ${id}`, path: `/shoppingCarts/${userId}/${id}` },
+          { name: "Shopping Carts", path: `/shoppingCarts/${basket.buyerId}` },
+          { name: `Shopping Cart ${basketIndex}`, path: `/shoppingCarts/${buyerId}/${basketIndex}` },
         ]}
       />
       <div className="detail-container">
         <div className="detail-container-title">
-          <div>Shopping Cart {id}</div>
-          <div className="supplier-name">{cart.supplier}</div>
+          <div>Shopping Cart {basketIndex}</div>
+          <div className="supplier-name">Supplier Name: {basket.sellerName}</div>
         </div>
         <div className="cart">
-          {cart.items.map((item, index) => (
-            <CartItem
-              key={index}
-              item={item}
-              quantity={item.quantity}
-              onIncrement={() => handleIncrement(item)}
-              onDecrement={() => handleDecrement(item)}
-            />
-          ))}
+          {basket?.ShoppingBasketItems?.length > 0 ? (
+            basket.ShoppingBasketItems.map((item, index) => (
+              <CartItem
+                key={item.item_id}
+                item={item}
+                quantity={item.quantity}
+                onIncrement={() => handleIncrement(item)}
+                onDecrement={() => handleDecrement(item)}
+              // onRemove={() => handleRemove(item)}
+              />
+            ))
+          ) : (
+            <div className='background-message'>No items found in the cart.</div>
+          )}
         </div>
         <div className="order-summary">
           <div className="order-summary-title">Order Summary</div>
           <div className="order-total">
             <div className="total-title">Order Total:</div>
-            <div className="total-price">930$</div>
+            <div className="total-price">{basket.total_price}</div>
           </div>
           <div className="order-summary-button">
-            <Link to={`/shoppingCarts/${userId}/${id}/complete`}>
+            <Link to={`/shoppingCarts/${buyerId}/${basketIndex}/complete`}>
               <button className="Checkout-button">CHECkOUT</button>
             </Link>
           </div>
