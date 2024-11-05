@@ -35,7 +35,7 @@ const AddRawMaterials = () => {
 
   const [imagePreview, setImagePreview] = useState(null);
   const MAX_FILE_SIZE = 1 * 1024 * 1024; // max file size to be uploaded set to 1 mb.
-  
+
   const navigate = useNavigate();
 
   // Handle file change and preview
@@ -76,7 +76,7 @@ const AddRawMaterials = () => {
     }
   };
 
-const handleMoreMaterial = () => {
+  const handleMoreMaterial = () => {
     setFormData(prev => ({
       ...prev,
       materialOption: [
@@ -120,20 +120,20 @@ const handleMoreMaterial = () => {
       if (formData.image) {
         const response = await uploadImage(formData.image);
         photoUrl = response.data.data.secure_url;
-      }      
+      }
       const updatedFormData = {
         ...formData,
         image: photoUrl
       };
       //units array can't be empty
       if (formData.units.length === 0) {
-        notification.warning({ 
+        notification.warning({
           message: 'Add Value or Unit',
-          placement: "top", 
+          placement: "top",
         });
         setLoading(false);
         return;
-      }      
+      }
       const response = await createMaterial(updatedFormData);
       if (response.data.success) {
         notification.success({
@@ -142,7 +142,7 @@ const handleMoreMaterial = () => {
           placement: "top",
         });
         console.log('response', response.data.data);
-        
+
         setFormData({
           name: '',
           quantity: 1,
@@ -167,7 +167,7 @@ const handleMoreMaterial = () => {
         message: 'Error in creating materials',
         description: 'Please try later.',
         placement: "top",
-      });      
+      });
       console.error('Error adding material:', error);
     }
     setLoading(false);
@@ -186,7 +186,7 @@ const handleMoreMaterial = () => {
           <div className="title">Add Raw Materials</div>
         </div>
 
-        <div className="container add-page"> 
+        <div className="container add-page">
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Raw Materials Name</label>
@@ -239,7 +239,7 @@ const handleMoreMaterial = () => {
               />
             </div>
 
-             {/* Material Options Section */}
+            {/* Material Options Section */}
             {formData.materialOption.map((option, index) => (
               <div key={index} className="form-group">
                 <label>
@@ -272,7 +272,7 @@ const handleMoreMaterial = () => {
               </div>
             ))}
 
-          {/* Units Section */}
+            {/* Units Section */}
             <div className="form-group">
               <label>Units</label>
               <input
@@ -292,13 +292,13 @@ const handleMoreMaterial = () => {
               <p className="form-upload-text">Image types allowed: jpeg, jpg, png</p>
               <p className="form-upload-text">Image size shouldn't exceed 1 mb</p>
               <label htmlFor="file-input">
-                <img 
-                  src={imagePreview ? imagePreview : upload_image} 
+                <img
+                  src={imagePreview ? imagePreview : upload_image}
                   alt="Raw material preview"
                   className="form-rawmaterial-thumbnail-img"
                 />
-                <input 
-                  type="file" 
+                <input
+                  type="file"
                   onChange={handleFileChange}
                   id="file-input"
                   hidden
@@ -316,7 +316,7 @@ const handleMoreMaterial = () => {
             message="Do you want to see added products on the View page?"
             onConfirm={confirmRedirect}
             onCancel={() => setIsModalOpen(false)}
-             stepType="viewRawMaterial"
+            stepType="viewRawMaterial"
           />
         )}
       </div>
