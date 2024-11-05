@@ -15,6 +15,18 @@ import axios from 'axios';
 //     return json.data; // إعادة جميع البيانات
 // };
 
+
+export const fetchAllCurrentRequests = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/manageRawMaterial/get-materials`, {
+            withCredentials: true,
+        });
+        return response.data.data; // إعادة جميع البيانات
+    } catch (error) {
+        throw new Error(`Error: ${error.response?.status}`);
+    }
+};
+
 export const uploadImage = async (image) => {
   const uploadFormData = new FormData();
   uploadFormData.append("image", image);

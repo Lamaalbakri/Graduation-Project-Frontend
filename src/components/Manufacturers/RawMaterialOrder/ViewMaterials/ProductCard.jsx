@@ -12,13 +12,13 @@ const ProductCard = ({ d }) => {
   };
 
   return (
-    <div className="productCard">
+    <div className="productCard-raw">
       <figure class="figure">
         <img src={d.image} alt="Card Preview" class="" />
       </figure>
-      <div className="details">
+      <div className="details-raw">
         <p className="grey-text">{d.slug}</p>
-        <p onClick={() => setIsModalOpen(true)} className="title">
+        <p onClick={() => setIsModalOpen(true)} className="title-raw">
           {d.name}
         </p>
         <Modal centered open={isModalOpen} onCancel={handleCancel}>
@@ -27,7 +27,7 @@ const ProductCard = ({ d }) => {
               <img src={d.image} alt="Card Preview" class="" />
             </div>
             <div className="modal-desc">
-              <p className="title">{d.name}</p>
+              <p className="title-raw">{d.name}</p>
               <div className="icon">
                 <FontAwesomeIcon icon={faStar} />
                 <FontAwesomeIcon icon={faStar} />
@@ -42,7 +42,7 @@ const ProductCard = ({ d }) => {
               </p>
 
               <div className="modal-bottom">
-                <input type="number" name="" id="" defaultValue={1} />
+                <input type="number" name="" id="" defaultValue={1} min={1} />
                 <button>
                   <FontAwesomeIcon icon={faShoppingCart} />
                   Add to Cart

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./ViewMaterials.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { fetchAllCurrentRequests } from "../../../../api/manageRawMaterialApi";
 import { Modal } from "antd";
 import ProductCard from "./ProductCard";
-import { fetchAllCurrentRequests } from "../../../../api/rawMaterialRequestAPI";
 
 
 const ViewRawMaterials = () => {
@@ -90,7 +90,7 @@ const ViewRawMaterials = () => {
   return (
     <>
       <main className="main">
-        <div className="content">
+        <div className="content-raw">
           <div className="header">
             <div className="filters" onClick={() => setIsFilterOpen(true)}>
               <FontAwesomeIcon icon={faFilter} />
@@ -110,7 +110,7 @@ const ViewRawMaterials = () => {
                 ghost: true,
               }}
             >
-              <div className="filter-modal">
+              <div className="filter-modal-raw">
                 <div>
                   <p className="filter-header">Prices</p>
                   {priceRanges.map((range) => (
@@ -150,11 +150,11 @@ const ViewRawMaterials = () => {
               </div>
             </Modal>
 
-            <div className="search">
+            <div className="search-raw">
               <FontAwesomeIcon icon={faMagnifyingGlass} />
               <input
                 type="text"
-                placeholder="Search for items..."
+                placeholder="Search by Name / ID"
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
