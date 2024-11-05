@@ -15,7 +15,7 @@
   padding: 10px 0;
   z-index: 12;
 }
-.HomePage .img {
+.HomePage .HomePage-img {
   background: url('https://t3.ftcdn.net/jpg/04/35/22/72/240_F_435227211_Ipbz8YZYB9ELUmkjaeNon4jSLclpNmUV.jpg') no-repeat;
   width: 100%;
   height: 100vh;
@@ -24,14 +24,14 @@
   background-position: center;
   position: relative;
 }
-.HomePage .img::before {
+.HomePage .HomePage-img::before {
   content: '';
   position: absolute;
   height: 100%;
   width: 100%;
   background: rgba(0, 0, 0, 0.4);
 }
-.HomePage .center {
+.HomePage .HomePage-center {
   position: absolute;
   top: 52%;
   left: 50%;
@@ -40,16 +40,16 @@
   padding: 0 20px;
   text-align: center;
 }
-.HomePage .center #title {
+.HomePage .HomePage-center #HomePage-title {
   color: #e0dddd;
   font-size: 40px;
   filter: blur(1px);
   font-weight: 600;
 }
-.HomePage .center .btns {
+.HomePage .HomePage-center .HomePage-btns {
   margin-top: 50px;
 }
-.HomePage .center .btns button {
+.HomePage .HomePage-center .HomePage-btns button {
   height: 50px;
   width: 150px;
   border-radius: 4px;
@@ -63,41 +63,41 @@
   outline: none;
   transition: all 0.3s ease;
 }
-.HomePage .center .btns button:first-child {
+.HomePage .HomePage-center .HomePage-btns button:first-child {
   color: #ebf7f0;
   background: none;
 }
-.HomePage .btns button:first-child:hover {
+.HomePage .HomePage-btns button:first-child:hover {
   background: #ebf7f0;
   color: black;
 }
-.HomePage .center .btns button:last-child {
+.HomePage .HomePage-center .HomePage-btns button:last-child {
   background: none;
   color:#ebf7f0 ;
 }
-.HomePage .btns button:last-child:hover {
+.HomePage .HomePage-btns button:last-child:hover {
   background: #ebf7f0;
   color: black;
 }
 
 /* Services Section */
-.HomePage #services {
+.HomePage #HomePage-services {
   background: linear-gradient(to right, #f8f8f8, #e8e8e8);
   padding: 60px 0;
 }
-.HomePage #services .content {
+.HomePage #HomePage-services .HomePage-content {
   max-width: 70em;
   margin: auto;
   text-align: center;
 }
-.HomePage #services h2 {
+.HomePage #HomePage-services h2 {
   font-size: 2.5em;
   margin-bottom: 40px;
   color: #1c2229;;
 }
 
 /* Service Card Styles */
-.HomePage #services .service-card {
+.HomePage #HomePage-services .HomePage-service-card {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -108,22 +108,22 @@
   position: relative;
   overflow: hidden;
 }
-.HomePage #services .service-card:hover {
+.HomePage #HomePage-services .HomePage-service-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
 }
-.HomePage #services .service-card h3 {
+.HomePage #HomePage-services .HomePage-service-card h3 {
   color: #333;
   font-size: 1.8em;
   margin-bottom: 10px;
 }
-.HomePage #services .service-card p {
+.HomePage #HomePage-services .HomePage-service-card p {
   color: #666;
   font-size: 1.2em;
   line-height: 1.6;
   text-align: center;
 }
-.HomePage #services .service-card i {
+.HomePage #HomePage-services .HomePage-service-card i {
   color: #f4d53f;
   font-size: 3em;
   margin-top: 10px;

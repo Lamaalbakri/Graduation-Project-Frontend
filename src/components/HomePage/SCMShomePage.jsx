@@ -12,14 +12,14 @@ function SCMShomePage() {
   return (
     <div className="HomePage">
       <nav>
-        <div className="menu"></div>
+        <div className="HomePage-menu"></div>
       </nav>
       <section id="home">
-        <div className="img"></div>
-        <div className="center">
+        <div className="HomePage-img"></div>
+        <div className="HomePage-center">
           <img src={image} alt="SCMS Logo" width="300" />
-          <div id="title">Supply Chain Management System</div>
-          <div className="btns">
+          <div id="HomePage-title">Supply Chain Management System</div>
+          <div className="HomePage-btns">
             <Link to="/register">
               <button>Register</button>
             </Link>
@@ -29,10 +29,10 @@ function SCMShomePage() {
           </div>
         </div>
       </section>
-      <section id="services">
-        <div className="content">
+      <section id="HomePage-services">
+        <div className="HomePage-content">
           <h2>Our Services</h2>
-          <div className="service-card">
+          <div className="HomePage-service-card">
             <i
               style={{
                 display: "inline-block",
@@ -53,7 +53,7 @@ function SCMShomePage() {
               all supply chain stakeholders.
             </p>
           </div>
-          <div className="service-card">
+          <div className="HomePage-service-card">
             <i
               style={{
                 display: "inline-block",
@@ -71,7 +71,7 @@ function SCMShomePage() {
             <h3>Inventory Management</h3>
             <p>Efficiently managing and optimizing inventory.</p>
           </div>
-          <div className="service-card">
+          <div className="HomePage-service-card">
             <i
               style={{
                 display: "inline-block",
