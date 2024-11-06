@@ -12,6 +12,7 @@ const EditAccount = () => {
   const { address } = useAddress();
   const { userData, setUserData } = useUserContext();
   const [originalAccount, setOriginalAccount] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [account, setAccount] = useState({
     id: "",
     full_name: "",
@@ -38,8 +39,10 @@ const EditAccount = () => {
         };
         setAccount(accountData);
         setOriginalAccount(accountData);
+        setIsLoading(false); // finish loading
       } catch (error) {
         console.error("Failed to fetch user data:", error);
+        setIsLoading(false); // end the loading in case of an error
       }
     };
 
@@ -111,14 +114,13 @@ const EditAccount = () => {
   };
 
   return (
-    <div className="edit-account">
-      <h1 className="edit-account-title">Edit Account</h1>
-      <div className="account-container">
-        <div className="account-picture">
-          <img src={logo} alt="Avatar" className="account-avatar" />
+    <div className="edit-account-content">
+      <h1 id="edit-account-title">Edit Account</h1>
+      <div className="edit-account-container">
+        <div className="edit-account-picture">
+          <img src={logo} alt="Avatar" className="edit-account-avatar" />
         </div>
-
-        <div className="account-details">
+        <div className="edit-account-details">
           <label>
             Name:
             <input
@@ -146,30 +148,35 @@ const EditAccount = () => {
               onChange={handleInputChange}
             />
           </label>
-          <label> Address: </label>
-          <div className="edit-adress-detail">
-            {address ? (
-              // if address exist , display it
-              <div className="edit-address-text">{`${address.country}, ${address.city}, ${address.neighborhood}, ${address.street}.`}</div>
-            ) : (
-              // if not exist  , display a message
-              <div className="edit-no-address-text">
-                <p>No address found, Click 'Edit' to add.</p>
+          {/* Address Section: Render only if userType is not 'transporter' */}
+          {!isLoading && account.userType !== "transporter" && (
+            <div>
+              <label> Address: </label>
+              <div className="edit-adress-detail">
+                {address ? (
+                  // if address exist , display it
+                  <div className="edit-address-text">{`${address.country}, ${address.city}, ${address.neighborhood}, ${address.street}.`}</div>
+                ) : (
+                  // if not exist  , display a message
+                  <div className="edit-no-address-text">
+                    <p>No address found, Click 'Edit' to add.</p>
+                  </div>
+                )}
+                <div className="edit-address-button">
+                  <button onClick={handleEditAddress}>
+                    Edit <EditOutlined />
+                  </button>
+                </div>
               </div>
-            )}
-            <div className="edit-address-button">
-              <button onClick={handleEditAddress}>
-                Edit <EditOutlined />
-              </button>
             </div>
-          </div>
+          )}
         </div>
       </div>
-      <div className="account-buttons">
-        <button className="account-cancel-button" onClick={handleCancel}>
+      <div className="edit-account-buttons">
+        <button className="edit-account-cancel-button" onClick={handleCancel}>
           Cancel
         </button>
-        <button className="account-save-button" onClick={handleSave}>
+        <button className="edit-account-save-button" onClick={handleSave}>
           Save
         </button>
       </div>
