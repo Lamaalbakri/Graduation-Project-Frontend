@@ -119,6 +119,14 @@
     border-color: #005bb5;
 }
 
+.filterActive {
+    background: #000;
+    border-radius: 10px;
+    color: white;
+    width: fit-content;
+    padding: 5px 10px;
+}
+
 /* Card container with responsive grid layout */
 .cardContainer {
     width: 100%;

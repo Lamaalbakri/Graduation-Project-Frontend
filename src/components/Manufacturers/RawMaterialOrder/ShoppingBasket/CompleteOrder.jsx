@@ -1,24 +1,47 @@
-import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
 import { EditOutlined } from "@ant-design/icons";
 import Breadcrumb from "./Breadcrumb";
-import "./ShoppingCart.css";
+import "./ShoppingBasket.css";
 import mada from "../../../images/mada-logo.png";
 import ConfirmationDialog from "../../../Dialog/ConfirmationDialog";
 import Address from "../../../Dialog/Address";
 import { useAddress } from "../../../../contexts/AddressContext";
 
-function CompleteOrder({ userId }) {
-  const { id } = useParams();
+function CompleteOrder() {
+  const { basketIndex, basketId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [stepType, setStepType] = useState("");
-  const { address } = useAddress();// استخدام context للحصول على العنوان
+  const { address, loading } = useAddress();// استخدام context للحصول على العنوان
+  // const sellerId = sessionStorage.getItem("sellerId") || location.state?.sellerId;
+  // const basketIndex = sessionStorage.getItem("basketIndex") || location.state?.basketIndex;
+  // const buyerId = sessionStorage.getItem("buyerId") || location.state?.buyerId;
+  const total_price = sessionStorage.getItem("total_price") || location.state?.total_price;
   const [dialogState, setDialogState] = useState({
     confirmationDialog: false,
     address: false,
   });
 
+  useEffect(() => {
+
+    // if (sellerId !== sessionStorage.getItem("sellerId")) {
+    //   sessionStorage.setItem("sellerId", sellerId);
+    // }
+    // if (basketIndex !== sessionStorage.getItem("basketIndex")) {
+    //   sessionStorage.setItem("basketIndex", basketIndex);
+    // }
+    // if (buyerId !== sessionStorage.getItem("buyerId")) {
+    //   sessionStorage.setItem("buyerId", buyerId);
+    // }
+    if (total_price !== sessionStorage.getItem("total_price")) {
+      sessionStorage.setItem("total_price", total_price);
+    }
+  }, [total_price]);
+
+
   // Helper function to toggle dialog states (open or close)
-  const toggleDialog = (dialogName, value, requestId = null, status = "") => {
+  const toggleDialog = (dialogName, value) => {
     setDialogState((prev) => ({ ...prev, [dialogName]: value }));
     // if (requestId) setSelectedRequestId(requestId);
     // if (status) setSelectedStatus(status);
@@ -36,9 +59,12 @@ function CompleteOrder({ userId }) {
     } else if (stepType == "viewOrder") {
 
       console.log("open view order page");
-      <Link to={`/viewOrder`} />;
+      // <Link to={`/viewOrder`} />;
+      // <Link to={`/ViewOrders`} />
+
       // set state of dialog to false "close"
       toggleDialog("confirmationDialog", false);
+      navigate(`/ViewOrders/`);
     }
   };
 
@@ -56,14 +82,15 @@ function CompleteOrder({ userId }) {
   };
 
   return (
-    <div className="shoppingCart">
+    <div className="shoppingBasket">
       <Breadcrumb
         crumbs={[
-          { name: "Shopping Carts", path: `/shoppingCarts/${userId}` },
-          { name: `Shopping Cart ${id}`, path: `/shoppingCarts/${userId}/${id}` },
+          // <Link to={`/shoppingBaskets/${buyerId}/${basketIndex}/complete`}>
+          { name: "Shopping Baskets", path: `/shoppingBaskets` },
+          { name: `Shopping Basket ${basketIndex}`, path: `/shoppingBaskets/${basketId}/${basketIndex}` },
           {
             name: "Payment Confirmation",
-            path: `/shoppingCarts/${userId}/${id}/complete`,
+            path: `/shoppingBaskets/${basketId}/${basketIndex}/complete`,
           },
         ]}
       />
@@ -71,7 +98,7 @@ function CompleteOrder({ userId }) {
         <div className="order-summary">
           <div className="order-total">
             <div className="total-title">Order Total:</div>
-            <div className="total-price">930$</div>
+            <div className="total-price">{location.state?.total_price || total_price} SAR</div>
           </div>
         </div>
         <div className="user-info">
@@ -82,11 +109,11 @@ function CompleteOrder({ userId }) {
             <div className="step-content">
               <div className="step-title">Receiving Address</div>
               <div className="adress-detail">
-                {address ? (
-                  // if address exist , display it
+                {loading ? (
+                  <p>Loading address...</p>
+                ) : address ? (
                   <div className="address">{`${address.country}, ${address.city}, ${address.neighborhood}, ${address.street}.`}</div>
                 ) : (
-                  // if not exist  , display a message
                   <div className="no-address">
                     <p>No address found, Click 'Edit' to add.</p>
                   </div>
@@ -107,7 +134,7 @@ function CompleteOrder({ userId }) {
               <div className="step-title">Payment</div>
               <div className="step-detail">
                 <div className="pay-method">
-                  <input type="radio" checked />
+                  <input type="radio" checked onChange={() => { }} />
                   <img src={mada}></img>
                 </div>
                 <div className="card-form">

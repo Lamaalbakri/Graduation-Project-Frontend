@@ -1,4 +1,4 @@
-.shoppingCart{
+.shoppingBasket{
     font-family: "Poppins", sans-serif;
     color: #1c2229;
     padding: 20px;
@@ -18,7 +18,7 @@
     text-align: center;
     margin: 250px;
 }
-.cart-container {
+.Basket-container {
     border: 0.5px solid #7575755b;
     border-radius: 7px;
     margin: 10px 50px;
@@ -29,13 +29,13 @@
     flex-direction: column; 
 }
 
-.cart-content {
+.Basket-content {
     display: flex; /* استخدم flex */
     flex-direction: column; /* اجعل المحتوى عمودياً */
     align-items: flex-start; /* محاذاة المحتوى إلى اليسار */
 }
 
-.cart-contnt-info p {
+.Basket-contnt-info p {
     margin: 0 0 0 70px; /* تعديل المسافة لتناسب التصميم */
     padding: 3px;
 }
@@ -46,7 +46,7 @@
     display: flex; 
     align-items: center; 
 }
-.cart-title p{
+.Basket-title p{
     font-size: 20px;
     font-weight: bold;
 }
@@ -62,7 +62,7 @@
     border-radius: 50%;
 }
 
-.cart-contnt-info p{
+.Basket-contnt-info p{
     font-size: 14px;
 }
 
@@ -137,15 +137,15 @@ button:hover {
     font-weight:normal ;
     margin-left: 10px;
 }
-/* The style of the displayed items on the shopping cart details page. */
-.cart {
+/* The style of the displayed items on the shopping Basket details page. */
+.Basket {
     display: flex;
     flex-direction: column; 
     gap: 16px;
     padding: 0px 50px;
 }
 
-.cart-item {
+.Basket-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -156,7 +156,7 @@ button:hover {
     background-color: #f9f9f9;
 }
 
-.cart-item-image {
+.Basket-item-image {
     border:1px solid #555;
     background-color: #555;
     width: 200px;
@@ -166,26 +166,26 @@ button:hover {
     margin-bottom: auto;
 }
 
-.cart-item-details {
+.Basket-item-details {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.cart-item-name {
+.Basket-item-name {
     font-size: 18px;
     font-weight: bold;
 }
 
-.cart-item-price{
+.Basket-item-price{
     font-size: 16px;
     color: #555;
     margin-top: 0px;
     margin-bottom: 10px;
     margin-left: 10px;
 }
-.cart-item-total{
+.Basket-item-total{
     margin-left: auto; /* يجعل الزر يظهر في اليمين */
     margin-top: 0px; /* إضافة مسافة بين الزر والمحتوى */
     padding: 0px;
@@ -196,7 +196,7 @@ button:hover {
     color: red; /* تغيير لون النجمة إلى الأحمر */
     margin-right: 4px; /* إضافة مسافة صغيرة بعد النجمة */
 }
-.cart-item-type, .cart-item-quantity {  
+.Basket-item-type, .Basket-item-quantity {  
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -205,7 +205,7 @@ button:hover {
     gap: 8px;
 }
 
-.cart-item-select{
+.Basket-item-select{
     padding: 0px;
     border-radius: 4px;
     border: 1px solid #ccc;

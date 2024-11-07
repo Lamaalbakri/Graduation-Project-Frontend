@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Layout, Button, Dropdown, Menu, Badge } from "antd";
 import {
   MenuUnfoldOutlined,
@@ -10,6 +10,8 @@ import {
 } from "@ant-design/icons";
 import UserProfile from "./UserProfile";
 import { Link, useNavigate } from "react-router-dom";
+import { fetchShoppingBasketList } from '../api/shoppingBasket';
+
 const { Header } = Layout;
 
 const AppHeader = ({
@@ -18,7 +20,6 @@ const AppHeader = ({
   handleLogout,
   colorBgContainer,
   userType,
-  userId,
 }) => {
   const navigate = useNavigate();
   const [cartItemCount, setCartItemCount] = useState(0); //  Number of items in the shopping cart
@@ -37,6 +38,22 @@ const AppHeader = ({
     userType
   );
 
+  // Fetch total item count from shopping basket list
+  useEffect(() => {
+    const fetchCartItemCount = async () => {
+      try {
+        const data = await fetchShoppingBasketList();
+        if (data && !data.error) {
+          const totalItems = data.numberOfBasketItems; // Assuming this is returned by the backend
+          setCartItemCount(totalItems);
+        }
+      } catch (err) {
+        console.error("Failed to fetch cart item count:", err);
+      }
+    };
+    fetchCartItemCount();
+  }, [cartItemCount]);
+
   // Function to update an item number in the cart
   const updateCart = () => {
     setCartItemCount(cartItemCount + 1);
@@ -44,7 +61,7 @@ const AppHeader = ({
 
   // Function to handle navigation to the cart page
   const handleCartClick = () => {
-    navigate(`/shoppingCarts/${userId}`); //
+    navigate(`/shoppingBaskets`); //
   };
 
   return (

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import ShoppingCart from './ShoppingCart';
-import './ShoppingCart.css';
+import ShoppingBasket from './ShoppingBasket.jsx';
+import './ShoppingBasket.css';
 import { fetchShoppingBasketList } from '../../../../api/shoppingBasket';
 
-function ShoppingCartList() {
+function ShoppingBasketList() {
     const [baskets, setBaskets] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -12,7 +12,7 @@ function ShoppingCartList() {
         const getBaskets = async () => {
             try {
                 const data = await fetchShoppingBasketList(); // استدعاء الدالة من الملف الخارجي
-                setBaskets(data); // تحديث حالة السلال بالبيانات التي تم جلبها
+                setBaskets(data.basket); // تحديث حالة السلال بالبيانات التي تم جلبها
             } catch (err) {
                 setError("Error fetching shopping Baskets");
             } finally {
@@ -32,7 +32,7 @@ function ShoppingCartList() {
     }
 
     return (
-        <div className='shoppingCart'>
+        <div className='shoppingBasket'>
             <div className='title'>
                 Shopping Baskets
             </div>
@@ -40,7 +40,7 @@ function ShoppingCartList() {
             {baskets !== null && baskets.length > 0 ? (
                 baskets.map((basket, index) => (
 
-                    <ShoppingCart key={basket._id} basket={basket} index={index} />
+                    <ShoppingBasket key={basket._id} basket={basket} basketId={basket._id} basketIndex={index + 1} />
                 ))
             ) : (
                 <div className='background-message'>
@@ -52,5 +52,5 @@ function ShoppingCartList() {
     );
 };
 
-export default ShoppingCartList
+export default ShoppingBasketList
 

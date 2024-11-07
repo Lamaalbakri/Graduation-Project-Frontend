@@ -27,9 +27,9 @@ import CurrentTransportRequests from "./components/Transporters/TransportRequest
 import PreviousTransportRequests from "./components/Transporters/TransportRequestsTable/PreviousTransportRequests";
 import SearchTransportRequests from "./components/Transporters/TransportRequestsTable/SearchTransportRequests";
 //Manufacturers imports
-import ShoppingCartList from "./components/Manufacturers/RawMaterialOrder/ShoppingCart/ShoppingCartList";
-import ShoppingCartDetail from "./components/Manufacturers/RawMaterialOrder/ShoppingCart/ShoppingCartDetail";
-import CompleteOrder from "./components/Manufacturers/RawMaterialOrder/ShoppingCart/CompleteOrder";
+import ShoppingBasketList from "./components/Manufacturers/RawMaterialOrder/ShoppingBasket/ShoppingBasketList";
+import ShoppingBasketDetail from "./components/Manufacturers/RawMaterialOrder/ShoppingBasket/ShoppingBasketDetail";
+import CompleteOrder from "./components/Manufacturers/RawMaterialOrder/ShoppingBasket/CompleteOrder";
 
 import AddSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/AddSupplier";
 import ViewSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/ViewSuppliers";
@@ -49,14 +49,14 @@ const { Content } = Layout;
 function App() {
 
   // when refreshing the website does not crash and show a empty white page 
-   const [userType, setUserType] = useState(localStorage.getItem('userType'));
-   const [userId, setUserId] = useState(localStorage.getItem('userId'));
+  const [userType, setUserType] = useState(localStorage.getItem('userType'));
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
 
 
-  useEffect(()=>{
+  useEffect(() => {
     localStorage.setItem('userType', userType);
     localStorage.setItem('userId', userId);
-  },[userType,userId])
+  }, [userType, userId])
 
 
   const clearUserData = () => {
@@ -69,8 +69,8 @@ function App() {
 
   return (
     <UserProvider>
-      <AddressProvider>
-        <Router>
+      <Router>
+        <AddressProvider>
           <Routes>
             <Route path="/" element={<HomePageLayout />} />
             <Route path="/register" element={<RegisterPageLayout />} />
@@ -86,16 +86,16 @@ function App() {
             <Route
               path="*"
               element={<MainLayout userType={userType} userId={userId} clearUserData={clearUserData} />}
-              />
+            />
           </Routes>
-        </Router>
-      </AddressProvider>
+        </AddressProvider>
+      </Router>
     </UserProvider>
   );
 }
 
 function MainLayout({ userType, userId, clearUserData }) {
-  console.log("Main Layout - User ID:", userId, "User Type:", userType);
+  // console.log("Main Layout - User ID:", userId, "User Type:", userType);
   const [darkTheme, setDarkTheme] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
   const toggleTheme = () => setDarkTheme(!darkTheme);
@@ -216,15 +216,15 @@ function MainLayout({ userType, userId, clearUserData }) {
                   element={<ViewRawMaterials userId={userId} />}
                 />
                 <Route
-                  path="/shoppingCarts/:userId"
-                  element={<ShoppingCartList userId={userId} />}
+                  path="/shoppingBaskets"
+                  element={<ShoppingBasketList userId={userId} />}
                 />
                 <Route
-                  path="/shoppingCarts/:userId/:id"
-                  element={<ShoppingCartDetail userId={userId} />}
+                  path="/shoppingBaskets/:basketId/:basketIndex"
+                  element={<ShoppingBasketDetail userId={userId} />}
                 />
                 <Route
-                  path="/shoppingCarts/:userId/:id/complete"
+                  path="/shoppingBaskets/:basketId/:basketIndex/complete"
                   element={<CompleteOrder userId={userId} />}
                 />
 

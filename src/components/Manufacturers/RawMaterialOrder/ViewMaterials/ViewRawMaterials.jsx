@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./ViewMaterials.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { fetchAllCurrentRequests } from "../../../../api/manageRawMaterialApi";
-import { Modal } from "antd";
+import { fetchMaterialForListOfSupplier } from "../../../../api/manageRawMaterialApi";
+import { Modal, Button } from "antd";
 import ProductCard from "./ProductCard";
 
 
@@ -19,12 +19,15 @@ const ViewRawMaterials = () => {
 
   const handleCancel = () => {
     setIsFilterOpen(false);
+    setSelectedPriceRange(null);
+    setSelectedSupplier(null);
+    setSelectedMaterial(null);
   };
 
   useEffect(() => {
     const getRequests = async () => {
       try {
-        const requests = await fetchAllCurrentRequests();
+        const requests = await fetchMaterialForListOfSupplier();
         setMaterial(requests);
 
         console.log(requests);
@@ -40,7 +43,7 @@ const ViewRawMaterials = () => {
     setUniqueSlugs(slugs);
     console.log(slugs);
 
-    const suppliers = [...new Set(material.map((item) => item.supplier))];
+    const suppliers = [...new Set(material.map((item) => item.supplierId?.full_name))];
     setUniqueSupplier(suppliers);
     console.log(suppliers);
   }, [material]);
@@ -49,9 +52,9 @@ const ViewRawMaterials = () => {
     setSelectedPriceRange(range);
   };
 
-  const handleMaterialFilter = (slug) => {
-    setSelectedMaterial(slug);
-  };
+  // const handleMaterialFilter = (slug) => {
+  //   setSelectedMaterial(slug);
+  // };
 
   const handleSupplierFilter = (supplier) => {
     setSelectedSupplier(supplier);
@@ -80,12 +83,12 @@ const ViewRawMaterials = () => {
     })
     .filter((item) => {
       if (!selectedSupplier) return true;
-      return item.supplier === selectedSupplier;
-    })
-    .filter((item) => {
-      if (!selectedMaterial) return true;
-      return item.slug === selectedMaterial;
+      return item?.supplierId?.full_name === selectedSupplier;
     });
+  // .filter((item) => {
+  //   if (!selectedMaterial) return true;
+  //   return item.slug === selectedMaterial;
+  // });
 
   return (
     <>
@@ -108,7 +111,18 @@ const ViewRawMaterials = () => {
               cancelButtonProps={{
                 hidden: true,
                 ghost: true,
-              }}
+              }} footer={[
+                <Button key="clearFilter" onClick={handleCancel}>
+                  Clear Filter
+                </Button>,
+                <Button
+                  key="submit"
+                  type="primary"
+                  onClick={() => setIsFilterOpen(false)}
+                >
+                  OK
+                </Button>,
+              ]}
             >
               <div className="filter-modal-raw">
                 <div>
@@ -116,7 +130,7 @@ const ViewRawMaterials = () => {
                   {priceRanges.map((range) => (
                     <p
                       key={range.label}
-                      className="grey-text pointer"
+                      className={`pointer ${range.label === selectedPriceRange?.label ? "filterActive" : "grey-text"}`}
                       onClick={() => handlePriceFilter(range)}
                     >
                       {range.label}
@@ -128,25 +142,25 @@ const ViewRawMaterials = () => {
                   {uniqueSupplier.map((sup, index) => (
                     <p
                       key={index}
-                      className="grey-text pointer"
+                      className={`pointer ${sup === selectedSupplier ? "filterActive" : "grey-text"}`}
                       onClick={() => handleSupplierFilter(sup)}
                     >
                       {sup}
                     </p>
                   ))}
                 </div>
-                <div>
+                {/* <div>
                   <p className="filter-header">Material</p>
                   {uniqueSlugs.map((slug, index) => (
                     <p
                       key={index}
-                      className="grey-text pointer"
+                      className={`pointer ${slug === selectedMaterial ? "filterActive" : "grey-text"}`}
                       onClick={() => handleMaterialFilter(slug)}
                     >
                       {slug}
                     </p>
                   ))}
-                </div>
+                </div> */}
               </div>
             </Modal>
 

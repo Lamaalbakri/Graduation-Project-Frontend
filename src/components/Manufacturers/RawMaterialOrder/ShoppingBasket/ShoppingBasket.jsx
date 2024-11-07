@@ -2,31 +2,25 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import logo from "../../../images/User.png";
-import './ShoppingCart.css';
+import './ShoppingBasket.css';
 
-const ShoppingCart = ({ basket, index }) => {
+const ShoppingBasket = ({ basket, basketIndex, basketId }) => {
+    console.log(basketIndex, basketId)
     const navigate = useNavigate();
     const itemNames = basket.ShoppingBasketItems.map(item => item.item_name);
 
     const handleViewDetails = () => {
-        navigate(`/shoppingCarts/${basket.buyerId}/${index + 1}`, {
-            state: {
-                sellerId: basket.sellerId,
-                sellerName: basket.sellerName,
-                basketIndex: index,
-                buyerId: basket.buyerId,
-            },
-        });
+        navigate(`/shoppingBaskets/${basketId}/${basketIndex}`);
     };
     return (
-        <div className='cart-container'>
-            <div className='cart-title'><p>Shopping Cart {index + 1}</p></div>
-            <div className='cart-content'>
+        <div className='Basket-container'>
+            <div className='Basket-title'><p>Shopping Basket {basketIndex}</p></div>
+            <div className='Basket-content'>
                 <div className='img-container'>
                     <img className='supplier-img' src={logo} />
                     <p>Supplier Name: {basket.sellerName}</p>
                 </div>
-                <div className='cart-contnt-info'>
+                <div className='Basket-contnt-info'>
                     <p><strong>Items in the Shopping Basket:</strong> {itemNames.join(', ')}</p>
                     <p><strong>Basket Total:</strong> {basket.total_price} $</p> {/* تحديث المتغير للسعر الإجمالي */}
                 </div>
@@ -40,4 +34,4 @@ const ShoppingCart = ({ basket, index }) => {
     );
 };
 
-export default ShoppingCart;
+export default ShoppingBasket;

@@ -105,9 +105,9 @@ const Actions = ({ userType, userId }) => {
                 <i className="fas fa-history"></i> View Suppliers
               </button>
             </Link>
-            <Link to="/shoppingCarts/:userId">
+            <Link to="/shoppingBaskets">
               <button>
-                <i className="fas fa-history"></i> Shopping Carts
+                <i className="fas fa-history"></i> Shopping Basket
               </button>
             </Link>
             <Link to="/viewOrders/:userId">
