@@ -7,10 +7,53 @@
     border-radius: 10px;
 }
 
+.RequestsTable{
+    padding: 20px;
+
+}
+
 .pp{
     display: flex; /* Use flexbox to center items */
 }
 
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 0;
+}
+
+
+.search-label {
+    margin-right: 15px;
+    font-size: 14px;
+    color: #1c2229;
+}
+
+.search-container input {
+    padding-left: 35px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    outline: none;
+    font-size: 14px;
+    width: 300px;
+    transition: border-color 0.3s ease;
+}
+
+.search-container input::placeholder {
+    color: #999;
+}
+
+.input-with-icon {
+    padding-right: 40px;
+    height: 35px;
+    width: 250px;
+    margin-right: 10px;
+    background: url("../images/iconsSearch.png") no-repeat 8px center;
+    background-size: 15px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 .search-instruction p {
     text-align: center; /* Center the text */
     font-size: 16px; /* Slightly larger font size for better visibility */
@@ -74,6 +117,10 @@
     font-size: 14px; /* Font size */
     transition: background-color 0.3s ease; /* Smooth transition on hover */
     background-color: #1c2229;
+}
+
+.form-group label {
+    font-weight: normal; /* Reset font weight */
 }
 
 .add-page .custom-file-upload:hover,
@@ -198,8 +245,22 @@
 .title {
     font-size: 30px;
     font-weight: bold;
-    text-align: left; /* Align text to the left */
-    margin-bottom: 0; /* Remove bottom margin */
+    text-align: left;
+    margin-bottom: 0;
+}
+
+.header-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+    margin-top: 25px;
+}
+
+.material-add-button {
+    cursor: pointer;
+    background-color: #c3c3c3  !important;
 }
 
 /* Button styles */
@@ -235,18 +296,12 @@
     border: 1px solid #dabeae;
     cursor: pointer;
   }
+
   .form-upload-text {
     color: rgb(112, 109, 109);
     margin-bottom: 0rem;
   }
 
-.material-edit-button{
-    cursor: pointer;
-}
-
-.material-add-button {
-    cursor: pointer;
-}
 
 /* Responsive Styles */
 @media (max-width: 768px) {

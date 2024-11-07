@@ -7,7 +7,7 @@ const AddSupplier = () => {
   const [supplierCategory, setSupplierCategory] = useState("");
   const [supplierName, setSupplierName] = useState("");
   const [isSearchActive, setIsSearchActive] = useState(false);
-  const [suppliers, setSuppliers] = useState();
+  const [suppliers, setSuppliers] = useState([]);
   const [user, setUser] = useState();
   const [appliedCategory, setAppliedCategory] = useState("");
   const [appliedName, setAppliedName] = useState("");
@@ -34,17 +34,41 @@ const AddSupplier = () => {
     setIsSearchActive(false);
     setAppliedCategory("");
     setAppliedName("");
+    setSuppliers([]); // Clear the suppliers list
   };
 
   const handleApply = async () => {
+    // Check if the user has selected a category but hasn't provided a supplier name or ID
+    if (supplierCategory && !supplierName) {
+      setSuppliers([]); // Set suppliers to an empty array to show "No suppliers found"
+      setIsSearchActive(true);
+      return;
+    }
+
+    // Check if neither category nor name is provided
+    if (!supplierCategory && !supplierName) {
+      setSuppliers([]); // Show "No suppliers found" if no category or name is provided
+      setIsSearchActive(true);
+      return;
+    }
+
     setAppliedCategory(supplierCategory);
     setAppliedName(supplierName);
     setIsSearchActive(true);
+
+    // Fetch suppliers based on the entered criteria
     getSearchSupplierCategory(
       supplierCategory || null,
       supplierName || null
     ).then((x) => {
-      setSuppliers(x);
+      // Show "No suppliers found" if no results match or if random name doesn't yield a specific match
+      if (!x || x.length === 0 || (supplierName && x.every(supplier => supplier.full_name !== supplierName))) {
+        setSuppliers([]); // Show "No suppliers found" when there is no match
+      } else {
+        setSuppliers(x);
+      }
+    }).catch(error => {
+      console.error("Error fetching suppliers:", error);
     });
   };
 
@@ -52,10 +76,8 @@ const AddSupplier = () => {
     const isSupplierAdded = user?.suppliersList.includes(id);
 
     if (isSupplierAdded) {
-      // If supplier is already added, remove it without confirmation
       confirmToggleSupplier(id, true);
     } else {
-      // If supplier is not added, show confirmation dialog to add
       setSupplierToToggle(id);
       setShowDialog(true);
     }
@@ -66,12 +88,10 @@ const AddSupplier = () => {
     const isSupplierAdded = updatedUser.suppliersList.includes(id);
 
     if (isSupplierAdded) {
-      // Remove supplier
       updatedUser.suppliersList = updatedUser.suppliersList.filter(
         (supplierId) => supplierId !== id
       );
     } else {
-      // Add supplier
       updatedUser.suppliersList.push(id);
     }
 
@@ -186,22 +206,35 @@ const AddSupplier = () => {
               </div>
             ))
           ) : (
-            <div>No suppliers found</div>
+            <div className='background-message'>No suppliers found</div>
           )}
         </>
       )}
 
       {showDialog && (
-        <div className="ManageSupplier-dialog-overlay">
-          <div className="ManageSupplier-dialog">
-            <p>Are you sure you want to add this supplier?</p>
-            <button onClick={() => confirmToggleSupplier(supplierToToggle)}>
-              Yes
-            </button>
-            <button onClick={() => setShowDialog(false)}>No</button>
-          </div>
-        </div>
-      )}
+  <div className="ManageSupplier-dialog-overlay">
+    <div className="ManageSupplier-dialog">
+      <h3>Confirm Action</h3>
+      <p>Are you sure you want to add this supplier?</p>
+      <div className="ManageSupplier-dialog-actions">
+        
+        <button 
+          className="ManageSupplier-dialog-button"
+          onClick={() => confirmToggleSupplier(supplierToToggle)}
+          
+        >
+          Yes
+        </button>
+        <button 
+          className="ManageSupplier-dialog-button"
+          onClick={() => setShowDialog(false)}
+        >
+          No
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };

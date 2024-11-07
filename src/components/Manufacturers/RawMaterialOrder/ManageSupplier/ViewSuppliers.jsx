@@ -5,6 +5,8 @@ import { fetchUserData, fetchUserDataWithSupplier, updateUserData } from "../../
 const ViewSuppliers = () => {
   const [user, setUser] = useState();
   const [suppliers, setSuppliers] = useState();
+  const [showDialog, setShowDialog] = useState(false);
+  const [supplierToToggle, setSupplierToToggle] = useState(null);
 
   useEffect(() => {
     fetchUserData().then(x => {
@@ -20,6 +22,19 @@ const ViewSuppliers = () => {
   }, []);
 
   const handleToggleSupplier = (id) => {
+    const isSupplierAdded = user?.suppliersList.includes(id);
+
+    if (isSupplierAdded) {
+      // Show dialog to confirm removal
+      setSupplierToToggle(id);
+      setShowDialog(true);
+    } else {
+      // Directly add supplier
+      confirmToggleSupplier(id, true);
+    }
+  };
+
+  const confirmToggleSupplier = (id, skipDialog = false) => {
     let updatedUser = { ...user };
     const isSupplierAdded = updatedUser.suppliersList.includes(id);
 
@@ -39,6 +54,11 @@ const ViewSuppliers = () => {
       .catch(error => {
         console.error("Error updating user data: ", error);
       });
+
+    if (!skipDialog) {
+      setShowDialog(false);
+      setSupplierToToggle(null);
+    }
   };
 
   return (
@@ -73,8 +93,31 @@ const ViewSuppliers = () => {
           </div>
         ))
       ) : (
-        <div>No suppliers found</div>
+        <div className='background-message'>No suppliers found</div>
       )}
+
+{showDialog && (
+  <div className="ManageSupplier-dialog-overlay">
+    <div className="ManageSupplier-dialog">
+      <h3>Confirm Removal</h3>
+      <p>Do you want to remove the supplier?</p>
+      <div className="ManageSupplier-dialog-actions">
+        <button 
+          className="ManageSupplier-dialog-button"
+          onClick={() => confirmToggleSupplier(supplierToToggle)}
+        >
+          Yes
+        </button>
+        <button 
+          className="ManageSupplier-dialog-button"
+          onClick={() => setShowDialog(false)}
+        >
+          No
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };

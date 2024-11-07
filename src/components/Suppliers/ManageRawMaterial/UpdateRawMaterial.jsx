@@ -291,7 +291,7 @@ const UpdateForm = ({ material, onSave, onClose }) => {
                   }}
                   placeholder={`Add value for ${option.optionName}`}
                 />
-                <button className='material-edit-button' type="button" onClick={() => handleAddMenuValue(index)}>Add Value</button>
+                <button className='material-add-button' type="button" onClick={() => handleAddMenuValue(index)}>Add Value</button>
                 <ul>
                   {option.menuList.map((value, valIndex) => (
                     <li key={valIndex}>
@@ -299,7 +299,7 @@ const UpdateForm = ({ material, onSave, onClose }) => {
                       <button
                         type="button"
                         onClick={() => handleDeleteMenuValue(index, valIndex)}
-                        style={{ marginLeft: '8px', color: 'red', cursor: 'pointer' }}
+                        style={{ marginLeft: '10px', marginBottom: '10px' , marginTop: '10px' , color: 'red', cursor: 'pointer' ,backgroundColor: '#c3c3c3' }}
                       >
                         &times;
                       </button>
@@ -318,7 +318,7 @@ const UpdateForm = ({ material, onSave, onClose }) => {
     placeholder="Add Unit" 
   />
   <button 
-    className='material-edit-button' 
+    className='material-add-button' 
     type="button" 
     onClick={handleAddUnit}
   >
@@ -331,7 +331,7 @@ const UpdateForm = ({ material, onSave, onClose }) => {
         <button
           type="button"
           onClick={() => handleDeleteUnit(index)}
-          style={{ marginLeft: '8px', color: 'red', cursor: 'pointer' }}
+          style={{ marginLeft: '10px', marginBottom: '10px' , marginTop: '10px' , color: 'red', cursor: 'pointer' ,backgroundColor: '#c3c3c3' }}
         >
           &times;
         </button>

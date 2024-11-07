@@ -1,37 +1,32 @@
-import React, { useState } from 'react';
-import './RawMaterial.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import "./RawMaterial.css";
+import { useNavigate } from "react-router-dom";
 import upload_image from "../../images/upload_image.png";
-import Loader from '../../../Utils/Loader';
+import Loader from "../../../Utils/Loader";
 import { notification } from "antd";
-import ConfirmationDialog from '../../Dialog/ConfirmationDialog';
-import { createMaterial, uploadImage } from '../../../api/manageRawMaterialApi';
-
-
-
+import ConfirmationDialog from "../../Dialog/ConfirmationDialog";
+import { createMaterial, uploadImage } from "../../../api/manageRawMaterialApi";
 
 const AddRawMaterials = () => {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
+    name: "",
     quantity: 1,
-    description: '',
-    storageInfo: '',
+    description: "",
+    storageInfo: "",
     price: 0,
     image: null,
     materialOption: [
       {
-        optionName: '', // For example, "Color"
+        optionName: "", // For example, "Color"
         menuList: [],
-        currentMenuValue: '' // Temporary storage for the current menu value
-      }
+        currentMenuValue: "", // Temporary storage for the current menu value
+      },
     ],
     units: [],
-    currentUnit: ''
+    currentUnit: "",
   });
-
-
 
   const [imagePreview, setImagePreview] = useState(null);
   const MAX_FILE_SIZE = 1 * 1024 * 1024; // max file size to be uploaded set to 1 mb.
@@ -42,19 +37,19 @@ const AddRawMaterials = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
       if (!allowedTypes.includes(file.type)) {
         notification.error({
-          message: 'Invalid File Type',
-          description: 'Only JPEG, JPG, and PNG are allowed.',
+          message: "Invalid File Type",
+          description: "Only JPEG, JPG, and PNG are allowed.",
           placement: "top",
         });
         return;
       }
       if (file.size > MAX_FILE_SIZE) {
         notification.error({
-          message: 'File Size Exceeded',
-          description: 'File size should be less than 1 MB.',
+          message: "File Size Exceeded",
+          description: "File size should be less than 1 MB.",
           placement: "top",
         });
         return;
@@ -69,24 +64,27 @@ const AddRawMaterials = () => {
     const updatedOptions = [...formData.materialOption];
     const option = updatedOptions[index];
 
-    if (option.currentMenuValue && !option.menuList.includes(option.currentMenuValue)) {
+    if (
+      option.currentMenuValue &&
+      !option.menuList.includes(option.currentMenuValue)
+    ) {
       option.menuList.push(option.currentMenuValue);
-      option.currentMenuValue = '';
+      option.currentMenuValue = "";
       setFormData({ ...formData, materialOption: updatedOptions });
     }
   };
 
   const handleMoreMaterial = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       materialOption: [
         ...prev.materialOption,
         {
-          optionName: '',
+          optionName: "",
           menuList: [],
-          currentMenuValue: ''
-        }
-      ]
+          currentMenuValue: "",
+        },
+      ],
     }));
   };
 
@@ -103,11 +101,14 @@ const AddRawMaterials = () => {
   };
 
   const handleAddUnit = () => {
-    if (formData.currentUnit && !formData.units.includes(formData.currentUnit)) {
-      setFormData(prev => ({
+    if (
+      formData.currentUnit &&
+      !formData.units.includes(formData.currentUnit)
+    ) {
+      setFormData((prev) => ({
         ...prev,
         units: [...prev.units, formData.currentUnit],
-        currentUnit: ''
+        currentUnit: "",
       }));
     }
   };
@@ -123,12 +124,12 @@ const AddRawMaterials = () => {
       }
       const updatedFormData = {
         ...formData,
-        image: photoUrl
+        image: photoUrl,
       };
       //units array can't be empty
       if (formData.units.length === 0) {
         notification.warning({
-          message: 'Add Value or Unit',
+          message: "Add Value or Unit",
           placement: "top",
         });
         setLoading(false);
@@ -141,47 +142,47 @@ const AddRawMaterials = () => {
           description: "Material has been created successfully.",
           placement: "top",
         });
-        console.log('response', response.data.data);
+        console.log("response", response.data.data);
 
         setFormData({
-          name: '',
+          name: "",
           quantity: 1,
-          description: '',
-          storageInfo: '',
+          description: "",
+          storageInfo: "",
           price: 0,
           image: null,
           materialOption: [
             {
-              optionName: '',
+              optionName: "",
               menuList: [],
-              currentMenuValue: ''
-            }
+              currentMenuValue: "",
+            },
           ],
           units: [],
-          currentUnit: ''
+          currentUnit: "",
         });
         setIsModalOpen(true); // Show the confirmation dialog
       }
     } catch (error) {
       notification.error({
-        message: 'Error in creating materials',
-        description: 'Please try later.',
+        message: "Error in creating materials",
+        description: "Please try later.",
         placement: "top",
       });
-      console.error('Error adding material:', error);
+      console.error("Error adding material:", error);
     }
     setLoading(false);
   };
 
   const confirmRedirect = () => {
-    navigate('/viewRawMaterial');
+    navigate("/viewRawMaterial");
     setIsModalOpen(false);
   };
 
   return (
     <>
       {loading && <Loader />}
-      <div className='RequestsTable'>
+      <div className="RequestsTable">
         <div className="header-row">
           <div className="title">Add Raw Materials</div>
         </div>
@@ -194,7 +195,9 @@ const AddRawMaterials = () => {
                 type="text"
                 name="name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 required
               />
             </div>
@@ -204,7 +207,9 @@ const AddRawMaterials = () => {
                 type="number"
                 name="quantity"
                 value={formData.quantity}
-                onChange={(e) => setFormData({ ...formData, quantity: Number(e.target.value) })}
+                onChange={(e) =>
+                  setFormData({ ...formData, quantity: Number(e.target.value) })
+                }
                 required
               />
             </div>
@@ -213,8 +218,10 @@ const AddRawMaterials = () => {
               <textarea
                 name="description"
                 value={formData.description}
-                placeholder='Should be at least 10 characters'
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="Should be at least 10 characters"
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 required
               />
             </div>
@@ -224,7 +231,9 @@ const AddRawMaterials = () => {
                 type="text"
                 name="storageInfo"
                 value={formData.storageInfo}
-                onChange={(e) => setFormData({ ...formData, storageInfo: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, storageInfo: e.target.value })
+                }
                 required
               />
             </div>
@@ -234,7 +243,9 @@ const AddRawMaterials = () => {
                 type="number"
                 name="price"
                 value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+                onChange={(e) =>
+                  setFormData({ ...formData, price: Number(e.target.value) })
+                }
                 required
               />
             </div>
@@ -246,7 +257,18 @@ const AddRawMaterials = () => {
                   Material Option {index + 1}
                   {/*show adding button only after the last material option not in everyone*/}
                   {index === formData.materialOption.length - 1 && (
-                    <button className='material-add-button' type="button" onClick={handleMoreMaterial}>+</button>
+                    <button
+                      className="material-add-button"
+                      type="button"
+                      onClick={handleMoreMaterial}
+                      style={{
+                        marginLeft: "10px",
+                        marginBottom: "10px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      +
+                    </button>
                   )}
                 </label>
                 <input
@@ -256,14 +278,23 @@ const AddRawMaterials = () => {
                   placeholder="e.g., Color"
                   required
                 />
+                <br />
                 <label>Specific Values for {option.optionName}</label>
                 <input
                   type="text"
                   value={option.currentMenuValue}
-                  onChange={(e) => handleCurrentMenuValueChange(index, e.target.value)}
+                  onChange={(e) =>
+                    handleCurrentMenuValueChange(index, e.target.value)
+                  }
                   placeholder={`Add value for ${option.optionName} (e.g., Black, Red)`}
                 />
-                <button className='material-add-button' type="button" onClick={() => handleAddMenuValue(index)}>Add Value</button>
+                <button
+                  className="material-add-button"
+                  type="button"
+                  onClick={() => handleAddMenuValue(index)}
+                >
+                  Add Value
+                </button>
                 <ul>
                   {option.menuList.map((value, valIndex) => (
                     <li key={valIndex}>{value}</li>
@@ -278,10 +309,18 @@ const AddRawMaterials = () => {
               <input
                 type="text"
                 value={formData.currentUnit}
-                onChange={(e) => setFormData({ ...formData, currentUnit: e.target.value })}
-                placeholder="Add Unit (e.g., Small, XL)"
+                onChange={(e) =>
+                  setFormData({ ...formData, currentUnit: e.target.value })
+                }
+                placeholder="Add Unit"
               />
-              <button className='material-add-button' type="button" onClick={handleAddUnit}>Add Unit</button>
+              <button
+                className="material-add-button"
+                type="button"
+                onClick={handleAddUnit}
+              >
+                Add Unit
+              </button>
               <ul>
                 {formData.units.map((unit, index) => (
                   <li key={index}>{unit}</li>
@@ -289,8 +328,12 @@ const AddRawMaterials = () => {
               </ul>
             </div>
             <div className="form-group">
-              <p className="form-upload-text">Image types allowed: jpeg, jpg, png</p>
-              <p className="form-upload-text">Image size shouldn't exceed 1 mb</p>
+              <p className="form-upload-text">
+                Image types allowed: jpeg, jpg, png
+              </p>
+              <p className="form-upload-text">
+                Image size shouldn't exceed 1 mb
+              </p>
               <label htmlFor="file-input">
                 <img
                   src={imagePreview ? imagePreview : upload_image}
@@ -306,7 +349,9 @@ const AddRawMaterials = () => {
               </label>
             </div>
             <div className="button-container">
-              <button type="submit" className="submit-button">Save</button>
+              <button type="submit" className="submit-button">
+                Save
+              </button>
             </div>
           </form>
         </div>
@@ -322,6 +367,6 @@ const AddRawMaterials = () => {
       </div>
     </>
   );
-}
+};
 
 export default AddRawMaterials;

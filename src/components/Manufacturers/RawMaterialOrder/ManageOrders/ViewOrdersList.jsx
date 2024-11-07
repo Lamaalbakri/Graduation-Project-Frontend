@@ -62,7 +62,7 @@ const ViewOrdersList = () => {
   return (
     <div>
       <div>
-        <p style={{ fontSize: "1.5rem", marginTop: "2rem", color: "black" }}>
+        <p style={{ fontSize: "1.5rem", marginTop: "2rem", color: "black",padding:"20px"}}>
           <Link style={{ color: "black" }} to="/ViewOrders">
             View Orders List
           </Link>
