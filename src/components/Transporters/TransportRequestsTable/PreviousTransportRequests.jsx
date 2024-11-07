@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Modal } from "antd";
 import TransportRequestsTable from "./TransportRequestsTable";
 import {
   fetchAllPreviousTransportRequests,
@@ -24,8 +25,9 @@ function PreviousTransportRequests() {
   }, []);
 
   const handleSearch = async (e) => {
-    const searchQuery = e.target.value.trim().toLowerCase();
-    setQuery(searchQuery);
+    const originalQuery = e.target.value;
+    setQuery(originalQuery);
+    const searchQuery = originalQuery.trim().toLowerCase();
 
     const validShortId = /^t?[0-9a-z]{8}$/;
     let foundResult = false;
@@ -49,11 +51,20 @@ function PreviousTransportRequests() {
           const requestData = await searchTransportPreviousRequestById(
             searchQuery
           ); // Call search from API if data is not present locally
-          if (requestData) {
+          if (requestData.error) {
+            if (requestData.error.includes("problem with the server")) {
+              Modal.error({
+                title: "Error",
+                content:
+                  "There is a problem with the server. Please contact customer service.",
+                okButtonProps: {
+                  className: "confirm-buttonn",
+                },
+              });
+            }
+          } else {
             setFilteredRequests([requestData]);
             foundResult = true; // Result found
-          } else {
-            setFilteredRequests([]); // there is no results
           }
         } catch (error) {
           console.error("Error fetching request by id:", error);

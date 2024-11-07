@@ -41,11 +41,10 @@ function LoginPage({ setUserType, setUserId }) {
       setSuccessMessage("Login successful!");
       setUserType(userRole);
       setUserId(userId);
-      console.log(userId)
+      console.log(userId);
 
       switch (userType) {
         case "supplier":
-
           navigate(`/supplier-home/${userId}`);
           break;
         case "transporter":
@@ -97,8 +96,9 @@ function LoginPage({ setUserType, setUserId }) {
               />
               <i className="uil uil-lock icon"></i>
               <i
-                className={`uil ${showPassword ? "uil-eye" : "uil-eye-slash"
-                  } showHidePw`}
+                className={`uil ${
+                  showPassword ? "uil-eye" : "uil-eye-slash"
+                } showHidePw`}
                 onClick={togglePasswordVisibility}
               ></i>
             </div>
@@ -111,7 +111,6 @@ function LoginPage({ setUserType, setUserId }) {
                 required
               >
                 <option value="">Select user type</option>
-                <option value="admin">Admin</option>
                 <option value="transporter">Transporter</option>
                 <option value="supplier">Supplier</option>
                 <option value="manufacturer">Manufacturer</option>

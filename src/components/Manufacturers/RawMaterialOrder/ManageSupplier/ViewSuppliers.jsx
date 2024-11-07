@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import './ManageSupplierStyle.css';
-import { fetchUserData, fetchUserDataWithSupplier, updateUserData } from "../../../../api/userAPI";
+import React, { useEffect, useState } from "react";
+import logo from "../../../images/User.png";
+import "./ManageSupplierStyle.css";
+import {
+  fetchUserData,
+  fetchUserDataWithSupplier,
+  updateUserData,
+} from "../../../../api/userAPI";
 
 const ViewSuppliers = () => {
   const [user, setUser] = useState();
@@ -9,13 +14,13 @@ const ViewSuppliers = () => {
   const [supplierToToggle, setSupplierToToggle] = useState(null);
 
   useEffect(() => {
-    fetchUserData().then(x => {
+    fetchUserData().then((x) => {
       setUser(x);
     });
   }, []);
 
   useEffect(() => {
-    fetchUserDataWithSupplier().then(x => {
+    fetchUserDataWithSupplier().then((x) => {
       console.log("user: ", x);
       setSuppliers(x.suppliersList);
     });
@@ -39,19 +44,21 @@ const ViewSuppliers = () => {
     const isSupplierAdded = updatedUser.suppliersList.includes(id);
 
     if (isSupplierAdded) {
-      updatedUser.suppliersList = updatedUser.suppliersList.filter(supplierId => supplierId !== id);
+      updatedUser.suppliersList = updatedUser.suppliersList.filter(
+        (supplierId) => supplierId !== id
+      );
     } else {
       updatedUser.suppliersList.push(id);
     }
 
     updatedUser.id = updatedUser._id;
 
-    updateUserData(updatedUser, localStorage.getItem('userType'))
-      .then(response => {
+    updateUserData(updatedUser, localStorage.getItem("userType"))
+      .then((response) => {
         console.log("updated: ", response.data);
         setUser(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error updating user data: ", error);
       });
 
@@ -70,14 +77,13 @@ const ViewSuppliers = () => {
         suppliers.map((supplier) => (
           <div key={supplier._id} className="ManageSupplier-search-result">
             <div className="ManageSupplier-supplier-info">
-              <img
-                src="https://media.istockphoto.com/id/931643150/vector/picture-icon.jpg?s=612x612&w=0&k=20&c=St-gpRn58eIa8EDAHpn_yO4CZZAnGD6wKpln9l3Z3Ok="
-                alt="Supplier"
-              />
+              <img src={logo} alt="Supplier" />
               <div>
                 <h3>{supplier?.full_name}</h3>
                 <p>{supplier?.rawMaterialList?.toString()}</p>
-                <p><strong>Category:</strong> {supplier?.category}</p>
+                <p>
+                  <strong>Category:</strong> {supplier?.category}
+                </p>
               </div>
             </div>
             <div className="ManageSupplier-toggle-switch">
@@ -93,31 +99,31 @@ const ViewSuppliers = () => {
           </div>
         ))
       ) : (
-        <div className='background-message'>No suppliers found</div>
+        <div className="background-message">No suppliers found</div>
       )}
 
-{showDialog && (
-  <div className="ManageSupplier-dialog-overlay">
-    <div className="ManageSupplier-dialog">
-      <h3>Confirm Removal</h3>
-      <p>Do you want to remove the supplier?</p>
-      <div className="ManageSupplier-dialog-actions">
-        <button 
-          className="ManageSupplier-dialog-button"
-          onClick={() => confirmToggleSupplier(supplierToToggle)}
-        >
-          Yes
-        </button>
-        <button 
-          className="ManageSupplier-dialog-button"
-          onClick={() => setShowDialog(false)}
-        >
-          No
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+      {showDialog && (
+        <div className="ManageSupplier-dialog-overlay">
+          <div className="ManageSupplier-dialog">
+            <h3>Confirm Removal</h3>
+            <p>Do you want to remove the supplier?</p>
+            <div className="ManageSupplier-dialog-actions">
+              <button
+                className="ManageSupplier-dialog-button"
+                onClick={() => confirmToggleSupplier(supplierToToggle)}
+              >
+                Yes
+              </button>
+              <button
+                className="ManageSupplier-dialog-button"
+                onClick={() => setShowDialog(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

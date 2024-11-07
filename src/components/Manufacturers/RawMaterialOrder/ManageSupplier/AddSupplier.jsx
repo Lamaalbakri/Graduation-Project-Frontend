@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import logo from "../../../images/User.png";
 import "./ManageSupplierStyle.css";
 import { getSearchSupplierCategory } from "../../../../api/CategoryAPI";
 import { fetchUserData, updateUserData } from "../../../../api/userAPI";
@@ -57,19 +58,23 @@ const AddSupplier = () => {
     setIsSearchActive(true);
 
     // Fetch suppliers based on the entered criteria
-    getSearchSupplierCategory(
-      supplierCategory || null,
-      supplierName || null
-    ).then((x) => {
-      // Show "No suppliers found" if no results match or if random name doesn't yield a specific match
-      if (!x || x.length === 0 || (supplierName && x.every(supplier => supplier.full_name !== supplierName))) {
-        setSuppliers([]); // Show "No suppliers found" when there is no match
-      } else {
-        setSuppliers(x);
-      }
-    }).catch(error => {
-      console.error("Error fetching suppliers:", error);
-    });
+    getSearchSupplierCategory(supplierCategory || null, supplierName || null)
+      .then((x) => {
+        // Show "No suppliers found" if no results match or if random name doesn't yield a specific match
+        if (
+          !x ||
+          x.length === 0 ||
+          (supplierName &&
+            x.every((supplier) => supplier.full_name !== supplierName))
+        ) {
+          setSuppliers([]); // Show "No suppliers found" when there is no match
+        } else {
+          setSuppliers(x);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching suppliers:", error);
+      });
   };
 
   const handleToggleSupplier = (id) => {
@@ -156,16 +161,22 @@ const AddSupplier = () => {
             </select>
             <input
               type="text"
-              placeholder="Search For Supplier By Name / ID"
+              placeholder="Search for Supplier By Name / ID"
               value={supplierName}
               onChange={handleSupplierNameChange}
             />
           </div>
           <div className="ManageSupplier-search-buttons">
-            <button className="ManageSupplier-clear-button" onClick={handleClear}>
+            <button
+              className="ManageSupplier-clear-button"
+              onClick={handleClear}
+            >
               Clear
             </button>
-            <button className="ManageSupplier-apply-button" onClick={handleApply}>
+            <button
+              className="ManageSupplier-apply-button"
+              onClick={handleApply}
+            >
               Apply
             </button>
           </div>
@@ -181,10 +192,7 @@ const AddSupplier = () => {
             suppliers.map((supplier) => (
               <div key={supplier._id} className="ManageSupplier-search-result">
                 <div className="ManageSupplier-supplier-info">
-                  <img
-                    src="https://media.istockphoto.com/id/931643150/vector/picture-icon.jpg?s=612x612&w=0&k=20&c=St-gpRn58eIa8EDAHpn_yO4CZZAnGD6wKpln9l3Z3Ok="
-                    alt="Supplier"
-                  />
+                  <img src={logo} alt="Supplier" />
                   <div>
                     <h3>{supplier?.full_name}</h3>
                     <p>{supplier?.rawMaterialList?.toString()}</p>
@@ -206,35 +214,33 @@ const AddSupplier = () => {
               </div>
             ))
           ) : (
-            <div className='background-message'>No suppliers found</div>
+            <div className="background-message">No suppliers found</div>
           )}
         </>
       )}
 
       {showDialog && (
-  <div className="ManageSupplier-dialog-overlay">
-    <div className="ManageSupplier-dialog">
-      <h3>Confirm Action</h3>
-      <p>Are you sure you want to add this supplier?</p>
-      <div className="ManageSupplier-dialog-actions">
-        
-        <button 
-          className="ManageSupplier-dialog-button"
-          onClick={() => confirmToggleSupplier(supplierToToggle)}
-          
-        >
-          Yes
-        </button>
-        <button 
-          className="ManageSupplier-dialog-button"
-          onClick={() => setShowDialog(false)}
-        >
-          No
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+        <div className="ManageSupplier-dialog-overlay">
+          <div className="ManageSupplier-dialog">
+            <h3>Confirm Action</h3>
+            <p>Are you sure you want to add this supplier?</p>
+            <div className="ManageSupplier-dialog-actions">
+              <button
+                className="ManageSupplier-dialog-button"
+                onClick={() => confirmToggleSupplier(supplierToToggle)}
+              >
+                Yes
+              </button>
+              <button
+                className="ManageSupplier-dialog-button"
+                onClick={() => setShowDialog(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

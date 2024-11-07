@@ -43,8 +43,12 @@ function RegisterPage() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name !== "full_name" && name !== "category" && !/^[A-Za-z0-9!@#$%^&*(),?":{}|<>.]*$/.test(value)) {
-      return; // يمنع أي مدخلات غير مطابقة للحروف والأرقام الإنجليزية
+    if (
+      name !== "full_name" &&
+      name !== "category" &&
+      !/^[A-Za-z0-9!@#$%^&*(),?":{}|<>.]*$/.test(value)
+    ) {
+      return;
     }
     setFormData({
       ...formData,
@@ -110,7 +114,10 @@ function RegisterPage() {
       return;
     }
 
-    if (["manufacturer", "supplier", "distributor"].includes(userType) && !category) {
+    if (
+      ["manufacturer", "supplier", "distributor"].includes(userType) &&
+      !category
+    ) {
       setErrors(["Please select a category for this user type."]);
       return;
     }
@@ -198,8 +205,9 @@ function RegisterPage() {
               />
               <i className="uil uil-lock icon"></i>
               <i
-                className={`uil ${showPassword ? "uil-eye" : "uil-eye-slash"
-                  } showHidePw`}
+                className={`uil ${
+                  showPassword ? "uil-eye" : "uil-eye-slash"
+                } showHidePw`}
                 onClick={togglePasswordVisibility}
               ></i>
             </div>
@@ -215,8 +223,9 @@ function RegisterPage() {
               />
               <i className="uil uil-lock icon"></i>
               <i
-                className={`uil ${showConfirmPassword ? "uil-eye" : "uil-eye-slash"
-                  } showHidePw`}
+                className={`uil ${
+                  showConfirmPassword ? "uil-eye" : "uil-eye-slash"
+                } showHidePw`}
                 onClick={toggleConfirmPasswordVisibility}
               ></i>
             </div>
@@ -230,7 +239,6 @@ function RegisterPage() {
                 required
               >
                 <option value="">Select user type</option>
-                <option value="admin">Admin</option>
                 <option value="transporter">Transporter</option>
                 <option value="supplier">Supplier</option>
                 <option value="manufacturer">Manufacturer</option>
@@ -240,7 +248,9 @@ function RegisterPage() {
               <i className="uil uil-users-alt"></i>
             </div>
             {/* Display the classification category only if userType is appropriate */}
-            {["manufacturer", "supplier", "distributor"].includes(formData.userType) && (
+            {["manufacturer", "supplier", "distributor"].includes(
+              formData.userType
+            ) && (
               <div className="select-field">
                 <select
                   name="category"
