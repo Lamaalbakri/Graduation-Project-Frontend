@@ -6,7 +6,6 @@ import { fetchMaterialForListOfSupplier } from "../../../../api/manageRawMateria
 import { Modal, Button } from "antd";
 import ProductCard from "./ProductCard";
 
-
 const ViewRawMaterials = () => {
   const [material, setMaterial] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -43,7 +42,9 @@ const ViewRawMaterials = () => {
     setUniqueSlugs(slugs);
     console.log(slugs);
 
-    const suppliers = [...new Set(material.map((item) => item.supplierId?.full_name))];
+    const suppliers = [
+      ...new Set(material.map((item) => item.supplierId?.full_name)),
+    ];
     setUniqueSupplier(suppliers);
     console.log(suppliers);
   }, [material]);
@@ -61,11 +62,11 @@ const ViewRawMaterials = () => {
   };
 
   const priceRanges = [
-    { label: "$0-$50", min: 0, max: 50 },
-    { label: "$51-$100", min: 51, max: 100 },
-    { label: "$101-$200", min: 101, max: 200 },
-    { label: "$201-$500", min: 201, max: 500 },
-    { label: "$501 or more", min: 501, max: 99999 },
+    { label: "0 - 50 SAR", min: 0, max: 50 },
+    { label: "51 - 100 SAR", min: 51, max: 100 },
+    { label: "101 - 200 SAR", min: 101, max: 200 },
+    { label: "201 - 500 SAR", min: 201, max: 500 },
+    { label: "501 SAR or more", min: 501, max: 99999 },
   ];
 
   const filteredMaterials = material
@@ -101,7 +102,15 @@ const ViewRawMaterials = () => {
             </div>
 
             <Modal
-              title="Filter"
+              title={
+                <span>
+                  <FontAwesomeIcon
+                    icon={faFilter}
+                    style={{ marginRight: "8px" }}
+                  />
+                  Filter
+                </span>
+              }
               open={isFilterOpen}
               onCancel={handleCancel}
               okButtonProps={{
@@ -111,14 +120,33 @@ const ViewRawMaterials = () => {
               cancelButtonProps={{
                 hidden: true,
                 ghost: true,
-              }} footer={[
-                <Button key="clearFilter" onClick={handleCancel}>
+              }}
+              footer={[
+                <Button
+                  key="clearFilter"
+                  onClick={handleCancel}
+                  style={{
+                    backgroundColor: "white",
+                    borderColor: "#1c2229",
+                    color: "#1c2229",
+                    fontSize: "14px", // تعديل الحجم
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.borderColor = "#f4d53f";
+                    e.currentTarget.style.color = "#f4d53f";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.borderColor = "#1c2229";
+                    e.currentTarget.style.color = "#1c2229";
+                  }}
+                >
                   Clear Filter
                 </Button>,
                 <Button
                   key="submit"
                   type="primary"
                   onClick={() => setIsFilterOpen(false)}
+                  className="filter-custom-button"
                 >
                   OK
                 </Button>,
@@ -130,7 +158,11 @@ const ViewRawMaterials = () => {
                   {priceRanges.map((range) => (
                     <p
                       key={range.label}
-                      className={`pointer ${range.label === selectedPriceRange?.label ? "filterActive" : "grey-text"}`}
+                      className={`pointer ${
+                        range.label === selectedPriceRange?.label
+                          ? "filterActive"
+                          : "grey-text"
+                      }`}
                       onClick={() => handlePriceFilter(range)}
                     >
                       {range.label}
@@ -142,7 +174,9 @@ const ViewRawMaterials = () => {
                   {uniqueSupplier.map((sup, index) => (
                     <p
                       key={index}
-                      className={`pointer ${sup === selectedSupplier ? "filterActive" : "grey-text"}`}
+                      className={`pointer ${
+                        sup === selectedSupplier ? "filterActive" : "grey-text"
+                      }`}
                       onClick={() => handleSupplierFilter(sup)}
                     >
                       {sup}

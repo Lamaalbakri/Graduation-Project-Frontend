@@ -8,12 +8,11 @@ import {
   updateBasketItemQuantity,
   fetchShoppingBasketDetails,
   deleteItemFromBasket,
-  deleteBasket
-} from '../../../../api/shoppingBasket'; // إضافة استيراد دالة تحديث الكمية
+  deleteBasket,
+} from "../../../../api/shoppingBasket"; // إضافة استيراد دالة تحديث الكمية
 import ConfirmationDialog from "../../../Dialog/ConfirmationDialog";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import "./ShoppingBasket.css";
-
 
 function ShoppingBasketDetail() {
   const { basketId, basketIndex } = useParams();
@@ -47,27 +46,26 @@ function ShoppingBasketDetail() {
   };
 
   useEffect(() => {
-
     fetchBasketDetails();
   }, [basketId]);
 
   if (loading) {
-    return <div className='background-message'>Loading...</div>;
+    return <div className="background-message">Loading...</div>;
   }
 
   if (error) {
-    return <div className='background-message'>{error}</div>;
+    return <div className="background-message">{error}</div>;
   }
 
   if (!updatedBasket) {
-    return <div className='background-message'>No basket found.</div>;
+    return <div className="background-message">No basket found.</div>;
   }
 
   const handleIncrement = async (item) => {
     try {
       const newQuantity = item.quantity + 1;
       const itemId = item._id;
-      console.log(itemId, newQuantity, basketId)
+      console.log(itemId, newQuantity, basketId);
       await updateBasketItemQuantity({ itemId, basketId, newQuantity }); // استدعاء API لتحديث الكمية
       await fetchBasketDetails();
     } catch (error) {
@@ -95,7 +93,7 @@ function ShoppingBasketDetail() {
       confirmationDialog: true,
       itemToDelete: item, // تخزين العنصر
     }));
-  }
+  };
 
   const confirmDeleteItem = async () => {
     if (dialogState.itemToDelete) {
@@ -114,7 +112,8 @@ function ShoppingBasketDetail() {
             const deleteBasketResult = await deleteBasket({ basketId });
             notification.info({
               message: "Delete Basket",
-              description: "The basket has been deleted as it does not contain any items.",
+              description:
+                "The basket has been deleted as it does not contain any items.",
               placement: "top",
               icon: <InfoCircleOutlined style={{ color: "#f4d53f" }} />,
             });
@@ -150,13 +149,18 @@ function ShoppingBasketDetail() {
       <Breadcrumb
         crumbs={[
           { name: "Shopping Baskets", path: `/shoppingBaskets` },
-          { name: `Shopping Basket ${basketIndex}`, path: `/shoppingBaskets/${updatedBasket._id}/${basketIndex}` },
+          {
+            name: `Shopping Basket ${basketIndex}`,
+            path: `/shoppingBaskets/${updatedBasket._id}/${basketIndex}`,
+          },
         ]}
       />
       <div className="detail-container">
         <div className="detail-container-title">
           <div>Shopping Basket {basketIndex}</div>
-          <div className="supplier-name">Supplier Name: {updatedBasket.sellerName}</div>
+          <div className="supplier-name">
+            Supplier Name: {updatedBasket.sellerName}
+          </div>
         </div>
         <div className="Basket">
           {updatedBasket?.ShoppingBasketItems?.length > 0 ? (
@@ -171,17 +175,27 @@ function ShoppingBasketDetail() {
               />
             ))
           ) : (
-            <div className='background-message'>No items found in the Basket.</div>
+            <div className="background-message">
+              No items found in the Basket.
+            </div>
           )}
         </div>
         <div className="order-summary">
           <div className="order-summary-title">Payment Summary</div>
           <div className="order-total">
-            <div className="total-price">Subtotal:<span className="total-title">({numberOfBasketItems} Items)</span></div>
-            <div className="total-price">{updatedBasket.subtotal_items} SAR</div>
+            <div className="total-price">
+              Subtotal:{" "}
+              <span className="total-title">({numberOfBasketItems} Items)</span>
+            </div>
+            <div className="total-price">
+              {updatedBasket.subtotal_items} SAR
+            </div>
           </div>
           <div className="order-total">
-            <div className="total-price">Shipping Cost:<span className="total-title">(10% of subtotal)</span></div>
+            <div className="total-price">
+              Shipping Cost:{" "}
+              <span className="total-title">(10% of subtotal)</span>
+            </div>
             <div className="total-price">{updatedBasket.shipping_cost} SAR</div>
           </div>
           <div className="order-total">
@@ -189,7 +203,9 @@ function ShoppingBasketDetail() {
             <div className="total-price">{updatedBasket.total_price} SAR</div>
           </div>
           <div className="order-summary-button">
-            <button onClick={handleCheckout} className="Checkout-button">CHECKOUT</button>
+            <button onClick={handleCheckout} className="Checkout-button">
+              CHECKOUT
+            </button>
           </div>
         </div>
       </div>
@@ -216,7 +232,6 @@ function ShoppingBasketDetail() {
         />
       )}
     </div>
-
   );
 }
 

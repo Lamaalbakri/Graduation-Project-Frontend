@@ -3,7 +3,7 @@ import "./ViewMaterials.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { Modal, Select } from "antd";
-import { addItemToBasket } from '../../../../api/shoppingBasket';
+import { addItemToBasket } from "../../../../api/shoppingBasket";
 const ProductCard = ({ d }) => {
   console.log(d);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,27 +16,26 @@ const ProductCard = ({ d }) => {
 
   // دالة لتحديث الخيارات
   const handleOptionChange = (optionName, value) => {
-    setSelectedOptions(prevOptions => ({
+    setSelectedOptions((prevOptions) => ({
       ...prevOptions,
-      [optionName]: value
+      [optionName]: value,
     }));
-    console.log(selectedOptions)
+    console.log(selectedOptions);
   };
 
   // توحيد الميثود للزرين
   const handleAddToBasket = async (fromModal = false) => {
-
-    const finalOptions = Object.keys(selectedOptions).map(optionName => ({
+    const finalOptions = Object.keys(selectedOptions).map((optionName) => ({
       optionType: optionName,
-      values: [selectedOptions[optionName]]
+      values: [selectedOptions[optionName]],
     }));
 
     // ضبط القيم الافتراضية لكل خيار إذا لم يتم اختيارها
-    d.materialOption.forEach(option => {
+    d.materialOption.forEach((option) => {
       if (!selectedOptions[option.optionName]) {
         finalOptions.push({
           optionType: option.optionName,
-          values: [option.menuList[0]] // تعيين أول خيار كافتراضي
+          values: [option.menuList[0]], // تعيين أول خيار كافتراضي
         });
       }
     });
@@ -50,7 +49,7 @@ const ProductCard = ({ d }) => {
       quantity: finalQuantity,
       options: finalOptions,
       sellerId: d.supplierId._id,
-      sellerName: d.supplierId.full_name
+      sellerName: d.supplierId.full_name,
     });
 
     console.log(response);
@@ -72,16 +71,18 @@ const ProductCard = ({ d }) => {
           {d.name}
         </p>
         <Modal
-          centered open={isModalOpen}
+          centered
+          open={isModalOpen}
           onCancel={handleCancel}
-          footer={null}>
+          footer={null}
+        >
           <div className="product-modal">
             <div className="modal-img">
               <img src={d.image} alt="Card Preview" class="" />
             </div>
             <div className="modal-desc">
               <p className="title-raw">{d.name}</p>
-              <p className="modal-price">${d.price}</p>
+              <p className="modal-price">{d.price} SAR</p>
               <p className="description">
                 {d.description}
                 {d.storageInfo}
@@ -93,7 +94,9 @@ const ProductCard = ({ d }) => {
                   <Select
                     placeholder={`Select ${option.optionName}`}
                     style={{ width: 200 }}
-                    onChange={(value) => handleOptionChange(option.optionName, value)}
+                    onChange={(value) =>
+                      handleOptionChange(option.optionName, value)
+                    }
                   >
                     {option.menuList.map((menuItem, index) => (
                       <Option key={index} value={menuItem}>
@@ -104,10 +107,14 @@ const ProductCard = ({ d }) => {
                 </div>
               ))}
               <div className="modal-bottom">
-                <input type="number" name="" id=""
+                <input
+                  type="number"
+                  name=""
+                  id=""
                   defaultValue={1}
                   min={1}
-                  onChange={(e) => setQuantity(Number(e.target.value))} />
+                  onChange={(e) => setQuantity(Number(e.target.value))}
+                />
                 <button onClick={() => handleAddToBasket(true)}>
                   <FontAwesomeIcon icon={faShoppingCart} />
                   Add to Basket
@@ -121,7 +128,7 @@ const ProductCard = ({ d }) => {
           {/* By <span>{d.shortId}</span> */}
         </p>
         <div className="price">
-          <p> SAR{d.price}</p>
+          <p>{d.price} SAR</p>
           <button onClick={() => handleAddToBasket(false)}>
             <FontAwesomeIcon icon={faShoppingCart} />
             Add

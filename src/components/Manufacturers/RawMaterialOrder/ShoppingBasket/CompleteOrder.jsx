@@ -8,8 +8,11 @@ import ConfirmationDialog from "../../../Dialog/ConfirmationDialog";
 import { notification, Modal } from "antd";
 import Address from "../../../Dialog/Address";
 import { useAddress } from "../../../../contexts/AddressContext";
-import { fetchShoppingBasketDetails, deleteBasket } from '../../../../api/shoppingBasket';
-import { createNewRawMaterialRequest } from '../../../../api/rawMaterialRequestAPI';
+import {
+  fetchShoppingBasketDetails,
+  deleteBasket,
+} from "../../../../api/shoppingBasket";
+import { createNewRawMaterialRequest } from "../../../../api/rawMaterialRequestAPI";
 
 function CompleteOrder() {
   const { basketIndex, basketId } = useParams();
@@ -17,7 +20,7 @@ function CompleteOrder() {
   const [basket, setBasket] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
   const [stepType, setStepType] = useState("");
-  const { address, loading } = useAddress();// استخدام context للحصول على العنوان
+  const { address, loading } = useAddress(); // استخدام context للحصول على العنوان
   const [dialogState, setDialogState] = useState({
     confirmationDialog: false,
     address: false,
@@ -38,7 +41,6 @@ function CompleteOrder() {
 
   useEffect(() => {
     fetchBasket();
-
   }, []);
 
   // Helper function to toggle dialog states (open or close)
@@ -53,18 +55,18 @@ function CompleteOrder() {
     if (stepType == "confirmPay") {
       console.log("Put the send order BE logic");
 
-      const itemsForRequest = basket?.ShoppingBasketItems.map(item => ({
-        rawMaterial_id: item.item_id,  // هنا نستخدم _id بدل من item_id
+      const itemsForRequest = basket?.ShoppingBasketItems.map((item) => ({
+        rawMaterial_id: item.item_id, // هنا نستخدم _id بدل من item_id
         rawMaterial_name: item.item_name,
         quantity: item.quantity,
         unit_price: item.unit_price,
         image: item.image,
         subtotal: item.quantity * item.unit_price, // حساب المجموع الفرعي
         unit: item.unit,
-        options: item.options.map(option => ({
+        options: item.options.map((option) => ({
           optionType: option.optionType,
           values: option.values,
-        }))
+        })),
       }));
 
       const requestData = {
@@ -83,7 +85,8 @@ function CompleteOrder() {
       if (!requestData.arrivalAddress) {
         Modal.error({
           title: "Error",
-          content: 'The address is required. Refresh the page to display it or add a new address.',
+          content:
+            "The address is required. Refresh the page to display it or add a new address.",
           okButtonProps: {
             className: "confirm-buttonn",
           },
@@ -92,7 +95,7 @@ function CompleteOrder() {
         try {
           // Call createNewRawMaterialRequest with the requestData
           const response = await createNewRawMaterialRequest(requestData);
-          console.log(response)
+          console.log(response);
           if (response.data) {
             const deleteBasketResult = await deleteBasket({ basketId });
             console.log("Order created successfully");
@@ -101,7 +104,7 @@ function CompleteOrder() {
           } else {
             Modal.error({
               title: "Error",
-              content: 'There is a problem, the order was not sent',
+              content: "There is a problem, the order was not sent",
               okButtonProps: {
                 className: "confirm-buttonn",
               },
@@ -110,7 +113,7 @@ function CompleteOrder() {
         } catch (error) {
           Modal.error({
             title: "Error",
-            content: 'There is a problem, the order was not sent',
+            content: "There is a problem, the order was not sent",
             okButtonProps: {
               className: "confirm-buttonn",
             },
@@ -157,7 +160,10 @@ function CompleteOrder() {
       <Breadcrumb
         crumbs={[
           { name: "Shopping Baskets", path: `/shoppingBaskets` },
-          { name: `Shopping Basket ${basketIndex}`, path: `/shoppingBaskets/${basketId}/${basketIndex}` },
+          {
+            name: `Shopping Basket ${basketIndex}`,
+            path: `/shoppingBaskets/${basketId}/${basketIndex}`,
+          },
           {
             name: "Payment Confirmation",
             path: `/shoppingBaskets/${basketId}/${basketIndex}/complete`,
@@ -168,7 +174,9 @@ function CompleteOrder() {
         <div className="order-summary">
           <div className="order-total">
             <div className="total-title">Order Total:</div>
-            <div className="total-price">{basket ? `${basket.total_price} SAR` : "Loading..."}</div>
+            <div className="total-price">
+              {basket ? `${basket.total_price} SAR` : "Loading..."}
+            </div>
           </div>
         </div>
         <div className="user-info">
@@ -204,10 +212,12 @@ function CompleteOrder() {
               <div className="step-title">Payment</div>
               <div className="step-detail">
                 <div className="pay-method">
-                  <input type="radio"
+                  <input
+                    type="radio"
                     checked={paymentMethod === "Credit Card"}
-                    onChange={() => handlePaymentMethodChange("Credit Card")} />
-                  <img src={mada} alt="Mada" ></img>
+                    onChange={() => handlePaymentMethodChange("Credit Card")}
+                  />
+                  <img src={mada} alt="Mada"></img>
                 </div>
                 <div className="card-form">
                   <label className="card-num">
@@ -235,14 +245,16 @@ function CompleteOrder() {
       </div>
       {dialogState.confirmationDialog && (
         <ConfirmationDialog
-          title={`${stepType === "confirmPay"
-            ? "Are you ready to confirm your payment?"
-            : "Your Order Has Been Created"
-            }`}
-          message={` ${stepType === "confirmPay"
-            ? "Once confirmed, you won't be able to cancel your order."
-            : "Would you like to view the Request? "
-            }`}
+          title={`${
+            stepType === "confirmPay"
+              ? "Are you ready to confirm your payment?"
+              : "Your Order Has Been Created"
+          }`}
+          message={` ${
+            stepType === "confirmPay"
+              ? "Once confirmed, you won't be able to cancel your order."
+              : "Would you like to view the Request? "
+          }`}
           onConfirm={handleConfirmAction}
           onCancel={handelCancel}
           stepType={stepType} // Pass stepType as a prop to control icon and buttons

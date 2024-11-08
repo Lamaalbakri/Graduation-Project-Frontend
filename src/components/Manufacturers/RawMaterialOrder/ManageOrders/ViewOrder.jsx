@@ -6,9 +6,9 @@ import { getOrders } from "../../../../api/orders";
 const ViewOrder = () => {
   const [orders, setOrders] = useState([]);
   useEffect(() => {
-    getOrders().then(x => {
-      setOrders(x)
-    })
+    getOrders().then((x) => {
+      setOrders(x);
+    });
   }, []);
 
   return (
@@ -18,10 +18,17 @@ const ViewOrder = () => {
         <div key={order?.shortId} className="order-item">
           <div className="order-header">Order ID: {order?.shortId}</div>
           <div className="order-info">
-            <p>Order status: {order?.status}</p>
-            <p>Price: {order?.total_price} SAR</p>
+            <p>
+              <span>Order Status:</span> {order?.status}
+            </p>
+            <p>
+              <span>Price:</span> {order?.total_price} SAR
+            </p>
           </div>
-          <Link to={"/ViewOrderList?id=" + order?.shortId} className="details-button">
+          <Link
+            to={"/ViewOrderList?id=" + order?.shortId}
+            className="details-button"
+          >
             Show more details
           </Link>
         </div>

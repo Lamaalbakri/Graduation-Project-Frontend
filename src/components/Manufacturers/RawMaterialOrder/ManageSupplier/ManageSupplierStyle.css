@@ -64,7 +64,7 @@
 /* General Button Styles */
 .ManageSupplier-search-buttons button {
   padding: 12px 24px;
-  background-color: #0f172a;
+  background-color: #1c2229;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -76,8 +76,8 @@
 /* Clear Button Styling */
 .ManageSupplier-search-buttons .ManageSupplier-clear-button {
   background-color: #fff !important; /* White background */
-  color: #0f172a !important;
-  border: 1px solid #0f172a !important;
+  color: #1c2229 !important;
+  border: 1px solid #1c2229 !important;
   padding: 12px 24px;
   border-radius: 6px;
   font-size: 14px;
@@ -95,13 +95,13 @@
 
 .ManageSupplier-search-buttons .ManageSupplier-clear-button:hover {
   border-color: #f4d53f !important; /* Change border color on hover */
-  color: #0f172a !important; /* Ensure text color remains consistent */
+  color: #f4d53f !important; /* Ensure text color remains consistent */
 }
 
 /* General Button Hover */
 .ManageSupplier-search-buttons button:hover {
   background-color: #f4d53f;
-  color: #0f172a;
+  color: #1c2229;
 }
 
 .ManageSupplier-search-result {
@@ -112,6 +112,7 @@
   border: 1px solid #d1d5db;
   border-radius: 8px;
   margin-bottom: 16px;
+  margin: 10px 35px;
 }
 
 .ManageSupplier-supplier-info {
@@ -179,11 +180,11 @@
 }
 
 .ManageSupplier-switch input:checked + .ManageSupplier-slider {
-  background-color: #0f172a;
+  background-color: #1c2229;
 }
 
 .ManageSupplier-switch input:focus + .ManageSupplier-slider {
-  box-shadow: 0 0 1px #0f172a;
+  box-shadow: 0 0 1px #1c2229;
 }
 
 .ManageSupplier-switch input:checked + .ManageSupplier-slider:before {
@@ -216,16 +217,37 @@
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+  position: relative;
+}
+
+.ManageSupplier-dialog-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 .ManageSupplier-dialog h3 {
+  margin-top: 5px;
   margin-bottom: 15px; /* Space below the title */
   text-align: left;
 }
 
 .ManageSupplier-dialog button {
-  margin: 5px;
-  margin-top: px;
+  margin: 4px;
+  margin-top: 25px;
+  width: 70px;
+  font-size: 15px;
+  /*float: right;*/
+}
+.ManageSupplier-dialog-button-No {
+  background-color: #fff;
+  border: 1px solid #1c2229;
+  color: #1c2229;
+}
+.ManageSupplier-dialog-button-No:hover {
+  background-color: #fff;
+  border: 1px solid #f4d53f;
+  color: #f4d53f;
 }
 
 /* Media Queries for Responsive Design */

@@ -2,62 +2,61 @@
   width: 100%; /* Adjust the width as necessary */
   max-width: 1200px; /* Maximum width of the order list */
   margin: auto;
-  font-family: "Arial", sans-serif;
+  /*font-family: "Arial", sans-serif;*/
+  font-family: 'Poppins', sans-serif;
 }
-
 .order-title {
   font-size: 30px;
   font-weight: bold;
   text-align: left;
   margin-bottom: 0;
   padding: 20px;
-
 }
-
 /* Styles for each individual order item */
 .order-item {
   position: relative;
   border: 1px solid #ccc;
+  margin: 10px 40px;
+  border-radius: 7px;
   padding: 20px;
   margin-top: 20px; /* Increased top margin for spacing */
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
 }
-
 /* Header styling for each order */
 .order-header {
   font-size: 18px;
   font-weight: bold;
-  color: #333;
+  color: #1c2229;
   margin-bottom: 10px; /* Add spacing under headers */
 }
-
 /* Paragraph or information styling */
 .order-info {
   font-size: 16px;
   color: #666;
   margin-bottom: 20px;
 }
-
+.order-info span{
+  font-weight: bold;
+}
 /* Button styling */
 .details-button {
   padding: 10px 20px;
-  background-color: #0f172a; /* Blue background */
+  background-color: #1c2229; /* Blue background */
   color: white;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease; /* Smooth transition for hover effect */
   position: absolute; /* Absolute position */
   right: 20px; /* Distance from the right */
   bottom: 20px; /* Distance from the bottom */
 }
-
 /* Hover effect for the button */
 .details-button:hover {
   background-color: #f4d53f;
-  color: #fff;
+  color: #1c2229;
 }
-
 /* Title styling */
 h1 {
   text-align: left; /* Changed from center to left */

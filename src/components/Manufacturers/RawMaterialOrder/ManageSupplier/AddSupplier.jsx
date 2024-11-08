@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../../images/User.png";
 import "./ManageSupplierStyle.css";
+import { CloseOutlined } from "@ant-design/icons";
 import { getSearchSupplierCategory } from "../../../../api/CategoryAPI";
 import { fetchUserData, updateUserData } from "../../../../api/userAPI";
 
@@ -14,6 +15,10 @@ const AddSupplier = () => {
   const [appliedName, setAppliedName] = useState("");
   const [showDialog, setShowDialog] = useState(false);
   const [supplierToToggle, setSupplierToToggle] = useState(null);
+
+  const closeDialog = () => {
+    setShowDialog(false);
+  };
 
   useEffect(() => {
     fetchUserData().then((x) => {
@@ -222,20 +227,29 @@ const AddSupplier = () => {
       {showDialog && (
         <div className="ManageSupplier-dialog-overlay">
           <div className="ManageSupplier-dialog">
+            <span className="ManageSupplier-dialog-close" onClick={closeDialog}>
+              <CloseOutlined
+                style={{
+                  fontSize: "16px",
+                  color: "#1c2229",
+                  cursor: "pointer",
+                }}
+              />
+            </span>
             <h3>Confirm Action</h3>
             <p>Are you sure you want to add this supplier?</p>
             <div className="ManageSupplier-dialog-actions">
               <button
-                className="ManageSupplier-dialog-button"
-                onClick={() => confirmToggleSupplier(supplierToToggle)}
-              >
-                Yes
-              </button>
-              <button
-                className="ManageSupplier-dialog-button"
+                className="ManageSupplier-dialog-button-No"
                 onClick={() => setShowDialog(false)}
               >
                 No
+              </button>
+              <button
+                className="ManageSupplier-dialog-button-Yes"
+                onClick={() => confirmToggleSupplier(supplierToToggle)}
+              >
+                Yes
               </button>
             </div>
           </div>
