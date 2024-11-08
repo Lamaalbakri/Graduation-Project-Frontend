@@ -14,7 +14,7 @@ export const fetchAllCurrentRequests = async () => {
     const json = await response.json();
     return json.data; //return all data
 };
-    
+
 export const fetchAllPreviousRequests = async () => {
     const response = await fetch(`${API_URL}/rawMaterialPreviousRequest`, {
         method: 'GET',
@@ -195,4 +195,24 @@ export const moveCurrentToPrevious = async (id) => {
 };
 
 
+// create new raw matireal request
+export const createNewRawMaterialRequest = async (data) => {
+    try {
+        const response = await fetch(`${API_URL}/rawMaterialCurrentRequest`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(data),
+        });
 
+        if (!response.ok) {
+            throw new Error(`Failed to create request: ${response.statusText}`);
+        }
+
+        return await response.json(); // استرجاع استجابة الطلب
+    } catch (error) {
+        return { error: "Error creating new request" };
+    }
+};

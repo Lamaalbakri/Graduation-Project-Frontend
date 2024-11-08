@@ -2,26 +2,26 @@ const OrderTimeline = ({ orderStatus }) => {
   // Map the order status to the corresponding stage description
   const statusToStage = {
     'pending': 'Order Placed',
-    'accepted': 'Order received',
+    'accepted': 'Order Accepted',
     'rejected': 'Order Rejected',
-    'inProgress': 'Order Processed',
-    'delivered': 'Ready to Pick up'
+    'inProgress': 'Order in Progress',
+    'delivered': 'Order Delivered'
   };
 
   const orderStages = [
     'Order Placed',
-    'Order received',
+    'Order Accepted',
     'Order Rejected',
-    'Order Processed',
-    'Ready to Pick up'
+    'Order in Progress',
+    'Order Delivered'
   ];
 
   const stageIcons = {
     'Order Placed': 'viewOrder1.png',
-    'Order received': 'viewOrder2.png',
+    'Order Accepted': 'viewOrder2.png',
     'Order Rejected': 'viewOrder5.png',
-    'Order Processed': 'viewOrder3.png',
-    'Ready to Pick up': 'viewOrder4.png'
+    'Order in Progress': 'viewOrder3.png',
+    'Order Delivered': 'viewOrder4.png'
   };
 
   const currentStage = statusToStage[orderStatus];
@@ -34,8 +34,8 @@ const OrderTimeline = ({ orderStatus }) => {
           return null;
         }
 
-        // Skip "Order Processed" and "Ready to Pick up" if the order is rejected
-        if (orderStatus === 'rejected' && (stage === 'Order Processed' || stage === 'Ready to Pick up')) {
+        // Skip "Order in Progress" and "Order Delivered" if the order is rejected
+        if (orderStatus === 'rejected' && (stage === 'Order in Progress' || stage === 'Order Delivered')) {
           return null;
         }
 

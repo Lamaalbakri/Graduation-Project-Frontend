@@ -1,11 +1,11 @@
-export const getOrders = async (id) => {
+export const getOrders = async () => {
     try {
-        const response = await fetch('http://localhost:8500/api/v1/rawMaterialCurrentRequest/manufacturer/' + id, {
+        const response = await fetch('http://localhost:8500/api/v1/rawMaterialCurrentRequest/manufacturer/order', {
             method: 'GET',
             credentials: 'include'
         });
         let data = await response.json();
-        const response1 = await fetch('http://localhost:8500/api/v1/rawMaterialPreviousRequest/manufacturer/' + id, {
+        const response1 = await fetch('http://localhost:8500/api/v1/rawMaterialPreviousRequest/manufacturer/order', {
             method: "GET",
             credentials: 'include', // Sending cookies with orders
         });
@@ -19,7 +19,7 @@ export const getOrders = async (id) => {
 };
 
 
-export const getSingleOrder = async (id) => {
+export const getSingleOrder = async () => {
     try {
         try {
             const response = await fetch(`http://localhost:8500/api/v1/rawMaterialPreviousRequest/${id}`, {

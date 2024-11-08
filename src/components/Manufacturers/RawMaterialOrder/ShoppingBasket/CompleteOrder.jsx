@@ -1,70 +1,136 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
 import { EditOutlined } from "@ant-design/icons";
 import Breadcrumb from "./Breadcrumb";
 import "./ShoppingBasket.css";
 import mada from "../../../images/mada-logo.png";
 import ConfirmationDialog from "../../../Dialog/ConfirmationDialog";
+import { notification, Modal } from "antd";
 import Address from "../../../Dialog/Address";
 import { useAddress } from "../../../../contexts/AddressContext";
+import { fetchShoppingBasketDetails, deleteBasket } from '../../../../api/shoppingBasket';
+import { createNewRawMaterialRequest } from '../../../../api/rawMaterialRequestAPI';
 
 function CompleteOrder() {
   const { basketIndex, basketId } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
+  const [basket, setBasket] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState("Credit Card");
   const [stepType, setStepType] = useState("");
   const { address, loading } = useAddress();// استخدام context للحصول على العنوان
-  // const sellerId = sessionStorage.getItem("sellerId") || location.state?.sellerId;
-  // const basketIndex = sessionStorage.getItem("basketIndex") || location.state?.basketIndex;
-  // const buyerId = sessionStorage.getItem("buyerId") || location.state?.buyerId;
-  const total_price = sessionStorage.getItem("total_price") || location.state?.total_price;
   const [dialogState, setDialogState] = useState({
     confirmationDialog: false,
     address: false,
   });
 
-  useEffect(() => {
-
-    // if (sellerId !== sessionStorage.getItem("sellerId")) {
-    //   sessionStorage.setItem("sellerId", sellerId);
-    // }
-    // if (basketIndex !== sessionStorage.getItem("basketIndex")) {
-    //   sessionStorage.setItem("basketIndex", basketIndex);
-    // }
-    // if (buyerId !== sessionStorage.getItem("buyerId")) {
-    //   sessionStorage.setItem("buyerId", buyerId);
-    // }
-    if (total_price !== sessionStorage.getItem("total_price")) {
-      sessionStorage.setItem("total_price", total_price);
+  const fetchBasket = async () => {
+    try {
+      const data = await fetchShoppingBasketDetails({ basketId });
+      if (data) {
+        setBasket(data.basket); // تحديث فقط البيانات التي تأتي من API
+      } else {
+        setError("Error fetching shopping baskets");
+      }
+    } catch (err) {
+      setError("Error fetching shopping Baskets");
     }
-  }, [total_price]);
+  };
 
+  useEffect(() => {
+    fetchBasket();
+
+  }, []);
 
   // Helper function to toggle dialog states (open or close)
   const toggleDialog = (dialogName, value) => {
     setDialogState((prev) => ({ ...prev, [dialogName]: value }));
-    // if (requestId) setSelectedRequestId(requestId);
-    // if (status) setSelectedStatus(status);
   };
 
   // Handle confirmation for conferm Payment or View order
-  const handleConfirmAction = () => {
+  const handleConfirmAction = async () => {
+    toggleDialog("confirmationDialog", false);
 
     if (stepType == "confirmPay") {
       console.log("Put the send order BE logic");
-      toggleDialog("confirmationDialog", false);
-      setStepType("viewOrder");
-      toggleDialog("confirmationDialog", true);
 
-    } else if (stepType == "viewOrder") {
+      const itemsForRequest = basket?.ShoppingBasketItems.map(item => ({
+        rawMaterial_id: item.item_id,  // هنا نستخدم _id بدل من item_id
+        rawMaterial_name: item.item_name,
+        quantity: item.quantity,
+        unit_price: item.unit_price,
+        image: item.image,
+        subtotal: item.quantity * item.unit_price, // حساب المجموع الفرعي
+        unit: item.unit,
+        options: item.options.map(option => ({
+          optionType: option.optionType,
+          values: option.values,
+        }))
+      }));
 
-      console.log("open view order page");
-      // <Link to={`/viewOrder`} />;
-      // <Link to={`/ViewOrders`} />
+      const requestData = {
+        supplierId: basket.sellerId,
+        supplierName: basket.sellerName,
+        manufacturerName: basket.buyerId,
+        supplyingRawMaterials: itemsForRequest,
+        subtotal_items: basket.subtotal_items,
+        shipping_cost: basket.shipping_cost,
+        total_price: basket.total_price,
+        payment_method: paymentMethod,
+        status: "pending",
+        arrivalAddress: address,
+      };
 
-      // set state of dialog to false "close"
+      if (!requestData.arrivalAddress) {
+        Modal.error({
+          title: "Error",
+          content: 'The address is required. Refresh the page to display it or add a new address.',
+          okButtonProps: {
+            className: "confirm-buttonn",
+          },
+        });
+      } else {
+        try {
+          // Call createNewRawMaterialRequest with the requestData
+          const response = await createNewRawMaterialRequest(requestData);
+          console.log(response)
+          if (response.data) {
+            const deleteBasketResult = await deleteBasket({ basketId });
+            console.log("Order created successfully");
+            setStepType("viewOrder");
+            toggleDialog("confirmationDialog", true);
+          } else {
+            Modal.error({
+              title: "Error",
+              content: 'There is a problem, the order was not sent',
+              okButtonProps: {
+                className: "confirm-buttonn",
+              },
+            });
+          }
+        } catch (error) {
+          Modal.error({
+            title: "Error",
+            content: 'There is a problem, the order was not sent',
+            okButtonProps: {
+              className: "confirm-buttonn",
+            },
+          });
+        }
+        // // Close the dialog after creating the order
+        // toggleDialog("confirmationDialog", false);
+      }
+    } else if (stepType === "viewOrder") {
       toggleDialog("confirmationDialog", false);
       navigate(`/ViewOrders/`);
+    }
+  };
+
+  const handelCancel = () => {
+    if (stepType == "confirmPay") {
+      toggleDialog("confirmationDialog", false);
+    } else if (stepType === "viewOrder") {
+      toggleDialog("confirmationDialog", false);
+      navigate("/shoppingBaskets");
     }
   };
 
@@ -81,11 +147,15 @@ function CompleteOrder() {
     toggleDialog("address", true);
   };
 
+  const handlePaymentMethodChange = (method) => {
+    console.log("Setting payment method:", method);
+    setPaymentMethod(method);
+  };
+
   return (
     <div className="shoppingBasket">
       <Breadcrumb
         crumbs={[
-          // <Link to={`/shoppingBaskets/${buyerId}/${basketIndex}/complete`}>
           { name: "Shopping Baskets", path: `/shoppingBaskets` },
           { name: `Shopping Basket ${basketIndex}`, path: `/shoppingBaskets/${basketId}/${basketIndex}` },
           {
@@ -98,7 +168,7 @@ function CompleteOrder() {
         <div className="order-summary">
           <div className="order-total">
             <div className="total-title">Order Total:</div>
-            <div className="total-price">{location.state?.total_price || total_price} SAR</div>
+            <div className="total-price">{basket ? `${basket.total_price} SAR` : "Loading..."}</div>
           </div>
         </div>
         <div className="user-info">
@@ -134,8 +204,10 @@ function CompleteOrder() {
               <div className="step-title">Payment</div>
               <div className="step-detail">
                 <div className="pay-method">
-                  <input type="radio" checked onChange={() => { }} />
-                  <img src={mada}></img>
+                  <input type="radio"
+                    checked={paymentMethod === "Credit Card"}
+                    onChange={() => handlePaymentMethodChange("Credit Card")} />
+                  <img src={mada} alt="Mada" ></img>
                 </div>
                 <div className="card-form">
                   <label className="card-num">
@@ -172,7 +244,7 @@ function CompleteOrder() {
             : "Would you like to view the Request? "
             }`}
           onConfirm={handleConfirmAction}
-          onCancel={() => toggleDialog("confirmationDialog", false)}
+          onCancel={handelCancel}
           stepType={stepType} // Pass stepType as a prop to control icon and buttons
         />
       )}

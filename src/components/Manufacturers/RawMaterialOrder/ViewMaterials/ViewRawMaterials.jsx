@@ -149,21 +149,8 @@ const ViewRawMaterials = () => {
                     </p>
                   ))}
                 </div>
-                {/* <div>
-                  <p className="filter-header">Material</p>
-                  {uniqueSlugs.map((slug, index) => (
-                    <p
-                      key={index}
-                      className={`pointer ${slug === selectedMaterial ? "filterActive" : "grey-text"}`}
-                      onClick={() => handleMaterialFilter(slug)}
-                    >
-                      {slug}
-                    </p>
-                  ))}
-                </div> */}
               </div>
             </Modal>
-
             <div className="search-raw">
               <FontAwesomeIcon icon={faMagnifyingGlass} />
               <input

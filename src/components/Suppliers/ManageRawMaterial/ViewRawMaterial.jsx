@@ -19,7 +19,6 @@ const ViewRawMaterial = () => {
     setLoading(true);
     try {
       const response = await getMaterial();
-      console.log("MATERIAL: ",response.data)
       setRawMaterials(response.data.data);
       setFilteredMaterials(response.data.data);
     } catch (error) {
@@ -67,7 +66,7 @@ const ViewRawMaterial = () => {
 
   const handleSave = async (updatedMaterial) => {
     setLoading(true);
-     const response = await updateMaterial(updatedMaterial);
+    const response = await updateMaterial(updatedMaterial);
     fetchMaterials();
     setLoading(false);
   };
@@ -137,12 +136,12 @@ const ViewRawMaterial = () => {
                   <p>Quantity: {material.quantity}</p>
                   <p>Price: ${material.price.toFixed(2)}</p>
                   <p>{material.description}</p>
-                 {/* Access materialOption and map through it */}
-          {material.materialOption?.map((option, index) => (
-              <p key={index}>
-                {option.optionName}: {option.menuList.join(', ')}
-              </p>
-            ))}
+                  {/* Access materialOption and map through it */}
+                  {material.materialOption?.map((option, index) => (
+                    <p key={index}>
+                      {option.optionName}: {option.menuList.join(', ')}
+                    </p>
+                  ))}
                   <p>Units: {material.units.join(", ")}</p>
                   <div className="button-container">
                     <button
@@ -227,7 +226,7 @@ const UpdateModal = ({ material, onSave, onClose }) => {
   const [loading, setLoading] = useState(false);
   const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1 MB
 
- 
+
   useEffect(() => {
     if (material) {
       setName(material.name);
@@ -289,8 +288,8 @@ const UpdateModal = ({ material, onSave, onClose }) => {
     }
   };
 
-  
-  
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -310,14 +309,14 @@ const UpdateModal = ({ material, onSave, onClose }) => {
         materialOption,
         units,
       };
-    await onSave(updatedMaterial);
-    notification.success({
-            message: "Material updated successfully!",
-            description: "The material has been updated.",
-            placement: 'top',
-    
-          });
-          onClose(); // Close the modal after saving
+      await onSave(updatedMaterial);
+      notification.success({
+        message: "Material updated successfully!",
+        description: "The material has been updated.",
+        placement: 'top',
+
+      });
+      onClose(); // Close the modal after saving
     } catch (error) {
       notification.error({
         message: 'Error updating material',
@@ -339,13 +338,13 @@ const UpdateModal = ({ material, onSave, onClose }) => {
     <>
       {loading && <Loader />}
       <div className="modal add-page">
-      <div className="modal-content">
-        <div className="modal-header">
-          <span className="close" onClick={onClose}>
-            &times;
-          </span>
-        </div>
-        <h2>Update Material</h2>
+        <div className="modal-content">
+          <div className="modal-header">
+            <span className="close" onClick={onClose}>
+              &times;
+            </span>
+          </div>
+          <h2>Update Material</h2>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Name:</label>
@@ -392,7 +391,7 @@ const UpdateModal = ({ material, onSave, onClose }) => {
                       <button
                         type="button"
                         onClick={() => handleDeleteMenuValue(index, valIndex)}
-                        style={{ marginLeft: '10px', marginBottom: '10px' , marginTop: '10px' , color: 'red', cursor: 'pointer' ,backgroundColor: '#c3c3c3' }}
+                        style={{ marginLeft: '10px', marginBottom: '10px', marginTop: '10px', color: 'red', cursor: 'pointer', backgroundColor: '#c3c3c3' }}
                       >
                         &times;
                       </button>
@@ -402,36 +401,36 @@ const UpdateModal = ({ material, onSave, onClose }) => {
               </div>
             ))}
 
-<div className="form-group">
-  <label>Units</label>
-  <input 
-    type="text" 
-    value={currentUnit} 
-    onChange={(e) => setCurrentUnit(e.target.value)} 
-    placeholder="Add Unit" 
-  />
-  <button 
-    className='material-add-button' 
-    type="button" 
-    onClick={handleAddUnit}
-  >
-    Add Unit
-  </button>
-  <ul>
-    {units.map((unit, index) => (
-      <li key={index}>
-        {unit}
-        <button
-          type="button"
-          onClick={() => handleDeleteUnit(index)}
-          style={{ marginLeft: '10px', marginBottom: '10px' , marginTop: '10px' , color: 'red', cursor: 'pointer' ,backgroundColor: '#c3c3c3'}}
-        >
-          &times;
-        </button>
-      </li>
-    ))}
-  </ul>
-</div>
+            <div className="form-group">
+              <label>Units</label>
+              <input
+                type="text"
+                value={currentUnit}
+                onChange={(e) => setCurrentUnit(e.target.value)}
+                placeholder="Add Unit"
+              />
+              <button
+                className='material-add-button'
+                type="button"
+                onClick={handleAddUnit}
+              >
+                Add Unit
+              </button>
+              <ul>
+                {units.map((unit, index) => (
+                  <li key={index}>
+                    {unit}
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteUnit(index)}
+                      style={{ marginLeft: '10px', marginBottom: '10px', marginTop: '10px', color: 'red', cursor: 'pointer', backgroundColor: '#c3c3c3' }}
+                    >
+                      &times;
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             <div className="form-group">
               <label>Image</label>
