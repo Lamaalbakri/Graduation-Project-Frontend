@@ -19,7 +19,7 @@ export const getOrders = async () => {
 };
 
 
-export const getSingleOrder = async () => {
+export const getSingleOrder = async (id) => {
     try {
         try {
             const response = await fetch(`http://localhost:8500/api/v1/rawMaterialPreviousRequest/${id}`, {
