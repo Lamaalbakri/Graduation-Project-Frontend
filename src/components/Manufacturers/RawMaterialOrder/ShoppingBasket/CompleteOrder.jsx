@@ -8,10 +8,7 @@ import ConfirmationDialog from "../../../Dialog/ConfirmationDialog";
 import { notification, Modal } from "antd";
 import Address from "../../../Dialog/Address";
 import { useAddress } from "../../../../contexts/AddressContext";
-import {
-  fetchShoppingBasketDetails,
-  deleteBasket,
-} from "../../../../api/shoppingBasket";
+import { fetchShoppingBasketDetails, deleteBasket, } from "../../../../api/shoppingBasket";
 import { createNewRawMaterialRequest } from "../../../../api/rawMaterialRequestAPI";
 
 function CompleteOrder() {
@@ -53,7 +50,6 @@ function CompleteOrder() {
     toggleDialog("confirmationDialog", false);
 
     if (stepType == "confirmPay") {
-      console.log("Put the send order BE logic");
 
       const itemsForRequest = basket?.ShoppingBasketItems.map((item) => ({
         rawMaterial_id: item.item_id, // هنا نستخدم _id بدل من item_id
@@ -72,7 +68,7 @@ function CompleteOrder() {
       const requestData = {
         supplierId: basket.sellerId,
         supplierName: basket.sellerName,
-        manufacturerName: basket.buyerId,
+        manufacturerName: basket.buyerName,
         supplyingRawMaterials: itemsForRequest,
         subtotal_items: basket.subtotal_items,
         shipping_cost: basket.shipping_cost,
@@ -95,20 +91,40 @@ function CompleteOrder() {
         try {
           // Call createNewRawMaterialRequest with the requestData
           const response = await createNewRawMaterialRequest(requestData);
-          console.log(response);
           if (response.data) {
             const deleteBasketResult = await deleteBasket({ basketId });
             console.log("Order created successfully");
             setStepType("viewOrder");
             toggleDialog("confirmationDialog", true);
-          } else {
-            Modal.error({
-              title: "Error",
-              content: "There is a problem, the order was not sent",
-              okButtonProps: {
-                className: "confirm-buttonn",
-              },
-            });
+          } else if (response.error) {
+            if (response.insufficientItems && response.insufficientItems.length > 0) {
+              Modal.error({
+                title: "Unavailable items:",
+                content: (
+                  <div>
+                    {response.insufficientItems.map(item => (
+                      <div key={item.rawMaterialId}>
+                        <p><b>Item Name:</b> {item.rawMaterialName}</p>
+                        <p><b>Requested Quantity:</b> {item.requestedQuantity}</p>
+                        <p><b>Available Quantity:</b> {item.availableQuantity}</p>
+                        <br />
+                      </div>
+                    ))}
+                  </div>
+                ),
+                okButtonProps: {
+                  className: "confirm-buttonn",
+                },
+              });
+            } else {
+              Modal.error({
+                title: "Error",
+                content: "There is a problem, the order was not sent",
+                okButtonProps: {
+                  className: "confirm-buttonn",
+                },
+              });
+            }
           }
         } catch (error) {
           Modal.error({
@@ -245,16 +261,14 @@ function CompleteOrder() {
       </div>
       {dialogState.confirmationDialog && (
         <ConfirmationDialog
-          title={`${
-            stepType === "confirmPay"
-              ? "Are you ready to confirm your payment?"
-              : "Your Order Has Been Created"
-          }`}
-          message={` ${
-            stepType === "confirmPay"
-              ? "Once confirmed, you won't be able to cancel your order."
-              : "Would you like to view the Request? "
-          }`}
+          title={`${stepType === "confirmPay"
+            ? "Are you ready to confirm your payment?"
+            : "Your Order Has Been Created"
+            }`}
+          message={` ${stepType === "confirmPay"
+            ? "Once confirmed, you won't be able to cancel your order."
+            : "Would you like to view the Request? "
+            }`}
           onConfirm={handleConfirmAction}
           onCancel={handelCancel}
           stepType={stepType} // Pass stepType as a prop to control icon and buttons

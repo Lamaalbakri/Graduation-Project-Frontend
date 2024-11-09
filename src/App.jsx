@@ -49,21 +49,33 @@ const { Content } = Layout;
 function App() {
 
   // when refreshing the website does not crash and show a empty white page 
-  const [userType, setUserType] = useState(localStorage.getItem('userType'));
-  const [userId, setUserId] = useState(localStorage.getItem('userId'));
+  // const [userType, setUserType] = useState(localStorage.getItem('userType'));
+  // const [userId, setUserId] = useState(localStorage.getItem('userId'));
+  const [userType, setUserType] = useState(sessionStorage.getItem('userType'));
+  const [userId, setUserId] = useState(sessionStorage.getItem('userId'));
 
 
+  // useEffect(() => {
+  //   localStorage.setItem('userType', userType);
+  //   localStorage.setItem('userId', userId);
+  // }, [userType, userId])
   useEffect(() => {
-    localStorage.setItem('userType', userType);
-    localStorage.setItem('userId', userId);
-  }, [userType, userId])
+    sessionStorage.setItem('userType', userType);
+    sessionStorage.setItem('userId', userId);
+  }, [userType, userId]);
 
 
+  // const clearUserData = () => {
+  //   setUserType(null);
+  //   setUserId(null);
+  //   localStorage.removeItem('userType');
+  //   localStorage.removeItem('userId');
+  // };
   const clearUserData = () => {
     setUserType(null);
     setUserId(null);
-    localStorage.removeItem('userType');
-    localStorage.removeItem('userId');
+    sessionStorage.removeItem('userType');
+    sessionStorage.removeItem('userId');
   };
 
 

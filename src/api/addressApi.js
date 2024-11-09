@@ -36,14 +36,15 @@ export const createAddress = async (addressData) => {
         });
 
         if (!response.ok) {
-            throw new Error('Error creating address');
+            const errorData = await response.json();
+            throw new Error(errorData.msg || 'Error creating address');
         }
 
         const data = await response.json();
-        return data.data; // Returns the created address data
+        return { success: true, message: data.msg, data: data.data }; // Returns the created address data
     } catch (error) {
         //console.error('Error creating address:', error);
-        throw error;
+        return { success: false, message: error.message };
     }
 };
 

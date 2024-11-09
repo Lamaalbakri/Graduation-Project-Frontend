@@ -58,7 +58,7 @@ const ViewSuppliers = () => {
 
     updatedUser.id = updatedUser._id;
 
-    updateUserData(updatedUser, localStorage.getItem("userType"))
+    updateUserData(updatedUser, sessionStorage.getItem("userType"))
       .then((response) => {
         console.log("updated: ", response.data);
         setUser(response.data);

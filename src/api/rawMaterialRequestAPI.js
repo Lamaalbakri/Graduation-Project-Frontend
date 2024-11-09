@@ -208,11 +208,16 @@ export const createNewRawMaterialRequest = async (data) => {
         });
 
         if (!response.ok) {
+            const errorData = await response.json();
+            if (errorData.insufficientItems && errorData.insufficientItems.length > 0) {
+                // إذا كانت هناك عناصر غير متوفرة، قم بإرجاعها مع رسالة مخصصة
+                return { error: "Some items are unavailable or have low stock.", insufficientItems: errorData.insufficientItems };
+            }
             throw new Error(`Failed to create request: ${response.statusText}`);
         }
 
-        return await response.json(); // استرجاع استجابة الطلب
+        return await response.json(); // استرجاع استجابة الطلب بنجاح
     } catch (error) {
-        return { error: "Error creating new request" };
+        return { error: error.message || "Error creating new request" };
     }
 };

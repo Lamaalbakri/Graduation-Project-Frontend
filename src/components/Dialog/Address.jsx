@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { CloseOutlined, InfoCircleOutlined } from "@ant-design/icons";
-import { notification } from "antd";
+import { notification, Modal } from "antd";
 import "./DialogStyle.css";
 import { createAddress, updateAddress } from "../../api/addressApi";
 import { useAddress } from "../../contexts/AddressContext";
@@ -40,20 +40,33 @@ function Address({ onClose }) {
       if (address && address._id) {
         // إذا كان هناك عنوان موجود، قم بالتحديث
         savedAddress = await updateAddress(address._id, newAddress);
-        // تحديث العنوان في السياق
       } else {
         // إذا لم يكن هناك عنوان موجود، قم بإنشاء عنوان جديد
-        savedAddress = await createAddress(newAddress);
-        // تحديث العنوان في السياق
+        const response = await createAddress(newAddress);
+
+        if (!response.success) {
+          Modal.error({
+            title: "Error:",
+            content: 'You already have an address, refresh the page if not appear.',
+            okButtonProps: {
+              className: "confirm-buttonn",
+            },
+          });
+          return;
+        }
+
+        // إذا نجحت العملية، خذ البيانات المحفوظة
+        savedAddress = response.data;
       }
       setAddress(savedAddress);
       onClose(savedAddress);
     } catch (error) {
-      notification.error({
-        message: "Error",
-        description: "Error saving address, try again",
-        placement: "top",
-        icon: <InfoCircleOutlined style={{ color: "#f4d53f" }} />,
+      Modal.error({
+        title: "Error:",
+        content: 'Error saving address, try again.',
+        okButtonProps: {
+          className: "confirm-buttonn",
+        },
       });
     }
   };
