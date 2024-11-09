@@ -8,6 +8,7 @@ import {
   moveTransportRequestCurrentToPrevious,
 } from "../../../api/transportRequestsAPI";
 import { DataGrid } from "@mui/x-data-grid";
+import { notification, Modal } from "antd";
 import "./TransportRequestsTable.css";
 
 function TransportRequestsTable({ data }) {
@@ -44,7 +45,14 @@ function TransportRequestsTable({ data }) {
       );
 
       if (!updatedTransportRequest || updatedTransportRequest.error) {
-        throw new Error("Failed to update status in the backend");
+        //throw new Error("Failed to update status in the backend");
+        Modal.error({
+          title: "Error:",
+          content: `Failed to update sender,Call customer service.`,
+          okButtonProps: {
+            className: "confirm-buttonn",
+          },
+        });
       }
 
       //update in front-end
@@ -55,15 +63,21 @@ function TransportRequestsTable({ data }) {
           ) =>
             request.shortId === id
               ? {
-                  ...request,
-                  status: updatedTransportRequest.data.status,
-                  statusClass: `TransportRequestsTable-status-${updatedTransportRequest.data.status}`,
-                }
+                ...request,
+                status: updatedTransportRequest.data.status,
+                statusClass: `TransportRequestsTable-status-${updatedTransportRequest.data.status}`,
+              }
               : request
         )
       );
     } catch (error) {
-      console.error("Error updating the status:", error);
+      Modal.error({
+        title: "Error:",
+        content: 'Error updating the status, Call customer service.',
+        okButtonProps: {
+          className: "confirm-buttonn",
+        },
+      });
     }
   };
 
@@ -296,14 +310,12 @@ function TransportRequestsTable({ data }) {
                   }}
                 />
               )}
-              {`Confirm ${
-                selectedStatus === "rejected" ? "Rejection" : "Delivery"
-              }`}
+              {`Confirm ${selectedStatus === "rejected" ? "Rejection" : "Delivery"
+                }`}
             </>
           }
-          message={`Are you sure you want to ${
-            selectedStatus === "rejected" ? "reject" : "mark as delivered"
-          } this transport request?`}
+          message={`Are you sure you want to ${selectedStatus === "rejected" ? "reject" : "mark as delivered"
+            } this transport request?`}
           onConfirm={handleConfirmAction}
           onCancel={() => toggleDialog("confirmationDialog", false)}
         />

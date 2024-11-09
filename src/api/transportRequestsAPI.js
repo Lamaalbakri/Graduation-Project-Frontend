@@ -6,7 +6,7 @@ export const fetchCompanies = async () => {
         method: 'GET',
         credentials: 'include'
     });
-      
+
     if (!response.ok) {
         const errorDetails = await response.text();
         throw new Error(`Failed to fetch company list: ${response.status} ${errorDetails}`);
@@ -17,25 +17,25 @@ export const fetchCompanies = async () => {
 
 export const sendTransportRequest = async (requestData) => {
     try {
-      const response = await fetch(`${API_URL}/transportCurrentRequest`, {
-        method: "POST",
-        credentials: 'include',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestData),
-      });
-  
-      const jsonResponse = await response.json();
+        const response = await fetch(`${API_URL}/transportCurrentRequest`, {
+            method: "POST",
+            credentials: 'include',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(requestData),
+        });
 
-      if (!response.ok) {
-        console.error('Error response:', jsonResponse);
-        throw new Error(jsonResponse.message || "Failed to send request.");
-      }
+        const jsonResponse = await response.json();
 
-      return jsonResponse;
+        if (!response.ok) {
+            console.error('Error response:', jsonResponse);
+            throw new Error(jsonResponse.message || "Failed to send request.");
+        }
+
+        return jsonResponse;
 
     } catch (error) {
-      console.error("Error sending transport request:", error);
-      throw error;
+        console.error("Error sending transport request:", error);
+        throw error;
     }
 };
 
@@ -62,7 +62,7 @@ export const fetchAllPreviousTransportRequests = async () => {
         throw new Error(`Error: ${response.status}`);
     }
     const json = await response.json();
-    return json.data; 
+    return json.data;
 };
 
 // change status
@@ -78,13 +78,15 @@ export const updateTransportRequestStatus = async (id, newStatus) => {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to update the status');
+            const errorData = await response.json();  // استخراج رسالة الخطأ من الـ response
+            throw new Error(errorData.msg || 'Failed to update the status');
         }
 
-        return await response.json();
+        const data = await response.json();
+        return data;
     } catch (error) {
         console.error("Error updating the status:", error);
-        throw error; 
+        throw error;
     }
 };
 
@@ -122,7 +124,7 @@ export const searchTransportCurrentRequestById = async (id) => {
             }
         }
         const json = await response.json();
-        return json.data; 
+        return json.data;
     } catch (error) {
         return { error: "problem with the server" };
     }
@@ -169,7 +171,7 @@ export const moveTransportRequestCurrentToPrevious = async (id) => {
         }
 
         await deleteTransportCurrentRequestById(id);
-        
+
         return await response.json();
     } catch (error) {
         return { error: `Error moving request to previous` };
