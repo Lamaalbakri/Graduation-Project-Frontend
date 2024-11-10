@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Button, Dropdown, Menu, Badge } from "antd";
+import { Layout, Button, Dropdown, Menu, Badge, List, Typography } from "antd";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -7,12 +7,17 @@ import {
   SettingOutlined,
   UserOutlined,
   ShoppingCartOutlined,
+  BellOutlined,
+  CloseCircleOutlined,
+  CheckCircleOutlined,
 } from "@ant-design/icons";
 import UserProfile from "./UserProfile";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchShoppingBasketList } from '../api/shoppingBasket';
+import { fetchShoppingBasketList } from "../api/shoppingBasket";
+import "./AppHeader.css"; // Import the CSS file
 
 const { Header } = Layout;
+const { Text } = Typography;
 
 const AppHeader = ({
   collapsed,
@@ -22,7 +27,49 @@ const AppHeader = ({
   userType,
 }) => {
   const navigate = useNavigate();
-  const [cartItemCount, setCartItemCount] = useState(0); //  Number of items in the shopping cart
+  const [cartItemCount, setCartItemCount] = useState(0); // Number of items in the shopping cart
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      type: "Order Shipped",
+      description: "Shipping 'wood' with  ID #2378467 is on its way",
+      status: "success",
+    },
+    {
+      id: 2,
+      type: "Order Processed",
+      description: "Your order with  ID #1276432 was processed",
+      status: "success",
+    },
+    {
+      id: 3,
+      type: "Order Canceled",
+      description: "The order with  ID #5965247 was canceled",
+      status: "error",
+    },
+
+    {
+      id: 4,
+      type: "Order Processed",
+      description: "Your order with  ID #1276432 was processed",
+      status: "success",
+    },
+
+    {
+      id: 5,
+      type: "Order Processed",
+      description: "Your order with  ID #1276432 was processed",
+      status: "success",
+    },
+
+    {
+      id: 6,
+      type: "Order Processed",
+      description: "Your order with  ID #1276432 was processed",
+      status: "success",
+    },
+  ]);
+
   const menu = (
     <Menu>
       <Menu.Item key="1" icon={<UserOutlined />}>
@@ -33,18 +80,15 @@ const AppHeader = ({
       </Menu.Item>
     </Menu>
   );
-  // Show shopping Cart icon only for users who purchase
-  const showCartButton = ["manufacturer", "distributor", "retailer"].includes(
-    userType
-  );
 
-  // Fetch total item count from shopping basket list
+  const showCartButton = ["manufacturer", "distributor", "retailer"].includes(userType);
+
   useEffect(() => {
     const fetchCartItemCount = async () => {
       try {
         const data = await fetchShoppingBasketList();
         if (data && !data.error) {
-          const totalItems = data.numberOfBasketItems; // Assuming this is returned by the backend
+          const totalItems = data.numberOfBasketItems;
           setCartItemCount(totalItems);
         }
       } catch (err) {
@@ -54,15 +98,35 @@ const AppHeader = ({
     fetchCartItemCount();
   }, [cartItemCount]);
 
-  // Function to update an item number in the cart
-  const updateCart = () => {
-    setCartItemCount(cartItemCount + 1);
+  const handleCartClick = () => {
+    navigate(`/shoppingBaskets`);
   };
 
-  // Function to handle navigation to the cart page
-  const handleCartClick = () => {
-    navigate(`/shoppingBaskets`); //
-  };
+  const notificationMenu = (
+    <div className="notification-menu">
+      <Text strong>Notifications</Text>
+      <List
+        itemLayout="horizontal"
+        dataSource={notifications}
+        renderItem={(item) => (
+          <List.Item className="notification-item">
+            <List.Item.Meta
+              avatar={
+                <span className={`notification-icon ${item.status}`}>
+                  {item.status === "success" ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                </span>
+              }
+              title={<Text strong>{item.type}</Text>}
+              description={<Text type="secondary" style={{ fontWeight: "500" }}>{item.description}</Text>}
+            />
+          </List.Item>
+        )}
+      />
+      {notifications.length === 0 && (
+        <Text type="secondary">No new notifications</Text>
+      )}
+    </div>
+  );
 
   return (
     <Header
@@ -81,6 +145,14 @@ const AppHeader = ({
         icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       />
       <div style={{ display: "flex", alignItems: "center", marginRight: "1%" }}>
+        <Dropdown overlay={notificationMenu} trigger={["click"]} placement="bottomRight">
+          <Button type="text" onClick={(e) => e.preventDefault()}>
+            <Badge count={notifications.length} overflowCount={9}>
+              <BellOutlined style={{ fontSize: "20px" }} />
+            </Badge>
+          </Button>
+        </Dropdown>
+
         {showCartButton && (
           <Button
             type="text"

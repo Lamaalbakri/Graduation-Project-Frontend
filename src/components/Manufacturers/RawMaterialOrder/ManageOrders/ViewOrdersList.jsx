@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import OrderTimeline from "./OrderTimeline";
 import "./ViewOrderList.css";
-import moment from "moment";
 import { getSingleOrder } from "../../../../api/orders";
 
-
+import {
+  CheckCircleOutlined
+} from "@ant-design/icons";
+import FeedbackPopup from "./FeedbackPopup";
 const ViewOrdersList = () => {
 
   const location = useLocation();
@@ -24,11 +26,42 @@ const ViewOrdersList = () => {
     }
   }, [id]);
 
-  // احسب إجمالي عدد العناصر مضروبا في الكمية لكل عنصر
-  const totalItemsCount = order?.supplyingRawMaterials?.reduce((total, item) => {
-    return total + (item.quantity || 0);
-  }, 0);
 
+  const products = [
+    {
+      id: 1,
+      name: "Milk 1 Liter",
+      price: 150,
+      type: "Cow's Milk",
+      quantity: 2,
+      totalPrice: 300,
+      imageKeyword: "milk",
+      imgSrc:
+        "https://imgs.search.brave.com/J6efkzMh3j8vjbmYo3MlUJTgngNGXVsq1P38L9Zx4jo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9ib3R0bGUtY293/LW1pbGstZ2xhc3Mt/bWlsay1ib3R0bGUt/bWlsa18xMDE1Mzg0/LTE4ODQxNC5qcGc_/c2l6ZT02MjYmZXh0/PWpwZw",
+    },
+    {
+      id: 2,
+      name: "Bread 1 Loaf",
+      price: 50,
+      type: "Whole Wheat",
+      quantity: 1,
+      totalPrice: 50,
+      imageKeyword: "bread",
+      imgSrc:
+        "https://imgs.search.brave.com/J6efkzMh3j8vjbmYo3MlUJTgngNGXVsq1P38L9Zx4jo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9ib3R0bGUtY293/LW1pbGstZ2xhc3Mt/bWlsay1ib3R0bGUt/bWlsa18xMDE1Mzg0/LTE4ODQxNC5qcGc_/c2l6ZT02MjYmZXh0/PWpwZw",
+    },
+    {
+      id: 3,
+      name: "Apples 1kg",
+      price: 100,
+      type: "Fresh Apples",
+      quantity: 3,
+      totalPrice: 300,
+      imageKeyword: "apples",
+      imgSrc:
+        "https://imgs.search.brave.com/J6efkzMh3j8vjbmYo3MlUJTgngNGXVsq1P38L9Zx4jo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/cHJlbWl1bS1waG90/by9ib3R0bGUtY293/LW1pbGstZ2xhc3Mt/bWlsay1ib3R0bGUt/bWlsa18xMDE1Mzg0/LTE4ODQxNC5qcGc_/c2l6ZT02MjYmZXh0/PWpwZw",
+    },
+  ];
   return (
     <div>
       <div>
@@ -36,7 +69,7 @@ const ViewOrdersList = () => {
           <Link style={{ color: "black" }} to="/ViewOrders">
             View Orders List
           </Link>
-          {">"} Order {order?.shortId}
+          {">"} Order # 9578495
         </p>
       </div>
       <div className="view_order_list_wrapper">
@@ -45,7 +78,7 @@ const ViewOrdersList = () => {
           {order?.supplyingRawMaterials?.map((item, index) => (
             <div key={item._id} className="view_order_list_card">
               <div className="view_order_list_card_image_wrapper">
-                <img src={item?.image} alt={item?.rawMaterial_name} />
+                <img src={item?.rawMaterial_name} alt={item} />
               </div>
               <div className="view_order_list_card_items">
                 <div className="view_order_list_card_items_heading">
@@ -53,17 +86,15 @@ const ViewOrdersList = () => {
                   <p style={{ fontSize: "1rem" }}>{item?.unit_price}$</p>
                 </div>
                 <div className="view_order_list_card_items_type">
-                  {item?.options?.map((option, idx) => (
-                    <p key={idx}>
-                      <span style={{ color: "red" }}>*</span>
-                      <b> {option.optionType}:  </b>{option.values}
-                    </p>
-                  ))}
+                  <p>
+                    <span style={{ color: "red" }}>*</span>
+                    Type : <b></b>
+                  </p>
                 </div>
                 <div className="view_order_list_card_items_quantity">
                   <p>
                     <span style={{ color: "red" }}>*</span>
-                    <b>Quantity:</b> {item?.quantity}
+                    Quantity: <b>{item?.quantity}</b>
                   </p>
                 </div>
                 <div className="view_order_list_total_price">
@@ -94,12 +125,12 @@ const ViewOrdersList = () => {
               >
                 <span style={{ fontSize: "1rem", fontWeight: "700" }}>
                   Subtotal{" "}
-                  <span style={{ color: "gray", fontWeight: "700" }}>
-                    ({totalItemsCount} Items)
+                  <span style={{ color: "gray" }}>
+                    ({order?.products?.length} Items)
                   </span>
                 </span>
                 <span style={{ fontSize: "1rem", fontWeight: "700" }}>
-                  {order?.subtotal_items} SAR
+                  {order?.total_price}$
                 </span>
               </li>
               {/* Shipping Cost */}
@@ -112,12 +143,9 @@ const ViewOrdersList = () => {
               >
                 <span style={{ fontSize: "1rem", fontWeight: "700" }}>
                   Shipping Costs
-                  <span style={{ color: "gray", fontWeight: "700" }}>
-                    (10% of subtotal)
-                  </span>
                 </span>
                 <span style={{ fontSize: "1rem", fontWeight: "700" }}>
-                  {order?.shipping_cost} SAR
+                  0$
                 </span>
               </li>
               {/* Total Cost */}
@@ -134,7 +162,7 @@ const ViewOrdersList = () => {
                   Total Payment
                 </span>
                 <span style={{ fontSize: "1rem", fontWeight: "700" }}>
-                  {order?.total_price} SAR
+                  {order?.total_price}$
                 </span>
               </li>
               {order?.status === 'rejected' &&
@@ -148,14 +176,26 @@ const ViewOrdersList = () => {
                   }}
                 >
                   <span style={{ fontSize: "1rem", fontWeight: "700" }}>
-                    Amount Refunded <span style={{ fontSize: "1rem", color: "gray", fontWeight: "700" }}>(Order Cancelled)</span>
+                    Amount Refunded <span style={{ fontSize: "1rem", fontWeight: "300" }}>(Order Cancelled)</span>
                   </span>
                   <span style={{ fontSize: "1rem", fontWeight: "700" }}>
-                    {order?.total_price} SAR
+                    {order?.total_price}$
                   </span>
                 </li>}
 
             </ul>
+          </div>
+          <div className="view_order_payment_summary">
+            <div className="flex" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <h5 style={{ fontSize: '16px' }}>
+                  <CheckCircleOutlined style={{ color: 'green', fontSize: '20px', marginRight: '10px' }} />
+                  Your Order is Complete
+                </h5>
+                <p>Evaluating the order helps us improve our services and deliver them better.</p>
+              </div>
+              <FeedbackPopup />
+            </div>
           </div>
         </div>}
         {/* Order Number Date Status */}
@@ -173,9 +213,7 @@ const ViewOrdersList = () => {
               </li>
               <li>
                 <span className="name">Date:</span>
-                <span className="value">
-                  {order?.createdAt ? moment(order.createdAt).format('DD MMM YYYY') : 'Undefined'}
-                </span>
+                <span className="value">{order?.createdAt}</span>
               </li>
               <li>
                 <span className="name">Order Status:</span>
