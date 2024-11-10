@@ -8,7 +8,7 @@ import {
   moveTransportRequestCurrentToPrevious,
 } from "../../../api/transportRequestsAPI";
 import { DataGrid } from "@mui/x-data-grid";
-import { notification, Modal } from "antd";
+import { Modal } from "antd";
 import "./TransportRequestsTable.css";
 
 function TransportRequestsTable({ data }) {
@@ -63,17 +63,17 @@ function TransportRequestsTable({ data }) {
           ) =>
             request.shortId === id
               ? {
-                ...request,
-                status: updatedTransportRequest.data.status,
-                statusClass: `TransportRequestsTable-status-${updatedTransportRequest.data.status}`,
-              }
+                  ...request,
+                  status: updatedTransportRequest.data.status,
+                  statusClass: `TransportRequestsTable-status-${updatedTransportRequest.data.status}`,
+                }
               : request
         )
       );
     } catch (error) {
       Modal.error({
         title: "Error:",
-        content: 'Error updating the status, Call customer service.',
+        content: "Error updating the status, Call customer service.",
         okButtonProps: {
           className: "confirm-buttonn",
         },
@@ -210,10 +210,19 @@ function TransportRequestsTable({ data }) {
               handleStatusChange(params.row.shortId, e.target.value)
             }
           >
-            <option value="pending">Pending</option>
-            <option value="accepted">Accepted</option>
-            <option value="delivered">Delivered</option>
-            <option value="rejected">Rejected</option>
+            {params.row.status === "pending" && (
+              <>
+                <option value="pending">Pending</option>
+                <option value="accepted">Accepted</option>
+                <option value="rejected">Rejected</option>
+              </>
+            )}
+            {params.row.status === "accepted" && (
+              <>
+                <option value="accepted">Accepted</option>
+                <option value="delivered">Delivered</option>
+              </>
+            )}
           </select>
         );
       },
@@ -310,12 +319,14 @@ function TransportRequestsTable({ data }) {
                   }}
                 />
               )}
-              {`Confirm ${selectedStatus === "rejected" ? "Rejection" : "Delivery"
-                }`}
+              {`Confirm ${
+                selectedStatus === "rejected" ? "Rejection" : "Delivery"
+              }`}
             </>
           }
-          message={`Are you sure you want to ${selectedStatus === "rejected" ? "reject" : "mark as delivered"
-            } this transport request?`}
+          message={`Are you sure you want to ${
+            selectedStatus === "rejected" ? "reject" : "mark as delivered"
+          } this transport request?`}
           onConfirm={handleConfirmAction}
           onCancel={() => toggleDialog("confirmationDialog", false)}
         />

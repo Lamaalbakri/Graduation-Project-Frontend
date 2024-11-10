@@ -10,7 +10,7 @@
   align-items: center;
   z-index: 1000;
 }
-.confirmation-dialog-confirm-button{
+.confirmation-dialog .confirmation-dialog-confirm-button{
   background-color: #1c2229 !important;
   color: white !important;
   padding: 0px 28px !important;
@@ -23,7 +23,7 @@
   min-width: 100px; /* إضافة عرض أدنى للزر */
   display: block;
 }
-.confirmation-dialog-cancel-button{
+.confirmation-dialog .confirmation-dialog-cancel-button{
   background-color: white !important;
   color: #1c2229 !important;
   padding: 0px 28px !important;
@@ -33,12 +33,12 @@
   box-shadow: none !important;
   top: 6px;
 }
-.confirmation-dialog-cancel-button:hover{
+.confirmation-dialog .confirmation-dialog-cancel-button:hover{
   background-color: white !important;
   color: #f4d53f!important;
   border: 1px solid #f4d53f !important;
 }
-.confirmation-dialog-confirm-button:hover{
+.confirmation-dialog .confirmation-dialog-confirm-button:hover{
   background-color: #f4d53f!important;
   border: 1px solid #f4d53f !important;
   color:#1c2229!important;
@@ -70,38 +70,6 @@ p {
   color: #1c2229;
   font-size: 16px;
   text-align: start;
-}
-.confirm-button{
-  background-color: #1c2229 !important;
-  color: white !important;
-  padding: 8px 28px !important;
-  border: 1px solid #1c2229 !important;
-  border-radius: 5px !important;
-  cursor: pointer !important;
-  transition: background-color 0.3s !important;
-  box-shadow: none !important;
-  top: 10px;
-  min-width: 100px; /* إضافة عرض أدنى للزر */
-}
-.confirm-button:hover{
-  background-color: #f4d53f!important;
-  border: 1px solid #f4d53f !important;
-  color:#1c2229!important;
-}
-.cancel-button{
-  background-color: white !important;
-  color: #1c2229 !important;
-  padding: 8px 28px !important;
-  border: 1px solid #1c2229 !important;
-  border-radius: 5px !important;
-  cursor: pointer !important;
-  box-shadow: none !important;
-  top: 10px;
-}
-.cancel-button:hover{
-  background-color: white !important;
-  color: #f4d53f!important;
-  border: 1px solid #f4d53f !important;
 }
 .close-button {
   position: absolute;
