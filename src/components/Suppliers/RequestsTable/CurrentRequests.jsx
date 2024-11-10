@@ -16,7 +16,7 @@ function CurrentRequests() {
     const getRequests = async () => {
       try {
         const requests = await fetchAllCurrentRequests(); // Call the fetch all requests function
-        console.log(requests)
+        //console.log(requests)
         setRawMaterialRequests(requests);
         setFilteredRequests(requests);
       } catch (error) {

@@ -90,6 +90,7 @@ function RequestsTable({ data }) {
               : request //Returns the request as is if the condition is false.
         )
       );
+      return updatedRequest; // Return the updated request if needed
     } catch (error) {
       Modal.error({
         title: "Error",
@@ -98,6 +99,7 @@ function RequestsTable({ data }) {
           className: "confirm-buttonn",
         },
       });
+      return null; // Return null or an error object to indicate failure if needed
     }
   };
 
@@ -131,8 +133,9 @@ function RequestsTable({ data }) {
           );
         }
         break;
+      // case "delivered":
+      //   break;
       case "rejected":
-      case "delivered":
         toggleDialog("confirmationDialog", true, id, newStatus);
         break;
       default:
@@ -142,6 +145,7 @@ function RequestsTable({ data }) {
 
   // Handle confirmation for delete or reject, called after clicking confirm in the dialog "onConfirm()"
   const handleConfirmAction = async () => {
+
     const previousStatus = requests.find(
       (request) => request.shortId === selectedRequestId
     )?.status;
@@ -153,63 +157,36 @@ function RequestsTable({ data }) {
         selectedRequestId,
         selectedStatus
       );
+
       if (!statusUpdateResult || statusUpdateResult.error) {
         errorUpdateStatus = true;
-        throw new Error("Status update failed");
+        throw new Error("Failed to update status in the backend");
       }
-      ////remove request from current table to previous
+
+      //remove request from current table to previous
       const moveResult = await moveCurrentToPrevious(selectedRequestId);
+
       if (moveResult.error || !moveResult) {
         errorMoveCurrentToPrevious = true;
         throw new Error("Move request to previous failed");
       }
 
-      //remove state in front-end
+      // Update frontend state to remove the request from the current list
       setRequests((prevRequests) =>
         prevRequests.filter((request) => request.shortId !== selectedRequestId)
       );
+
+      Modal.success({ //confirm
+        title: "Rejected request",
+        content: "The rejected request was moved to the previous requests page.",
+        okButtonProps: {
+          className: "confirm-buttonn",
+        },
+      });
     } catch (error) {
-      if (errorUpdateStatus) {
+      if (errorMoveCurrentToPrevious || errorUpdateStatus) {
         // Restore the original state of the request in the back-end
         await updateRequestStatus(selectedRequestId, previousStatus);
-
-        // Restore the original state of the request in the front-end
-        setRequests((prevRequests) =>
-          prevRequests.map((request) =>
-            request.shortId === selectedRequestId
-              ? {
-                ...request,
-                status: previousStatus,
-                statusClass: `ManageRawMaterial-status-${previousStatus}`,
-              }
-              : request
-          )
-        );
-        Modal.error({
-          title: "Error",
-          content:
-            "Failed to move request to previous. Please contact support.",
-          okButtonProps: {
-            className: "confirm-buttonn",
-          },
-        });
-      }
-
-      if (errorMoveCurrentToPrevious) {
-        // Restore the original state of the request in the back-end
-        await updateRequestStatus(selectedRequestId, previousStatus);
-        // Restore the original state of the request in the front-end
-        setRequests((prevRequests) =>
-          prevRequests.map((request) =>
-            request.shortId === selectedRequestId
-              ? {
-                ...request,
-                status: previousStatus,
-                statusClass: `ManageRawMaterial-status-${previousStatus}`,
-              }
-              : request
-          )
-        );
         Modal.error({
           title: "Error",
           content:
@@ -276,10 +253,10 @@ function RequestsTable({ data }) {
         <div className="ManageRawMaterial-cell-content">
           {params.row.supplyingRawMaterials.map((item, index) => (
             <div
-              key={item.rawMaterial_id}
+              key={`${item.rawMaterial_id}-${index}`}
               className={`ManageRawMaterial-supplying-item ${index !== params.row.supplyingRawMaterials.length - 1
-                  ? "item-with-border"
-                  : ""
+                ? "item-with-border"
+                : ""
                 }`}
             >
               {item.rawMaterial_name}
@@ -298,7 +275,7 @@ function RequestsTable({ data }) {
         <div className="ManageRawMaterial-cell-content">
           {params.row.supplyingRawMaterials.map((item, index) => (
             <div
-              key={item.rawMaterial_id}
+              key={`${item.rawMaterial_id}-${index}`}
               className="ManageRawMaterial-supplying-item"
             >
               {item.quantity} {item.unit}
@@ -362,7 +339,9 @@ function RequestsTable({ data }) {
         const statusClass = `ManageRawMaterial-status-${params.row.status}`;
         if (
           params.row.status === "rejected" ||
-          params.row.status === "delivered"
+          params.row.status === "delivered" ||
+          params.row.status === "inProgress" ||
+          params.row.status === "accepted"
         ) {
           return (
             <div
@@ -382,8 +361,8 @@ function RequestsTable({ data }) {
           >
             <option value="pending">Pending</option>
             <option value="accepted">Accepted</option>
-            <option value="inProgress">In Progress</option>
-            <option value="delivered">Delivered</option>
+            {/* <option value="inProgress">In Progress</option> */}
+            {/* <option value="delivered">Delivered</option> */}
             <option value="rejected">Rejected</option>
           </select>
         );

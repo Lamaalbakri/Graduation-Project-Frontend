@@ -4,7 +4,7 @@ import './ShoppingBasket.css';
 import { fetchShoppingBasketList } from '../../../../api/shoppingBasket';
 
 function ShoppingBasketList() {
-    const [baskets, setBaskets] = useState(null);
+    const [baskets, setBaskets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -12,7 +12,7 @@ function ShoppingBasketList() {
         const getBaskets = async () => {
             try {
                 const data = await fetchShoppingBasketList(); // استدعاء الدالة من الملف الخارجي
-                setBaskets(data.basket); // تحديث حالة السلال بالبيانات التي تم جلبها
+                setBaskets(data.basket || []); // تحديث حالة السلال بالبيانات التي تم جلبها
             } catch (err) {
                 setError("Error fetching shopping Baskets");
             } finally {
@@ -37,7 +37,7 @@ function ShoppingBasketList() {
                 Shopping Baskets
             </div>
             {/* <Breadcrumb crumbs={[{ name: "Shopping Baskets", path: "/shoppingBaskets" }]} /> */}
-            {baskets !== null && baskets.length > 0 ? (
+            {baskets && baskets.length > 0 ? (
                 baskets.map((basket, index) => (
 
                     <ShoppingBasket key={basket._id} basket={basket} basketId={basket._id} basketIndex={index + 1} />

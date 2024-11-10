@@ -30,6 +30,7 @@ export const fetchAllPreviousRequests = async () => {
 
 // change status
 export const updateRawMaterialRequestStatus = async (id, newStatus) => {
+    //console.log("Sending request to update status:", newStatus, id);
     try {
         const response = await fetch(`${API_URL}/rawMaterialCurrentRequest/${id}`, {
             method: 'PUT',
@@ -43,7 +44,7 @@ export const updateRawMaterialRequestStatus = async (id, newStatus) => {
         if (!response.ok) {
             return { error: "Failed to update the status" };
         }
-
+        //console.log(await response.json());
         return await response.json(); // get responce
     } catch (error) {
         return { error: "problem with the server" };
@@ -69,6 +70,24 @@ export const deleteCurrentRequestById = async (id) => {
     return { msg: 'Request deleted successfully' };
 }
 
+export const deletePreviousRequestById = async (id) => {
+    const response = await fetch(`${API_URL}/rawMaterialPreviousRequest/${id}`, {
+        method: 'DELETE',
+        credentials: 'include'
+    });
+
+    if (!response.ok) {
+        return { error: "Error deleting Previous request" };
+    }
+
+    // If the response is 204, do not try to read JSON.
+    if (response.status !== 204) {
+        const data = await response.json(); // Just try to read the JSON if the response is not 204
+        return data; // Receive responce after deletion
+    }
+
+    return { msg: 'Request deleted successfully' };
+}
 //search current by id
 export const searchCurrentRequestById = async (id) => {
     try {
@@ -169,10 +188,44 @@ export const moveCurrentToPrevious = async (id) => {
 
     try {
         // Step 1: Get the request from the current requests
-        const currentRequest = await searchCurrentRequestById(id);
+        const currentRequestID = await searchCurrentRequestById(id);
 
+        console.log(`called here searchCurrentRequestById ${currentRequestID}`)
         // Step 2: Send the request to the previous requests list
         const response = await fetch(`${API_URL}/rawMaterialPreviousRequest`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                ...currentRequestID, // جميع البيانات
+                shortId: currentRequestID.shortId // إضافة shortId الحالي
+            })
+        });
+
+        if (!response.ok) {
+            return { error: `Error moving request to previous` };
+        }
+
+        // Step 3: Delete the request from the current requests list
+        await deleteCurrentRequestById(id);
+        return await response.json(); //return responce
+    } catch (error) {
+        return { error: `Error moving request to current` };
+    }
+};
+
+//move currnt request to preveious request
+export const movePreviousToCurrent = async (id) => {
+
+    try {
+        // Step 1: Get the request from the previous requests
+        const currentRequest = await searchPreviousRequestById(id);
+
+        console.log(`called here searchCurrentRequestById ${currentRequest}`)
+        // Step 2: Send the request to the previous requests list
+        const response = await fetch(`${API_URL}/rawMaterialCurrentRequest`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -186,14 +239,13 @@ export const moveCurrentToPrevious = async (id) => {
         }
 
         // Step 3: Delete the request from the current requests list
-        await deleteCurrentRequestById(id);
+        await deletePreviousRequestById(id);
 
         return await response.json(); //return responce
     } catch (error) {
         return { error: `Error moving request to previous` };
     }
 };
-
 
 // create new raw matireal request
 export const createNewRawMaterialRequest = async (data) => {
