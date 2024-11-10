@@ -158,11 +158,10 @@ const ViewRawMaterials = () => {
                   {priceRanges.map((range) => (
                     <p
                       key={range.label}
-                      className={`pointer ${
-                        range.label === selectedPriceRange?.label
+                      className={`pointer ${range.label === selectedPriceRange?.label
                           ? "filterActive"
                           : "grey-text"
-                      }`}
+                        }`}
                       onClick={() => handlePriceFilter(range)}
                     >
                       {range.label}
@@ -174,9 +173,8 @@ const ViewRawMaterials = () => {
                   {uniqueSupplier.map((sup, index) => (
                     <p
                       key={index}
-                      className={`pointer ${
-                        sup === selectedSupplier ? "filterActive" : "grey-text"
-                      }`}
+                      className={`pointer ${sup === selectedSupplier ? "filterActive" : "grey-text"
+                        }`}
                       onClick={() => handleSupplierFilter(sup)}
                     >
                       {sup}
