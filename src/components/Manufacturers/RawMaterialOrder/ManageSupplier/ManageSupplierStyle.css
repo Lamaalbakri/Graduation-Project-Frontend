@@ -101,7 +101,7 @@
 /* General Button Hover */
 .ManageSupplier-search-buttons button:hover {
   background-color: #f4d53f;
-  color: #1c2229;
+  color: #fff;
 }
 
 .ManageSupplier-search-result {
@@ -248,6 +248,11 @@
   background-color: #fff;
   border: 1px solid #f4d53f;
   color: #f4d53f;
+}
+.ManageSupplier-dialog-button-Yes:hover {
+  background-color: #f4d53f;
+  border: 1px solid #f4d53f;
+  color: #fff;
 }
 
 /* Media Queries for Responsive Design */

@@ -32,40 +32,40 @@ const AppHeader = ({
     {
       id: 1,
       type: "Order Shipped",
-      description: "Shipping 'wood' with  ID #2378467 is on its way",
+      description: "Shipping order with ID #2378467 is on its way",
       status: "success",
     },
     {
       id: 2,
       type: "Order Processed",
-      description: "Your order with  ID #1276432 was processed",
+      description: "Your order with ID #1276432 was processed",
       status: "success",
     },
     {
       id: 3,
       type: "Order Canceled",
-      description: "The order with  ID #5965247 was canceled",
+      description: "The order with ID #5965247 was canceled",
       status: "error",
     },
 
     {
       id: 4,
       type: "Order Processed",
-      description: "Your order with  ID #1276432 was processed",
+      description: "Your order with ID #1276432 was processed",
       status: "success",
     },
 
     {
       id: 5,
       type: "Order Processed",
-      description: "Your order with  ID #1276432 was processed",
+      description: "Your order with ID #1276432 was processed",
       status: "success",
     },
 
     {
       id: 6,
       type: "Order Processed",
-      description: "Your order with  ID #1276432 was processed",
+      description: "Your order with ID #1276432 was processed",
       status: "success",
     },
   ]);
@@ -81,7 +81,9 @@ const AppHeader = ({
     </Menu>
   );
 
-  const showCartButton = ["manufacturer", "distributor", "retailer"].includes(userType);
+  const showCartButton = ["manufacturer", "distributor", "retailer"].includes(
+    userType
+  );
 
   useEffect(() => {
     const fetchCartItemCount = async () => {
@@ -104,6 +106,7 @@ const AppHeader = ({
 
   const notificationMenu = (
     <div className="notification-menu">
+      <BellOutlined style={{ fontSize: "20px" }} />
       <Text strong>Notifications</Text>
       <List
         itemLayout="horizontal"
@@ -113,11 +116,19 @@ const AppHeader = ({
             <List.Item.Meta
               avatar={
                 <span className={`notification-icon ${item.status}`}>
-                  {item.status === "success" ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+                  {item.status === "success" ? (
+                    <CheckCircleOutlined />
+                  ) : (
+                    <CloseCircleOutlined />
+                  )}
                 </span>
               }
               title={<Text strong>{item.type}</Text>}
-              description={<Text type="secondary" style={{ fontWeight: "500" }}>{item.description}</Text>}
+              description={
+                <Text type="secondary" style={{ fontWeight: "500" }}>
+                  {item.description}
+                </Text>
+              }
             />
           </List.Item>
         )}
@@ -145,9 +156,26 @@ const AppHeader = ({
         icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       />
       <div style={{ display: "flex", alignItems: "center", marginRight: "1%" }}>
-        <Dropdown overlay={notificationMenu} trigger={["click"]} placement="bottomRight">
-          <Button type="text" onClick={(e) => e.preventDefault()}>
-            <Badge count={notifications.length} overflowCount={9}>
+        <Dropdown
+          overlay={notificationMenu}
+          trigger={["click"]}
+          placement="bottomRight"
+        >
+          <Button
+            type="text"
+            style={{ marginRight: 0, position: "relative", padding: 10 }}
+            onClick={(e) => e.preventDefault()}
+          >
+            <Badge
+              count={notifications.length}
+              overflowCount={50}
+              style={{
+                fontSize: "11px",
+                height: "15px",
+                minWidth: "15px",
+                lineHeight: "15px",
+              }}
+            >
               <BellOutlined style={{ fontSize: "20px" }} />
             </Badge>
           </Button>
@@ -156,7 +184,7 @@ const AppHeader = ({
         {showCartButton && (
           <Button
             type="text"
-            style={{ marginRight: 5, position: "relative", padding: 10 }}
+            style={{ marginRight: 0, position: "relative", padding: 10 }}
             onClick={handleCartClick}
           >
             <Badge
@@ -164,10 +192,10 @@ const AppHeader = ({
               overflowCount={99}
               offset={[6, -1]}
               style={{
-                fontSize: "10px",
-                height: "14px",
-                minWidth: "14px",
-                lineHeight: "14px",
+                fontSize: "11px",
+                height: "15px",
+                minWidth: "15px",
+                lineHeight: "15px",
               }}
             >
               <ShoppingCartOutlined style={{ fontSize: "20px" }} />

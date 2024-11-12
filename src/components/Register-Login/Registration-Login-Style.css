@@ -96,7 +96,7 @@
 }
 .button input:hover{
     background-color: #f4d53f;
-    color: #1c2229;
+    color: #fff;
 }
 .form a.text{
     color: #1c2229;
@@ -108,7 +108,7 @@
     text-align: center;
 }
 .form a.text:hover{
-    color: blue;
+    color: #f4d53f;
 }
 .success{
     margin-top: 15px;

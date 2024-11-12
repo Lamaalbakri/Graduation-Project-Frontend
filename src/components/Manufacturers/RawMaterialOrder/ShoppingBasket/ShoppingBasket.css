@@ -87,7 +87,7 @@ button {
 
 button:hover {
     background-color: #f4d53f;
-    color: #1c2229;
+    color: #fff;
 }
 
 .breadcrumb {
@@ -304,7 +304,7 @@ button:hover {
 }
 .Checkout-button:hover {
     background-color: #f4d53f;
-    color: #1c2229;
+    color: #fff;
 }
 
 /* Complate order file */
@@ -489,5 +489,5 @@ height: 20px;
 
 .Checkout-button:hover {
     background-color: #f4d53f;
-    color: #1c2229;
+    color: #fff;
 }

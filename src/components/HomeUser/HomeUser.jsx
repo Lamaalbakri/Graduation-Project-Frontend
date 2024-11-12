@@ -1,11 +1,10 @@
 import React from "react";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import WelcomeCard from "./WelcomeCard ";
 import Actions from "./Actions";
 import Dashboard from "./Dashboard";
 import "./HomeUser.css";
 function HomeUser({ userType, userId }) {
-
   const getWelcomeMessage = (userType) => {
     switch (userType) {
       case "supplier":
@@ -13,13 +12,13 @@ function HomeUser({ userType, userId }) {
       case "transporter":
         return "Let's get started to manage your transportation requests";
       case "manufacturer":
-        return " ";
+        return "Let's get started to manage your production process and boost efficiency";
       case "distributor":
-        return " ";
+        return "Let's get started to manage your goods and streamline deliveries";
       case "retailer":
-        return " ";
+        return "Let's start managing your retail inventory and boosting customer satisfaction";
       default:
-        return "Welcome to the Supply Chain Management System";
+        return "Welcome to Our System 'Smart Contract for Supply Chain Management and Optimization' ";
     }
   };
 

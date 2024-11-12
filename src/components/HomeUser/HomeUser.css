@@ -64,12 +64,10 @@
 }
 
 /* Action buttons below the card */
-
-
 .actions button {
-    flex: 1 1 auto; /* يسمح للزر بالنمو والتمدد */
-    min-width: 150px; /* الحد الأدنى لعرض الزر */
-    max-width: 250px; /* الحد الأقصى لعرض الزر */
+    flex: 1 1 auto; 
+    min-width: 150px;
+    max-width: 250px;
     padding: 15px 20px;
     border: none;
     background-color: #f4f4f4;
@@ -81,16 +79,16 @@
     justify-content: center;
     border-radius: 8px;
     transition: background 0.3s ease, transform 0.2s ease;
-    height: 50px; /* ارتفاع موحد لجميع الأزرار */
+    height: 50px; 
 }
 .actions button i {
-    margin-right: 5px; /* مسافة قصيرة بين الأيقونة والنص */
+    margin-right: 5px; 
+    font-size: 20px;
 }
-
 .actions {
     display: flex;
-    flex-wrap: wrap; /* يسمح للعناصر بالنزول إلى السطر التالي عند الحاجة */
-    gap: 10px; /* تباعد بين الأزرار */
+    flex-wrap: wrap;
+    gap: 10px; 
     justify-content:center;
     align-items: center;
     margin-top: 30px;
@@ -99,30 +97,10 @@
     position: relative;
     z-index: 0;
 }
-/* .actions button {
-    flex-grow: 1;
-    padding: 15px 20px;
-    border: none;
-    background-color: #f4f4f4;
-    color: #333;
-    cursor: pointer;
-    font-weight: 500;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    transition: background 0.3s ease, transform 0.2s ease;
-    margin: 0 10px;
-    max-width: 250px;
-}  */
 .actions button:hover {
     background-color: #f4d53f;
     transform: translateY(-2px);
 } 
-.actions button i {
-    font-size: 20px;
-}
 
 /* Dashboard below the card action buttons */ 
 .dashboard {
@@ -130,7 +108,6 @@
     flex-direction: column;
     gap: 20px;
 }
-  /* Map styling */
 .map {
     text-align: center;
     width: 100%;
@@ -169,5 +146,4 @@
       align-items: center; /* Center the buttons */
       justify-content: center;
     }
-  
 }

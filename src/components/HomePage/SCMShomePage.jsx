@@ -18,7 +18,11 @@ function SCMShomePage() {
         <div className="HomePage-img"></div>
         <div className="HomePage-center">
           <img src={image} alt="SCMS Logo" width="300" />
-          <div id="HomePage-title">Supply Chain Management System</div>
+          <div id="HomePage-title">
+            Smart Contract for Supply Chain Management
+            <br />
+            and Optimization
+          </div>
           <div className="HomePage-btns">
             <Link to="/register">
               <button>Register</button>
@@ -96,7 +100,8 @@ function SCMShomePage() {
       </section>
       <footer>
         <h5>
-          &copy; 2024 Supply Chain Management System. All rights reserved.
+          &copy; 2024 Smart Contract for Supply Chain Management and
+          Optimization. All rights reserved.
         </h5>
       </footer>
     </div>

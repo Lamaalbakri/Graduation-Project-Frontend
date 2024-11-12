@@ -184,7 +184,7 @@
 }
 .nextButtonStyle:hover, .sendButtonStyle:hover{
     background-color: #f4d53f !important;
-    color: #1c2229;
+    color: #fff;
 }
 .ant-btn-primary{
     background-color: #1c2229!important;
@@ -208,7 +208,7 @@
 .confirm-buttonn:hover{
     background-color: #f4d53f!important;
     border: 1px solid #f4d53f !important;
-    color:#1c2229!important;
+    color:#fff!important;
 }
 .cancel-buttonn{
     background-color: white !important;

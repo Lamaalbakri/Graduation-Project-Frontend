@@ -116,7 +116,10 @@ const ProductCard = ({ d }) => {
                   onChange={(e) => setQuantity(Number(e.target.value))}
                 />
                 <button onClick={() => handleAddToBasket(true)}>
-                  <FontAwesomeIcon icon={faShoppingCart} />
+                  <FontAwesomeIcon
+                    icon={faShoppingCart}
+                    style={{ marginTop: "3px" }}
+                  />
                   Add to Basket
                 </button>
               </div>
@@ -130,7 +133,10 @@ const ProductCard = ({ d }) => {
         <div className="price">
           <p>{d.price} SAR</p>
           <button onClick={() => handleAddToBasket(false)}>
-            <FontAwesomeIcon icon={faShoppingCart} />
+            <FontAwesomeIcon
+              icon={faShoppingCart}
+              style={{ marginTop: "3px" }}
+            />
             Add
           </button>
         </div>

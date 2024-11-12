@@ -11,6 +11,11 @@
 
 }
 
+.notification-menu strong{
+  padding-left: 6px;
+  font-size: 16px;
+}
+
 .notification-item {
   display: flex;
   align-items: center;
@@ -22,11 +27,9 @@
 }
 
 .notification-icon {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  margin-right: 0px;
   margin-inline-end: 0px !important;
   padding: 5px;
 }
@@ -34,15 +37,19 @@
 .notification-icon.success {
   color: green;
   border:0px;
+  font-size: 25px;
   background-color: transparent;
+  margin: 0;
+  position: relative; 
 }
 
 .notification-icon.error {
   color: red;
   border:0px;
+  font-size: 25px;
   background-color: transparent;
-  font-size: 24px;
-  margin-inline-end: 0px !important;
+  margin: 0;
+  position: relative; 
 }
 
 .notification-item .ant-typography {
@@ -53,15 +60,32 @@
   font-size: 12px;
   color: #555;
 }
+
 .notification-item .ant-list-item-meta {
-   background-color: #F1F1F1;
-   border-radius: 50px;
-   padding: 10px 0px;
-   padding-right: 10px;
+  display: flex;
+  align-items: center;
+  background-color: #F1F1F1;
+  border-radius: 50px;
+  padding: 10px 10px;
 }
 
 .notification-item .ant-list-item-meta-title{
   margin-bottom: 0px !important;
+}
+.notification-menu::-webkit-scrollbar {
+  width: 8px;
+}
+.notification-menu::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 6px;
+}
+.notification-menu::-webkit-scrollbar-thumb {
+  background-color: #a8a8a8;
+  border-radius: 6px;
+  border: 2px solid #f1f1f1;
+}
+.notification-menu::-webkit-scrollbar-thumb:hover {
+  background-color: #808080;
 }
 
 /* Mobile-specific styling */

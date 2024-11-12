@@ -42,12 +42,13 @@
 }
 .HomePage .HomePage-center #HomePage-title {
   color: #e0dddd;
-  font-size: 40px;
+  padding-top: 20px;
+  font-size: 35px;
   filter: blur(1px);
   font-weight: 600;
 }
 .HomePage .HomePage-center .HomePage-btns {
-  margin-top: 50px;
+  margin-top: 40px;
 }
 .HomePage .HomePage-center .HomePage-btns button {
   height: 50px;

@@ -41,7 +41,7 @@
 .confirmation-dialog .confirmation-dialog-confirm-button:hover{
   background-color: #f4d53f!important;
   border: 1px solid #f4d53f !important;
-  color:#1c2229!important;
+  color:#fff!important;
 }
 .ant-modal-footer .ant-btn {
   display: inline-block!important; 
@@ -153,10 +153,13 @@ p {
   border-radius: 3px;
   font-size: 16px;
 }
+.form-group input:focus {
+  border-color: #1c2229;
+}
 .dialog-content .button-container {
   margin-top: 25px;
 }
-.save-button{
+.save-button-address{
   background-color: #1c2229 !important;
   color: white !important;
   border: 1px solid #1c2229 !important;
@@ -171,11 +174,31 @@ p {
   padding: 8px 40px;
   font-size: 14px;
 }
-.save-button:hover{
+.save-button-address:hover{
   background-color: #f4d53f!important;
   border: 1px solid #f4d53f !important;
-  color:#1c2229!important;
+  color:#fff!important;
 }
+.cancel-button-address{
+  background-color: white !important;
+  color: #1c2229 !important;
+  border: 1px solid #1c2229 !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s !important;
+  box-shadow: none !important;
+  top: 10px;
+  margin-top: 0px;
+  align-self: flex-end;
+  padding: 8px 40px;
+  font-size: 14px;
+}
+.cancel-button-address:hover{
+  background-color: white !important;
+  color: #f4d53f!important;
+  border: 1px solid #f4d53f !important;
+}
+
 @keyframes slideDown {
   from {
     transform: translateY(-20px);

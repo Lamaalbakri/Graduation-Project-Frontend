@@ -47,7 +47,8 @@ function Address({ onClose }) {
         if (!response.success) {
           Modal.error({
             title: "Error:",
-            content: 'You already have an address, refresh the page if not appear.',
+            content:
+              "You already have an address, refresh the page if not appear.",
             okButtonProps: {
               className: "confirm-buttonn",
             },
@@ -63,7 +64,7 @@ function Address({ onClose }) {
     } catch (error) {
       Modal.error({
         title: "Error:",
-        content: 'Error saving address, try again.',
+        content: "Error saving address, try again.",
         okButtonProps: {
           className: "confirm-buttonn",
         },
@@ -151,11 +152,14 @@ function Address({ onClose }) {
               className="button-container"
               style={{ justifyContent: "flex-end" }}
             >
-              <button className="cancel-button" onClick={() => onClose(false)}>
+              <button
+                className="cancel-button-address"
+                onClick={() => onClose(false)}
+              >
                 Cancel
               </button>
               <button
-                className="save-button"
+                className="save-button-address"
                 type="button"
                 onClick={handleSaveAddress}
               >

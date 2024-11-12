@@ -298,7 +298,8 @@ function RegisterPage() {
 
         <footer>
           <h5>
-            &copy; 2024 Supply Chain Management System. All rights reserved.
+            &copy; 2024 Smart Contract for Supply Chain Management and
+            Optimization. All rights reserved.
           </h5>
         </footer>
       </div>
