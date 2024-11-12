@@ -16,13 +16,21 @@ const ViewOrder = () => {
       <h2 className="order-title">View Orders List</h2>
       {orders?.map((order) => (
         <div key={order?.shortId} className="order-item">
-          <div className="order-header">Order ID: {order?.shortId}</div>
+          <div className="order-header">Order ID: #{order?.shortId}</div>
           <div className="order-info">
             <p>
-              <span>Order Status:</span> {order?.status}
+              <span className="info">Order Status: </span>
+              <span
+                className={`status-${order?.status
+                  .toLowerCase()
+                  .replace(" ", "-")}`}
+              >
+                {order?.status}
+              </span>
             </p>
+
             <p>
-              <span>Price:</span> {order?.total_price} SAR
+              <span className="info">Price:</span> {order?.total_price} SAR
             </p>
           </div>
           <Link

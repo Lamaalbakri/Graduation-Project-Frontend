@@ -66,6 +66,7 @@
     align-items: center;
     margin-bottom: 50px;
     margin-top: 25px;
+    flex-wrap: wrap;
 }
 .TransportRequestsTable-title {
     font-size: 30px;
@@ -78,6 +79,7 @@
     align-items: center;
     justify-content: flex-end;
     margin-bottom: 0;
+    flex-wrap: wrap;
 }
 .TransportRequestsTable-search-label {
     margin-right: 15px;
@@ -119,4 +121,29 @@
     font-weight: bold;
     text-align: center;
     margin: 300px;
+}
+
+@media (max-width: 768px) {
+    .TransportRequestsTable-header-row {
+        flex-direction: column; 
+        align-items: flex-start;
+    }
+    .TransportRequestsTable-title {
+        font-size: 20px; 
+    }
+    .TransportRequestsTable-search-container input {
+        max-width: 100%; 
+    }
+}
+
+@media (max-width: 480px) {
+    .TransportRequestsTable {
+        padding: 10px; 
+    }
+    .TransportRequestsTable-title {
+        font-size: 18px; 
+    }
+    .TransportRequestsTable-action-buttons {
+        flex-direction: column; 
+    }
 }

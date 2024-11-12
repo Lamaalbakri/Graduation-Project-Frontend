@@ -1,22 +1,16 @@
-/* Main container styling with hover effect */
 .main {
     background-color: #ffffff;
     margin-top: 40px;
     transition: all 0.3s ease;
 }
-
 .main:hover {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
-
-/* Content container styling */
 .content-raw {
     width: 90%;
     margin: auto;
     padding: 50px 0;
 }
-
-/* Header styling with spacing and alignment */
 .header {
     display: flex;
     justify-content: space-between;
@@ -26,13 +20,9 @@
     gap: 20px;
     flex-wrap: wrap;
 }
-
-/* Align filter to the far left in the header */
 .header .filters {
     order: -1;
 }
-
-/* Search bar styling with hover effects */
 .search-raw {
     width: 300px;
     display: flex;
@@ -43,7 +33,6 @@
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-
 .search-raw input {
     width: 100%;
     border: none;
@@ -52,20 +41,14 @@
     background: transparent;
     padding: 0 10px;
 }
-
-/* Placeholder styling for the search input */
 .search input::placeholder {
     color: #888;
     font-style: italic;
 }
-
-/* Hover effect for search box */
 .search-raw:hover {
     background-color: #e1e1e3;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
-
-/* Filter container styling with hover effect */
 .filters {
     font-size: 18px;
     font-weight: 600;
@@ -73,8 +56,11 @@
     gap: 12px;
     align-items: center;
     cursor: pointer;
+    color:#1c2229
 }
-
+.filters:hover {
+    color: #f4d53f;
+}
 .filters div {
     padding: 8px 15px;
     border-radius: 12px;
@@ -86,18 +72,15 @@
     gap: 5px;
     position: relative;
 }
-
-/* Hover effect on individual filter items */
 .filters div:hover {
     background-color: #e1e1e3;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
-
 .filter-custom-button {
     background-color: #1c2229 !important;
     color: white !important;
     font-size: 14px;
-    width: 100px;
+    width: 70px;
     transition: background-color 0.3s, color 0.3s; 
 }
 .filter-custom-button:hover {
@@ -105,39 +88,26 @@
     border-color: #f4d53f !important;
     color: #fff !important;
 }
-
-/* Active filter styling
-.filters div.active {
-    background-color: #007aff;
-    color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border: 1px solid #007aff;
-}*/
-/* Checkmark added to active filter 
-.filters div.active::after {
-    content: "✓";
-    font-weight: bold;
-    font-size: 18px;
-    color: #ffffff;
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-}*/
-/* Hover effect for active filter
-.filters div.active:hover {
-    background-color: #005bb5;
-    border-color: #005bb5;
-}*/
-
 .filterActive {
     background: #f4d53f;
     border-radius: 10px;
     color: white;
     width: fit-content;
-    padding: 5px 10px;
+    padding: 3px 10px;
 }
-
+.custom-filter-modal {
+    max-width: 494px;
+}
+.filter-modal-raw {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: space-between;
+}
+.filter-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
 /* Card container with responsive grid layout */
 .cardContainer {
     width: 100%;
@@ -148,8 +118,6 @@
     padding: 25px;
     gap: 35px;
 }
-
-/* Product card styling with hover effect */
 .productCard-raw {
     width: 250px;
     height: 400px;
@@ -159,19 +127,16 @@
     margin: auto;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .productCard-raw:hover {
     transform: scale(1.02);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
-
-/* Image container styling within product card */
+ /* Image container styling within product card */ 
 .figure {
     padding: 10px;
     height: 220px;
     overflow: hidden;
 }
-
 .figure img {
     width: 100%;
     max-width: 100%;
@@ -179,36 +144,32 @@
     object-fit: cover;
     border-radius: 12px;
 }
-
 /* Text styling for product details */
 .details-raw p {
     margin: 0;
     font-size: 12px;
 }
-
 .title-raw {
     padding: 10px 0;
     font-size: 17px !important;
     cursor: pointer;
 }
-
-/* Icon styling */
 .icon {
     display: flex;
     gap: 5px;
     color: #f4d53f;
 }
-
 .grey-text {
+    color: #595a5b;
+    font-size: 14px !important;
+}
+.by-text {
     color: #c4c4c4;
     font-size: 14px !important;
 }
-
-/* Span styling within product details */
 .details-raw span {
     color: #f4d53f;
 }
-
 /* Price and button styling with hover effect */
 .price {
     margin-top: 15px;
@@ -217,13 +178,11 @@
     justify-content: space-between;
     align-items: center;
 }
-
 .price p {
     font-size: 18px;
     font-weight: 700;
     color: #f4d53f;
 }
-
 .price button {
     display: flex;
     gap: 8px;
@@ -232,31 +191,15 @@
     background: #1c2229;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
-
 .price button:hover {
     background: #f4d53f;
     color: #ffffff;
     transform: scale(1.05);
 }
-
 /* Hide modal footer buttons */
 .ant-modal-footer .ant-btn {
     display: none;
 }
-
-/* Filter modal grid styling */
-.filter-modal-raw {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    justify-content: space-between;
-}
-
-.filter-header {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
 /* Product modal styling */
 .product-modal {
     display: flex;
@@ -264,14 +207,12 @@
     align-items: center;
     gap: 30px;
 }
-
 .modal-img {
     width: 100%;
     padding: 10px;
     border: 1px solid #d5d5d5;
     border-radius: 12px;
 }
-
 .modal-img img {
     width: 100%;
     max-width: 100%;
@@ -279,22 +220,18 @@
     object-fit: cover;
     border-radius: 12px;
 }
-
 .modal-desc {
     width: 100%;
 }
-
 .modal-price {
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 700;
     color: #f4d53f;
 }
-
 .description {
-    font-size: 12px;
-    color: #c0b9b9;
+    font-size: 14px;
+    color: #808182;
 }
-
 /* Modal bottom section styling with hover effect on button */
 .modal-bottom {
     display: flex;
@@ -303,14 +240,12 @@
     gap: 15px;
     margin-top: 20px;
 }
-
 .modal-bottom input {
     width: 40%;
     border: 1px solid black;
     height: 32px;
     text-align: center;
 }
-
 .modal-bottom button {
     width: 100%;
     display: flex;
@@ -323,29 +258,21 @@
     border-radius: 20px;
     transition: all 0.3s ease;
 }
-
 .modal-bottom button:hover {
     background: #f4d53f;
     color: #ffffff;
     transform: scale(1.05);
 }
-
+.title-modal {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #1c2229;
+}
 .pointer {
     cursor: pointer;
 }
 
 /* Responsive styling for tablets */
-@media (max-width: 1024px) {
-    .header {
-        padding: 0 30px;
-    }
-
-    .cardContainer {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Responsive styling for mobile */
 @media (max-width: 640px) {
     .header {
         padding: 0 30px;
@@ -353,5 +280,15 @@
 
     .cardContainer {
         grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .header {
+        padding: 0 30px;
+    }
+
+    .cardContainer {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

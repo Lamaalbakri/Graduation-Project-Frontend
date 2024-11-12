@@ -85,6 +85,12 @@ const AppHeader = ({
     userType
   );
 
+  const shownotificationButton = [
+    "manufacturer",
+    "distributor",
+    "retailer",
+  ].includes(userType);
+
   useEffect(() => {
     const fetchCartItemCount = async () => {
       try {
@@ -156,30 +162,32 @@ const AppHeader = ({
         icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       />
       <div style={{ display: "flex", alignItems: "center", marginRight: "1%" }}>
-        <Dropdown
-          overlay={notificationMenu}
-          trigger={["click"]}
-          placement="bottomRight"
-        >
-          <Button
-            type="text"
-            style={{ marginRight: 0, position: "relative", padding: 10 }}
-            onClick={(e) => e.preventDefault()}
+        {shownotificationButton && (
+          <Dropdown
+            overlay={notificationMenu}
+            trigger={["click"]}
+            placement="bottomRight"
           >
-            <Badge
-              count={notifications.length}
-              overflowCount={50}
-              style={{
-                fontSize: "11px",
-                height: "15px",
-                minWidth: "15px",
-                lineHeight: "15px",
-              }}
+            <Button
+              type="text"
+              style={{ marginRight: 0, position: "relative", padding: 10 }}
+              onClick={(e) => e.preventDefault()}
             >
-              <BellOutlined style={{ fontSize: "20px" }} />
-            </Badge>
-          </Button>
-        </Dropdown>
+              <Badge
+                count={notifications.length}
+                overflowCount={50}
+                style={{
+                  fontSize: "11px",
+                  height: "15px",
+                  minWidth: "15px",
+                  lineHeight: "15px",
+                }}
+              >
+                <BellOutlined style={{ fontSize: "20px" }} />
+              </Badge>
+            </Button>
+          </Dropdown>
+        )}
 
         {showCartButton && (
           <Button

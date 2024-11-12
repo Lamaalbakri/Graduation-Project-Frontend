@@ -18,6 +18,14 @@
   flex-direction: column;
   gap: 20px;
 }
+.custom-link {
+  color: #555;
+  border-bottom: 1px solid #ccc;
+}
+.custom-link:hover {
+  color: #1c2229;
+  border-bottom: 1px solid #ccc;
+}
 .arrival_address {
   background: white;
   padding: 20px;
@@ -60,6 +68,51 @@
   border-bottom: 2px solid lightgray;
 }
 .order_list_details_list > li > span.value {
+  font-size: 1rem;
+  font-weight: 400;
+}
+.value-pending {
+  background-color: #ff990059;
+  color: #5e3902;
+  padding: 3px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 400;
+}
+.value-accepted {
+  background-color: #0d62a761;
+  color: #03477f;
+  padding: 3px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 400;
+}
+.value-inprogress {
+  background-color: #7a4caf71;
+  color: #400188;
+  padding: 3px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 400;
+}
+.value-delivered {
+  background-color: #4caf4f71;
+  color: #023404;
+  padding: 3px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 400;
+}
+.value-rejected {
+  background-color: #f443366d;
+  color: #7e0901;
+  padding: 3px 8px;
+  border-radius: 8px;
+  display: inline-block;
   font-size: 1rem;
   font-weight: 400;
 }
@@ -106,8 +159,7 @@
   font-weight: 400;
 }
 .view_order_list_total_price {
-  width: 100%;
-  
+  width: 100%; 
 }
 .view_order_list_total_price p {
   display: flex;
@@ -192,13 +244,10 @@
   background: #1c2229;
   border-radius: 50%;
 }
-
 .title_order_place {
   font-size: 17px;
   font-weight: 500;
   color: #1c2229;
-}
-@media (min-width: 674px) {
 }
 
 @media (min-width: 1024px) {

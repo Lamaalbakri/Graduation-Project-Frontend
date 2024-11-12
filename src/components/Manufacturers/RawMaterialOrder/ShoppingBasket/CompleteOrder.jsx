@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { EditOutlined } from "@ant-design/icons";
 import Breadcrumb from "./Breadcrumb";
 import "./ShoppingBasket.css";
 import mada from "../../../images/mada-logo.png";
 import ConfirmationDialog from "../../../Dialog/ConfirmationDialog";
-import { notification, Modal } from "antd";
+import { Modal } from "antd";
 import Address from "../../../Dialog/Address";
 import { useAddress } from "../../../../contexts/AddressContext";
-import { fetchShoppingBasketDetails, deleteBasket, } from "../../../../api/shoppingBasket";
+import {
+  fetchShoppingBasketDetails,
+  deleteBasket,
+} from "../../../../api/shoppingBasket";
 import { createNewRawMaterialRequest } from "../../../../api/rawMaterialRequestAPI";
 
 function CompleteOrder() {
@@ -50,7 +53,6 @@ function CompleteOrder() {
     toggleDialog("confirmationDialog", false);
 
     if (stepType == "confirmPay") {
-
       const itemsForRequest = basket?.ShoppingBasketItems.map((item) => ({
         rawMaterial_id: item.item_id, // هنا نستخدم _id بدل من item_id
         rawMaterial_name: item.item_name,
@@ -97,16 +99,25 @@ function CompleteOrder() {
             setStepType("viewOrder");
             toggleDialog("confirmationDialog", true);
           } else if (response.error) {
-            if (response.insufficientItems && response.insufficientItems.length > 0) {
+            if (
+              response.insufficientItems &&
+              response.insufficientItems.length > 0
+            ) {
               Modal.error({
                 title: "Unavailable items:",
                 content: (
                   <div>
-                    {response.insufficientItems.map(item => (
+                    {response.insufficientItems.map((item) => (
                       <div key={item.rawMaterialId}>
-                        <p><b>Item Name:</b> {item.rawMaterialName}</p>
-                        <p><b>Requested Quantity:</b> {item.requestedQuantity}</p>
-                        <p><b>Available Quantity:</b> {item.availableQuantity}</p>
+                        <p>
+                          <b>Item Name:</b> {item.rawMaterialName}
+                        </p>
+                        <p>
+                          <b>Requested Quantity:</b> {item.requestedQuantity}
+                        </p>
+                        <p>
+                          <b>Available Quantity:</b> {item.availableQuantity}
+                        </p>
                         <br />
                       </div>
                     ))}
@@ -261,14 +272,16 @@ function CompleteOrder() {
       </div>
       {dialogState.confirmationDialog && (
         <ConfirmationDialog
-          title={`${stepType === "confirmPay"
-            ? "Are you ready to confirm your payment?"
-            : "Your Order Has Been Created"
-            }`}
-          message={` ${stepType === "confirmPay"
-            ? "Once confirmed, you won't be able to cancel your order."
-            : "Would you like to view the Request? "
-            }`}
+          title={`${
+            stepType === "confirmPay"
+              ? "Are you ready to confirm your payment?"
+              : "Your Order Has Been Created"
+          }`}
+          message={` ${
+            stepType === "confirmPay"
+              ? "Once confirmed, you won't be able to cancel your order."
+              : "Would you like to view the Request? "
+          }`}
           onConfirm={handleConfirmAction}
           onCancel={handelCancel}
           stepType={stepType} // Pass stepType as a prop to control icon and buttons

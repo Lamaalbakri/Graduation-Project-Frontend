@@ -53,10 +53,6 @@ const ViewRawMaterials = () => {
     setSelectedPriceRange(range);
   };
 
-  // const handleMaterialFilter = (slug) => {
-  //   setSelectedMaterial(slug);
-  // };
-
   const handleSupplierFilter = (supplier) => {
     setSelectedSupplier(supplier);
   };
@@ -86,10 +82,6 @@ const ViewRawMaterials = () => {
       if (!selectedSupplier) return true;
       return item?.supplierId?.full_name === selectedSupplier;
     });
-  // .filter((item) => {
-  //   if (!selectedMaterial) return true;
-  //   return item.slug === selectedMaterial;
-  // });
 
   return (
     <>
@@ -103,7 +95,7 @@ const ViewRawMaterials = () => {
 
             <Modal
               title={
-                <span>
+                <span style={{ fontSize: "20px" }}>
                   <FontAwesomeIcon
                     icon={faFilter}
                     style={{ marginRight: "8px" }}
@@ -113,6 +105,7 @@ const ViewRawMaterials = () => {
               }
               open={isFilterOpen}
               onCancel={handleCancel}
+              className="custom-filter-modal"
               okButtonProps={{
                 hidden: true,
                 ghost: true,
@@ -129,7 +122,7 @@ const ViewRawMaterials = () => {
                     backgroundColor: "white",
                     borderColor: "#1c2229",
                     color: "#1c2229",
-                    fontSize: "14px", // تعديل الحجم
+                    fontSize: "14px",
                   }}
                   onMouseOver={(e) => {
                     e.currentTarget.style.borderColor = "#f4d53f";
@@ -140,7 +133,7 @@ const ViewRawMaterials = () => {
                     e.currentTarget.style.color = "#1c2229";
                   }}
                 >
-                  Clear Filter
+                  Clear
                 </Button>,
                 <Button
                   key="submit"
@@ -158,10 +151,11 @@ const ViewRawMaterials = () => {
                   {priceRanges.map((range) => (
                     <p
                       key={range.label}
-                      className={`pointer ${range.label === selectedPriceRange?.label
+                      className={`pointer ${
+                        range.label === selectedPriceRange?.label
                           ? "filterActive"
                           : "grey-text"
-                        }`}
+                      }`}
                       onClick={() => handlePriceFilter(range)}
                     >
                       {range.label}
@@ -173,8 +167,9 @@ const ViewRawMaterials = () => {
                   {uniqueSupplier.map((sup, index) => (
                     <p
                       key={index}
-                      className={`pointer ${sup === selectedSupplier ? "filterActive" : "grey-text"
-                        }`}
+                      className={`pointer ${
+                        sup === selectedSupplier ? "filterActive" : "grey-text"
+                      }`}
                       onClick={() => handleSupplierFilter(sup)}
                     >
                       {sup}
