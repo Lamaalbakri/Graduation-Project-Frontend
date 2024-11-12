@@ -100,6 +100,7 @@
 .actions button:hover {
     background-color: #f4d53f;
     transform: translateY(-2px);
+    color: #1c2229;
 } 
 
 /* Dashboard below the card action buttons */ 

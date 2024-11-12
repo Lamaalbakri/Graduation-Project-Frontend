@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../../images/User.png";
 import "./ManageSupplierStyle.css";
-import { CloseOutlined } from "@ant-design/icons";
+import { CloseOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { getSearchSupplierCategory } from "../../../../api/CategoryAPI";
 import { fetchUserData, updateUserData } from "../../../../api/userAPI";
 
@@ -233,10 +233,25 @@ const AddSupplier = () => {
                   fontSize: "16px",
                   color: "#1c2229",
                   cursor: "pointer",
+                  position: "absolute",
+                  top: "6px",
+                  right: "6px",
                 }}
               />
             </span>
-            <h3>Confirm Action</h3>
+            <div
+              className="ManageSupplier-dialog-header"
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <CheckCircleOutlined
+                style={{
+                  color: "green",
+                  marginRight: 8,
+                  fontSize: "25px",
+                }}
+              />
+              <h3 style={{ margin: 0 }}>Confirm Action</h3>
+            </div>
             <p>Are you sure you want to add this supplier?</p>
             <div className="ManageSupplier-dialog-actions">
               <button
