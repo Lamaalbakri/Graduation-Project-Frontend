@@ -56,6 +56,11 @@
   margin-top: 20px; /* Increased top margin for spacing */
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.order-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 /* Header styling for each order */
 .order-header {

@@ -22,18 +22,13 @@ const BasketItem = ({ item, quantity, onIncrement, onDecrement, onRemove }) => {
         <div className="Basket-item-type">
           {item.options.map((option) => (
             <div key={option._id} className="option-group">
-              <label>
-                <span className="required">*</span>
-                {option.optionType}:
-              </label>
+              <label>{option.optionType}:</label>
               <span> {option.values}</span>
             </div>
           ))}
         </div>
         <div className="Basket-item-quantity">
-          <label>
-            <span className="required">*</span>Quantity:
-          </label>
+          <label>Quantity:</label>
           <div className="quantity-button-container">
             <button className="quantity-button" onClick={onDecrement}>
               <MinusOutlined />

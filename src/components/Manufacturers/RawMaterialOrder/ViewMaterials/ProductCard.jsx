@@ -124,7 +124,10 @@ const ProductCard = ({ d }) => {
         </p>
         <div className="price">
           <p>{d.price} SAR</p>
-          <button onClick={() => handleAddToBasket(false)}>
+          <button
+            className="price-button-card"
+            onClick={() => handleAddToBasket(false)}
+          >
             <FontAwesomeIcon
               icon={faShoppingCart}
               style={{ marginTop: "3px" }}

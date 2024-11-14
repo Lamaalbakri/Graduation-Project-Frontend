@@ -74,16 +74,12 @@ const ViewOrdersList = () => {
                   <div className="view_order_list_card_items_type">
                     {item?.options?.map((option, idx) => (
                       <p key={idx}>
-                        <span style={{ color: "red" }}>* </span>
                         {option.optionType}: {option.values}
                       </p>
                     ))}
                   </div>
                   <div className="view_order_list_card_items_quantity">
-                    <p>
-                      <span style={{ color: "red" }}>* </span>
-                      Quantity: {item?.quantity}
-                    </p>
+                    <p>Quantity: {item?.quantity}</p>
                   </div>
                   <div className="view_order_list_total_price">
                     <p>Total: {item?.subtotal} SAR</p>
@@ -93,7 +89,7 @@ const ViewOrdersList = () => {
             ))}
             {/* Payment Summary */}
             <div className="view_order_payment_summary">
-              <h4 className="heading">Payment Summary</h4>
+              <p className="heading">Payment Summary</p>
               <ul
                 style={{
                   display: "flex",
@@ -109,13 +105,19 @@ const ViewOrdersList = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <span style={{ fontSize: "1rem", fontWeight: "700" }}>
+                  <span className="view_order-total-price">
                     Subtotal:{" "}
-                    <span style={{ color: "gray", fontWeight: "700" }}>
+                    <span
+                      style={{
+                        color: "#555",
+                        fontSize: "16px",
+                        fontWeight: "normal",
+                      }}
+                    >
                       ({totalItemsCount} Items)
                     </span>
                   </span>
-                  <span style={{ fontSize: "1rem", fontWeight: "700" }}>
+                  <span className="view_order-total-price">
                     {order?.subtotal_items} SAR
                   </span>
                 </li>
@@ -127,30 +129,34 @@ const ViewOrdersList = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <span style={{ fontSize: "1rem", fontWeight: "700" }}>
+                  <span className="view_order-total-price">
                     Shipping Cost:{" "}
-                    <span style={{ color: "gray", fontWeight: "700" }}>
+                    <span
+                      style={{
+                        color: "#555",
+                        fontSize: "16px",
+                        fontWeight: "normal",
+                      }}
+                    >
                       (10% of subtotal)
                     </span>
                   </span>
-                  <span style={{ fontSize: "1rem", fontWeight: "700" }}>
+                  <span className="view_order-total-price">
                     {order?.shipping_cost} SAR
                   </span>
                 </li>
+                <hr className="divider" />
                 {/* Total Cost */}
                 <li
                   style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    borderTop: "1px solid lightgray",
-                    padding: "15px 0px",
+                    padding: "5px 0px",
                   }}
                 >
-                  <span style={{ fontSize: "1rem", fontWeight: "700" }}>
-                    Order Total:
-                  </span>
-                  <span style={{ fontSize: "1rem", fontWeight: "700" }}>
+                  <span className="view_order-total-price">Order Total:</span>
+                  <span className="view_order-total-price">
                     {order?.total_price} SAR
                   </span>
                 </li>
@@ -160,23 +166,21 @@ const ViewOrdersList = () => {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
-                      borderTop: "1px solid lightgray",
-                      padding: "10px 0px",
                     }}
                   >
-                    <span style={{ fontSize: "1rem", fontWeight: "700" }}>
-                      Amount Refunded{" "}
+                    <span className="view_order-total-price">
+                      Amount Refunded:{" "}
                       <span
                         style={{
-                          fontSize: "1rem",
-                          color: "gray",
-                          fontWeight: "700",
+                          color: "red",
+                          fontSize: "16px",
+                          fontWeight: "normal",
                         }}
                       >
                         (Order Cancelled)
                       </span>
                     </span>
-                    <span style={{ fontSize: "1rem", fontWeight: "700" }}>
+                    <span className="view_order-total-price">
                       {order?.total_price} SAR
                     </span>
                   </li>
@@ -184,7 +188,7 @@ const ViewOrdersList = () => {
               </ul>
             </div>
             {order?.status === "delivered" && (
-              <div className="view_order_payment_summary">
+              <div className="Feedback-card">
                 <div
                   className="flex"
                   style={{
@@ -244,12 +248,13 @@ const ViewOrdersList = () => {
                     .toLowerCase()
                     .replace(" ", "-")}`}
                 >
-                  {order?.status}
+                  {order?.status.charAt(0).toUpperCase() +
+                    order?.status.slice(1)}
                 </span>
               </li>
             </ul>
             {/* Import Order Timeline */}
-            <div style={{ margin: "2.5rem 2.5rem" }}>
+            <div style={{ margin: "2.5rem 2.3rem" }}>
               <OrderTimeline orderStatus={order?.status} />
             </div>
           </div>
@@ -265,42 +270,92 @@ const ViewOrdersList = () => {
               </li>
               <li> {order?.arrivalAddress?.country}</li>
             </ul>
-            {order?.transporterName && (
-              <div className="transporter_info">
-                <p></p>
-                <h4 className="heading">Transporter Name</h4>
-                <li>{order?.transporterName}</li>
-              </div>
-            )}
-            {order?.transportRequest_id && (
-              <div className="transport_request_id">
-                <p></p>
-                <h4 className="heading">Transport Request ID</h4>
-                <li>{order?.transportRequest_id}</li>
-              </div>
-            )}
-            {order?.estimated_delivery_date &&
-              order?.estimated_delivery_date.length > 0 && (
-                <div>
-                  <p></p>
-                  <h4 className="heading">Estimated Delivery Dates</h4>
-                  <ul className="arrival_address_list">
-                    {order?.estimated_delivery_date.map((date, index) => (
-                      <li key={index}>{moment(date).format("YYYY-MM-DD")}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            {order?.actual_delivery_date && (
-              <div>
-                <p></p>
-                <h4 className="heading">Actual Delivery Date</h4>
-                <li>
-                  {moment(order?.actual_delivery_date).format("YYYY-MM-DD")}
-                </li>
-              </div>
-            )}
           </div>
+          {/* Transporter information */}
+          {order?.status === "pending" ? (
+            <div className="transporter-information">
+              <h4 className="heading">Transportation Details</h4>
+              <p
+                style={{ color: "#555", textAlign: "center", fontSize: "15px" }}
+              >
+                No transport company has been assigned yet
+              </p>
+            </div>
+          ) : order?.status === "rejected" ? null : (
+            <div className="transporter-information">
+              <h4 className="heading">Transportation Details</h4>
+              <ul className="transporter-information_list">
+                <li>
+                  {order?.transporterName && (
+                    <div>
+                      <span className="transporter-information_list-name">
+                        Company:{" "}
+                      </span>
+                      <span className="transporter-information_list-value">
+                        {order?.transporterName}
+                      </span>
+                    </div>
+                  )}
+                </li>
+                <li>
+                  {order?.transportRequest_id && (
+                    <div>
+                      <span className="transporter-information_list-name">
+                        Transport Request ID:{" "}
+                      </span>
+                      <span className="transporter-information_list-value">
+                        #{order?.transportRequest_id}
+                      </span>
+                    </div>
+                  )}
+                </li>
+                <li>
+                  {order?.estimated_delivery_date &&
+                    order?.estimated_delivery_date.length > 0 && (
+                      <div>
+                        <span className="transporter-information_list-name">
+                          Estimated Delivery Dates:
+                        </span>
+                        <br />
+                        {order?.estimated_delivery_date.length === 1 ? (
+                          <span className="value-estimated-delivery-date">
+                            {moment(order.estimated_delivery_date[0]).format(
+                              "DD MMM YYYY"
+                            )}
+                          </span>
+                        ) : (
+                          <span className="value-estimated-delivery-date">
+                            {moment(order.estimated_delivery_date[0]).format(
+                              "DD MMM YYYY"
+                            )}{" "}
+                            to{" "}
+                            {moment(
+                              order.estimated_delivery_date[
+                                order.estimated_delivery_date.length - 1
+                              ]
+                            ).format("DD MMM YYYY")}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                </li>
+                <li>
+                  {order?.actual_delivery_date && (
+                    <div>
+                      <span className="transporter-information_list-name">
+                        Actual Delivery Date:{" "}
+                      </span>
+                      <span className="transporter-information_list-value">
+                        {moment(order?.actual_delivery_date).format(
+                          "DD MMM YYYY"
+                        )}
+                      </span>
+                    </div>
+                  )}
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>

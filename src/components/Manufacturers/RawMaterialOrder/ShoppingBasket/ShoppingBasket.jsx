@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import logo from "../../../images/User.png";
 import "./ShoppingBasket.css";
@@ -7,7 +6,8 @@ import "./ShoppingBasket.css";
 const ShoppingBasket = ({ basket, basketIndex, basketId }) => {
   console.log(basketIndex, basketId);
   const navigate = useNavigate();
-  const itemNames = basket.ShoppingBasketItems.map((item) => item.item_name);
+  //const itemNames = basket.ShoppingBasketItems.map((item) => item.item_name);
+  const itemCount = basket.ShoppingBasketItems.length; // Get the number of items
 
   const handleViewDetails = () => {
     navigate(`/shoppingBaskets/${basketId}/${basketIndex}`);
@@ -25,12 +25,21 @@ const ShoppingBasket = ({ basket, basketIndex, basketId }) => {
         <div className="Basket-contnt-info">
           <p>
             <strong>Items in the Shopping Basket:</strong>{" "}
-            {itemNames.join(", ")}
+            {/*{itemNames.join(", ")}*/}
+            {itemCount} items
           </p>
           <p>
-            <strong>Basket Total:</strong> {basket.total_price} SAR
+            <strong>Basket Total: </strong>
+            <span
+              style={{
+                color: "#f4d53f",
+                fontWeight: "bold",
+                fontSize: "16.5px",
+              }}
+            >
+              {basket.total_price} SAR
+            </span>
           </p>{" "}
-          {/* تحديث المتغير للسعر الإجمالي */}
         </div>
       </div>
       <div className="button-view-container">

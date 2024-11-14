@@ -37,7 +37,7 @@ const OrderTimeline = ({ orderStatus }) => {
         // Skip "Order in Progress" and "Order Delivered" if the order is rejected
         if (
           orderStatus === "rejected" &&
-          (stage === "Order in Progress" || stage === "Order Delivered")
+          (stage === "Order inProgress" || stage === "Order Delivered")
         ) {
           return null;
         }

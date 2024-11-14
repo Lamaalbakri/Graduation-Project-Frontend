@@ -183,15 +183,17 @@
     font-weight: 700;
     color: #f4d53f;
 }
-.price button {
+.price .price-button-card {
     display: flex;
     gap: 8px;
     font-size: 12px;
+    padding: 6px 8px ;
+    border-radius: 6px;
     color: #f4d53f;
     background: #1c2229;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
-.price button:hover {
+.price .price-button-card:hover {
     background: #f4d53f;
     color: #ffffff;
     transform: scale(1.05);
@@ -247,15 +249,15 @@
     text-align: center;
 }
 .modal-bottom button {
-    width: 100%;
+    width: 80%;
     display: flex;
     gap: 8px;
-    font-size: 12px;
+    font-size: 13px;
     color: #f4d53f;
     background: #1c2229;
     justify-content: center;
     padding: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
     transition: all 0.3s ease;
 }
 .modal-bottom button:hover {
