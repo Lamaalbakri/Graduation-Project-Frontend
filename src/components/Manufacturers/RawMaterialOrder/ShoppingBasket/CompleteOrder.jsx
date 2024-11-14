@@ -20,7 +20,7 @@ function CompleteOrder() {
   const [basket, setBasket] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
   const [stepType, setStepType] = useState("");
-  const { address, loading } = useAddress(); // استخدام context للحصول على العنوان
+  const { address, loading } = useAddress();
   const [dialogState, setDialogState] = useState({
     confirmationDialog: false,
     address: false,
@@ -30,7 +30,7 @@ function CompleteOrder() {
     try {
       const data = await fetchShoppingBasketDetails({ basketId });
       if (data) {
-        setBasket(data.basket); // تحديث فقط البيانات التي تأتي من API
+        setBasket(data.basket);
       } else {
         setError("Error fetching shopping baskets");
       }
@@ -54,12 +54,12 @@ function CompleteOrder() {
 
     if (stepType == "confirmPay") {
       const itemsForRequest = basket?.ShoppingBasketItems.map((item) => ({
-        rawMaterial_id: item.item_id, // هنا نستخدم _id بدل من item_id
+        rawMaterial_id: item.item_id,
         rawMaterial_name: item.item_name,
         quantity: item.quantity,
         unit_price: item.unit_price,
         image: item.image,
-        subtotal: item.quantity * item.unit_price, // حساب المجموع الفرعي
+        subtotal: item.quantity * item.unit_price,
         unit: item.unit,
         options: item.options.map((option) => ({
           optionType: option.optionType,
@@ -146,8 +146,6 @@ function CompleteOrder() {
             },
           });
         }
-        // // Close the dialog after creating the order
-        // toggleDialog("confirmationDialog", false);
       }
     } else if (stepType === "viewOrder") {
       toggleDialog("confirmationDialog", false);
@@ -200,7 +198,7 @@ function CompleteOrder() {
       <div className="complate-page-container">
         <div className="order-summary">
           <div className="order-total">
-            <div className="total-title">Order Total:</div>
+            <div className="complate-total-title">Order Total:</div>
             <div className="total-price">
               {basket ? `${basket.total_price} SAR` : "Loading..."}
             </div>

@@ -59,12 +59,13 @@ const ViewOrdersList = () => {
                 </div>
                 <div className="view_order_list_card_items">
                   <div className="view_order_list_card_items_heading">
-                    <h2>{item.rawMaterial_name}</h2>
+                    <p>{item.rawMaterial_name}</p>
                     <p
                       style={{
-                        fontSize: "24px",
-                        fontWeight: "700",
+                        fontSize: "17px",
+                        fontWeight: "bold",
                         color: "#f4d53f",
+                        marginBottom: "15px",
                       }}
                     >
                       {item?.unit_price} SAR
@@ -73,16 +74,15 @@ const ViewOrdersList = () => {
                   <div className="view_order_list_card_items_type">
                     {item?.options?.map((option, idx) => (
                       <p key={idx}>
-                        <span style={{ color: "red" }}>*</span>
-                        <b> {option.optionType}: </b>
-                        {option.values}
+                        <span style={{ color: "red" }}>* </span>
+                        {option.optionType}: {option.values}
                       </p>
                     ))}
                   </div>
                   <div className="view_order_list_card_items_quantity">
                     <p>
-                      <span style={{ color: "red" }}>*</span>
-                      <b>Quantity:</b> {item?.quantity}
+                      <span style={{ color: "red" }}>* </span>
+                      Quantity: {item?.quantity}
                     </p>
                   </div>
                   <div className="view_order_list_total_price">
@@ -194,7 +194,7 @@ const ViewOrdersList = () => {
                   }}
                 >
                   <div>
-                    <h5 style={{ fontSize: "17px" }}>
+                    <h5 style={{ fontSize: "17px", color: "#1c2229" }}>
                       <CheckCircleOutlined
                         style={{
                           color: "green",
@@ -204,7 +204,7 @@ const ViewOrdersList = () => {
                       />
                       Your Order is Complete
                     </h5>
-                    <p>
+                    <p style={{ color: "#1c2229" }}>
                       Evaluating the order helps us improve our services and
                       deliver them better.
                     </p>
@@ -221,6 +221,7 @@ const ViewOrdersList = () => {
             style={{
               background: "#fff",
               padding: "20px",
+              border: "1px solid #ddd",
             }}
           >
             <ul className="order_list_details_list">

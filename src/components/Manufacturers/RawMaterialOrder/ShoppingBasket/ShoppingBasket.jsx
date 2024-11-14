@@ -33,8 +33,8 @@ const ShoppingBasket = ({ basket, basketIndex, basketId }) => {
           {/* تحديث المتغير للسعر الإجمالي */}
         </div>
       </div>
-      <div className="button-container">
-        <div className="button-container">
+      <div className="button-view-container">
+        <div className="button-view-details">
           <button onClick={handleViewDetails}>View Details</button>
         </div>
       </div>

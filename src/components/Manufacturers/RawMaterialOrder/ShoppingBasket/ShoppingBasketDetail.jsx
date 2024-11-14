@@ -9,7 +9,7 @@ import {
   fetchShoppingBasketDetails,
   deleteItemFromBasket,
   deleteBasket,
-} from "../../../../api/shoppingBasket"; // إضافة استيراد دالة تحديث الكمية
+} from "../../../../api/shoppingBasket";
 import ConfirmationDialog from "../../../Dialog/ConfirmationDialog";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import "./ShoppingBasket.css";
@@ -17,7 +17,7 @@ import "./ShoppingBasket.css";
 function ShoppingBasketDetail() {
   const { basketId, basketIndex } = useParams();
   const navigate = useNavigate();
-  const location = useLocation(); // الحصول على الموقع
+  const location = useLocation();
   const [updatedBasket, setBasket] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,7 +33,7 @@ function ShoppingBasketDetail() {
       const data = await fetchShoppingBasketDetails({ basketId });
       console.log("Fetched Basket Data:", data);
       if (data) {
-        setBasket(data.basket); // تحديث فقط البيانات التي تأتي من API
+        setBasket(data.basket);
         setNumberOfBasketItems(data.numberOfBasketItems);
       } else {
         setError("Error fetching shopping baskets");
@@ -41,7 +41,7 @@ function ShoppingBasketDetail() {
     } catch (err) {
       setError("Error fetching shopping Baskets");
     } finally {
-      setLoading(false); // التوقف عن حالة التحميل
+      setLoading(false);
     }
   };
 
@@ -66,7 +66,7 @@ function ShoppingBasketDetail() {
       const newQuantity = item.quantity + 1;
       const itemId = item._id;
       console.log(itemId, newQuantity, basketId);
-      await updateBasketItemQuantity({ itemId, basketId, newQuantity }); // استدعاء API لتحديث الكمية
+      await updateBasketItemQuantity({ itemId, basketId, newQuantity });
       await fetchBasketDetails();
     } catch (error) {
       setError("Error updating item quantity");
@@ -78,7 +78,7 @@ function ShoppingBasketDetail() {
       try {
         const newQuantity = item.quantity - 1;
         const itemId = item._id;
-        await updateBasketItemQuantity({ itemId, basketId, newQuantity }); // استدعاء API لتحديث الكمية
+        await updateBasketItemQuantity({ itemId, basketId, newQuantity });
         await fetchBasketDetails();
       } catch (error) {
         setError("Error updating item quantity");
@@ -87,11 +87,10 @@ function ShoppingBasketDetail() {
   };
 
   const handleRemove = (item) => {
-    // حفظ العنصر الذي سيتم حذفه في حالة الحوار
     setDialogState((prevState) => ({
       ...prevState,
       confirmationDialog: true,
-      itemToDelete: item, // تخزين العنصر
+      itemToDelete: item,
     }));
   };
 
@@ -198,6 +197,7 @@ function ShoppingBasketDetail() {
             </div>
             <div className="total-price">{updatedBasket.shipping_cost} SAR</div>
           </div>
+          <hr className="divider" />
           <div className="order-total">
             <div className="total-price">Order Total:</div>
             <div className="total-price">{updatedBasket.total_price} SAR</div>
