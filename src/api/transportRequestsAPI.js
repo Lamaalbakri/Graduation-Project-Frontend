@@ -74,11 +74,11 @@ export const updateTransportRequestStatus = async (id, newStatus) => {
                 'Content-Type': 'application/json'
             },
             credentials: 'include',
-            body: JSON.stringify({ status: newStatus }) // إرسال الحالة الجديدة
+            body: JSON.stringify({ status: newStatus }) 
         });
 
         if (!response.ok) {
-            const errorData = await response.json();  // استخراج رسالة الخطأ من الـ response
+            const errorData = await response.json(); 
             throw new Error(errorData.msg || 'Failed to update the status');
         }
 

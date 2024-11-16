@@ -43,8 +43,3 @@ export const getSingleOrder = async (id) => {
         console.error('Error fetching orders:', error);
     }
 };
-
-
-
-
-

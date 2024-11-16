@@ -234,7 +234,7 @@ const ViewOrdersList = () => {
                 <span className="value">#{order?.shortId}</span>
               </li>
               <li>
-                <span className="name">Date:</span>
+                <span className="name">Creation Date:</span>
                 <span className="value">
                   {order?.createdAt
                     ? moment(order.createdAt).format("DD MMM YYYY")
@@ -252,6 +252,26 @@ const ViewOrdersList = () => {
                     order?.status.slice(1)}
                 </span>
               </li>
+              <li>
+                {(order?.status === "inProgress" ||
+                  order?.status === "delivered") && (
+                  <>
+                    <span className="name">Order Contract:</span>
+                  </>
+                )}
+              </li>
+              {(order?.status === "inProgress" ||
+                order?.status === "delivered") && (
+                <div className="contract-button">
+                  <a
+                    href={`/SmartContract/${order.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <button>View</button>
+                  </a>
+                </div>
+              )}
             </ul>
             {/* Import Order Timeline */}
             <div style={{ margin: "2.5rem 2.3rem" }}>
@@ -272,7 +292,7 @@ const ViewOrdersList = () => {
             </ul>
           </div>
           {/* Transporter information */}
-          {order?.status === "pending" ? (
+          {order?.status === "pending" || order?.status === "accepted" ? (
             <div className="transporter-information">
               <h4 className="heading">Transportation Details</h4>
               <p

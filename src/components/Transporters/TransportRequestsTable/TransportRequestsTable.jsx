@@ -29,6 +29,10 @@ function TransportRequestsTable({ data }) {
     setRequests(data);
   }, [data]);
 
+  const handleViewContract = (id) => {
+    window.open(`/SmartContract/${id}`, "_blank");
+  };
+
   // Helper function to toggle dialog states (open or close)
   const toggleDialog = (dialogName, value, requestId = null, status = "") => {
     setDialogState((prev) => ({ ...prev, [dialogName]: value }));
@@ -186,10 +190,14 @@ function TransportRequestsTable({ data }) {
     {
       field: "status",
       headerName: "Status",
-      width: 135,
+      width: 130,
       headerAlign: "left",
       renderCell: (params) => {
         const statusClass = `TransportRequestsTable-status-${params.row.status}`;
+        const formattedStatus =
+          params.row.status.charAt(0).toUpperCase() +
+          params.row.status.slice(1);
+
         if (
           params.row.status === "rejected" ||
           params.row.status === "delivered"
@@ -198,7 +206,7 @@ function TransportRequestsTable({ data }) {
             <div
               className={`TransportRequestsTable-status-text-no-drop-${params.row.status}`}
             >
-              {params.row.status}
+              {formattedStatus}
             </div>
           );
         }
@@ -226,6 +234,19 @@ function TransportRequestsTable({ data }) {
           </select>
         );
       },
+    },
+    {
+      field: "contract",
+      headerName: "Contract",
+      width: 110,
+      headerAlign: "left",
+      renderCell: (params) => (
+        <div className="TransportRequestsTable-contract-button">
+          <button onClick={() => handleViewContract(params.row.id)}>
+            View
+          </button>
+        </div>
+      ),
     },
     {
       field: "arrivalAddress",

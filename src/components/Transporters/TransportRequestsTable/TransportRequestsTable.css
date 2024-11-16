@@ -7,7 +7,7 @@
     padding: 5px;
     border-radius: 8px;
     outline: none;
-    width: 93%;
+    width: 90%;
     text-align: center;
 }
 .TransportRequestsTable-status-select:hover {
@@ -41,10 +41,9 @@
     display: inline-block;
     background-color: #f443366d;
     color: #7e0901;
-    padding: 5px;
     border-radius: 8px;
     outline: none;
-    width: 93%;
+    width: 85%;
     text-align: center;
 }
 .TransportRequestsTable-status-text-no-drop-delivered {
@@ -53,10 +52,9 @@
     display: inline-block;
     background-color: #4caf4f71;
     color: #023404;
-    padding: 5px;
     border-radius: 8px;
     outline: none;
-    width: 93%;
+    width: 85%;
     text-align: center;
 }
 .TransportRequestsTable-header-row {
@@ -121,6 +119,22 @@
     font-weight: bold;
     text-align: center;
     margin: 300px;
+}
+.TransportRequestsTable-contract-button button {
+    padding: 2.5px 25px;
+    background-color: #fff; 
+    color: #1c2229;
+    border: 1px solid #1c2229;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 2.1px;
+    font-size: 15px;
+}
+.TransportRequestsTable-contract-button button:hover {
+    background-color: #fff !important;
+    color: #f4d53f !important;
+    border: 1px solid #f4d53f !important;
 }
 
 @media (max-width: 768px) {

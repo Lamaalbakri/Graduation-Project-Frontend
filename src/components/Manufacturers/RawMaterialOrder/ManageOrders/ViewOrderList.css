@@ -140,6 +140,26 @@
   font-size: 1rem;
   font-weight: 400;
 }
+.order_list_details_list .contract-button {
+  margin-left: auto;
+  margin-top: -55px; 
+}
+.order_list_details_list .contract-button button {
+  padding: 2.5px 25px;
+  background-color: #fff; 
+  color: #1c2229;
+  border: 1px solid #1c2229;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 2.1px;
+  font-size: 15px;
+}
+.order_list_details_list .contract-button button:hover {
+  background-color: #fff !important;
+  color: #f4d53f !important;
+  border: 1px solid #f4d53f !important;
+}
 .value-pending {
   background-color: #ff990059;
   color: #5e3902;

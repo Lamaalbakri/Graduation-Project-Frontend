@@ -14,6 +14,7 @@ import RegisterPage from "./components/Register-Login/RegisterPage";
 import LoginPage from "./components/Register-Login/LoginPage";
 import SCMShomePage from "./components/HomePage/SCMShomePage";
 import EditAccount from "./components/EditAccount/EditAccount";
+import SmartContract from "./components/SmartContract/SmartContractDetails";
 // Suppliers imports
 import AddRawMaterial from "./components/Suppliers/ManageRawMaterial/AddRawMaterial";
 import DeleteRawMaterial from "./components/Suppliers/ManageRawMaterial/DeleteRawMaterial";
@@ -30,15 +31,11 @@ import SearchTransportRequests from "./components/Transporters/TransportRequests
 import ShoppingBasketList from "./components/Manufacturers/RawMaterialOrder/ShoppingBasket/ShoppingBasketList";
 import ShoppingBasketDetail from "./components/Manufacturers/RawMaterialOrder/ShoppingBasket/ShoppingBasketDetail";
 import CompleteOrder from "./components/Manufacturers/RawMaterialOrder/ShoppingBasket/CompleteOrder";
-
 import AddSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/AddSupplier";
 import ViewSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupplier/ViewSuppliers";
-
 import ViewRawMaterials from "./components/Manufacturers/RawMaterialOrder/ViewMaterials/ViewRawMaterials";
-
-import ViewOrder from './components/Manufacturers/RawMaterialOrder/ManageOrders/ViewOrder';
-import ViewOrderList from './components/Manufacturers/RawMaterialOrder/ManageOrders/ViewOrdersList';
-
+import ViewOrder from "./components/Manufacturers/RawMaterialOrder/ManageOrders/ViewOrder";
+import ViewOrderList from "./components/Manufacturers/RawMaterialOrder/ManageOrders/ViewOrdersList";
 
 // Contexts
 import { AddressProvider } from "./contexts/AddressContext"; // تأكد من تحديث المسار بناءً على موقعك الفعلي
@@ -47,23 +44,20 @@ import { UserProvider } from "./contexts/UserContext";
 const { Content } = Layout;
 
 function App() {
-
-  // when refreshing the website does not crash and show a empty white page 
+  // when refreshing the website does not crash and show a empty white page
   // const [userType, setUserType] = useState(localStorage.getItem('userType'));
   // const [userId, setUserId] = useState(localStorage.getItem('userId'));
-  const [userType, setUserType] = useState(sessionStorage.getItem('userType'));
-  const [userId, setUserId] = useState(sessionStorage.getItem('userId'));
-
+  const [userType, setUserType] = useState(sessionStorage.getItem("userType"));
+  const [userId, setUserId] = useState(sessionStorage.getItem("userId"));
 
   // useEffect(() => {
   //   localStorage.setItem('userType', userType);
   //   localStorage.setItem('userId', userId);
   // }, [userType, userId])
   useEffect(() => {
-    sessionStorage.setItem('userType', userType);
-    sessionStorage.setItem('userId', userId);
+    sessionStorage.setItem("userType", userType);
+    sessionStorage.setItem("userId", userId);
   }, [userType, userId]);
-
 
   // const clearUserData = () => {
   //   setUserType(null);
@@ -74,10 +68,9 @@ function App() {
   const clearUserData = () => {
     setUserType(null);
     setUserId(null);
-    sessionStorage.removeItem('userType');
-    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem("userType");
+    sessionStorage.removeItem("userId");
   };
-
 
   return (
     <UserProvider>
@@ -97,8 +90,16 @@ function App() {
             />
             <Route
               path="*"
-              element={<MainLayout userType={userType} userId={userId} clearUserData={clearUserData} />}
+              element={
+                <MainLayout
+                  userType={userType}
+                  userId={userId}
+                  clearUserData={clearUserData}
+                />
+              }
             />
+            {/*<Route path="/SmartContract" element={<SmartContract />} />*/}
+            <Route path="/SmartContract/:id" element={<SmartContract />} />
           </Routes>
         </AddressProvider>
       </Router>
@@ -122,7 +123,6 @@ function MainLayout({ userType, userId, clearUserData }) {
     navigate("/");
     clearUserData();
   };
-
 
   return (
     <Layout>
@@ -240,8 +240,14 @@ function MainLayout({ userType, userId, clearUserData }) {
                   element={<CompleteOrder userId={userId} />}
                 />
 
-                <Route path="/ViewOrderList" element={<ViewOrderList userId={userId} />} />
-                <Route path="/ViewOrders" element={<ViewOrder userId={userId} />} />
+                <Route
+                  path="/ViewOrderList"
+                  element={<ViewOrderList userId={userId} />}
+                />
+                <Route
+                  path="/ViewOrders"
+                  element={<ViewOrder userId={userId} />}
+                />
               </>
             )}
 

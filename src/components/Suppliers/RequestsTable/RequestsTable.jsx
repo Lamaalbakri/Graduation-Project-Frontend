@@ -47,6 +47,10 @@ function RequestsTable({ data }) {
     setRequests(data); // Update requests when data changes
   }, [data]);
 
+  const handleViewContract = (id) => {
+    window.open(`/SmartContract/${id}`, "_blank");
+  };
+
   // Helper function to toggle dialog states (open or close)
   const toggleDialog = (
     dialogName,
@@ -83,10 +87,10 @@ function RequestsTable({ data }) {
           ) =>
             request.shortId === id //Check if the shortId of the request matches the ID we want to update.
               ? {
-                ...request,
-                status: updatedRequest.data.status,
-                statusClass: `ManageRawMaterial-status-${updatedRequest.data.status}`,
-              }
+                  ...request,
+                  status: updatedRequest.data.status,
+                  statusClass: `ManageRawMaterial-status-${updatedRequest.data.status}`,
+                }
               : request //Returns the request as is if the condition is false.
         )
       );
@@ -145,7 +149,6 @@ function RequestsTable({ data }) {
 
   // Handle confirmation for delete or reject, called after clicking confirm in the dialog "onConfirm()"
   const handleConfirmAction = async () => {
-
     const previousStatus = requests.find(
       (request) => request.shortId === selectedRequestId
     )?.status;
@@ -176,9 +179,11 @@ function RequestsTable({ data }) {
         prevRequests.filter((request) => request.shortId !== selectedRequestId)
       );
 
-      Modal.success({ //confirm
+      Modal.success({
+        //confirm
         title: "Rejected request",
-        content: "The rejected request was moved to the previous requests page.",
+        content:
+          "The rejected request was moved to the previous requests page.",
         okButtonProps: {
           className: "confirm-buttonn",
         },
@@ -254,10 +259,11 @@ function RequestsTable({ data }) {
           {params.row.supplyingRawMaterials.map((item, index) => (
             <div
               key={`${item.rawMaterial_id}-${index}`}
-              className={`ManageRawMaterial-supplying-item ${index !== params.row.supplyingRawMaterials.length - 1
-                ? "item-with-border"
-                : ""
-                }`}
+              className={`ManageRawMaterial-supplying-item ${
+                index !== params.row.supplyingRawMaterials.length - 1
+                  ? "item-with-border"
+                  : ""
+              }`}
             >
               {item.rawMaterial_name}
             </div>
@@ -319,7 +325,7 @@ function RequestsTable({ data }) {
       field: "total_price",
       headerName: "Total Price",
       type: "number",
-      width: 70,
+      width: 80,
       headerAlign: "left",
       renderCell: (params) => {
         const price = params.row.total_price;
@@ -337,6 +343,10 @@ function RequestsTable({ data }) {
       headerAlign: "left",
       renderCell: (params) => {
         const statusClass = `ManageRawMaterial-status-${params.row.status}`;
+        const formattedStatus =
+          params.row.status.charAt(0).toUpperCase() +
+          params.row.status.slice(1);
+
         if (
           params.row.status === "rejected" ||
           params.row.status === "delivered" ||
@@ -347,7 +357,7 @@ function RequestsTable({ data }) {
             <div
               className={`ManageRawMaterial-status-text-no-drop-${params.row.status}`}
             >
-              {params.row.status}
+              {formattedStatus}
             </div>
           );
         }
@@ -361,12 +371,23 @@ function RequestsTable({ data }) {
           >
             <option value="pending">Pending</option>
             <option value="accepted">Accepted</option>
-            {/* <option value="inProgress">In Progress</option> */}
-            {/* <option value="delivered">Delivered</option> */}
             <option value="rejected">Rejected</option>
           </select>
         );
       },
+    },
+    {
+      field: "contract",
+      headerName: "Contract",
+      width: 110,
+      headerAlign: "left",
+      renderCell: (params) => (
+        <div className="ManageRawMaterial-contract-button">
+          <button onClick={() => handleViewContract(params.row.id)}>
+            View
+          </button>
+        </div>
+      ),
     },
     {
       field: "arrivalAddress",
@@ -471,12 +492,14 @@ function RequestsTable({ data }) {
                   }}
                 />
               )}
-              {`Confirm ${selectedStatus === "rejected" ? "Rejection" : "Delivery"
-                }`}
+              {`Confirm ${
+                selectedStatus === "rejected" ? "Rejection" : "Delivery"
+              }`}
             </>
           }
-          message={`Are you sure you want to ${selectedStatus === "rejected" ? "reject" : "mark as delivered"
-            } this request?`}
+          message={`Are you sure you want to ${
+            selectedStatus === "rejected" ? "reject" : "mark as delivered"
+          } this request?`}
           onConfirm={handleConfirmAction}
           onCancel={() => toggleDialog("confirmationDialog", false)}
           stepType={selectedStatus === "viewOrder" ? "viewOrder" : "default"}
