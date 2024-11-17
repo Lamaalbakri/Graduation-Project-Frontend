@@ -85,7 +85,6 @@ const ViewSuppliers = () => {
               <img src={logo} alt="Supplier" />
               <div>
                 <h3>{supplier?.full_name}</h3>
-                <p>{supplier?.rawMaterialList?.toString()}</p>
                 <p>
                   <strong>Category:</strong> {supplier?.category}
                 </p>

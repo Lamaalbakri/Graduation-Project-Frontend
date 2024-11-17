@@ -9,8 +9,8 @@ const AddSupplier = () => {
   const [supplierCategory, setSupplierCategory] = useState("");
   const [supplierName, setSupplierName] = useState("");
   const [isSearchActive, setIsSearchActive] = useState(false);
-  const [suppliers, setSuppliers] = useState([]);
-  const [user, setUser] = useState();
+  const [suppliers, setSuppliers] = useState();
+  const [user, setUser] = useState([]);
   const [appliedCategory, setAppliedCategory] = useState("");
   const [appliedName, setAppliedName] = useState("");
   const [showDialog, setShowDialog] = useState(false);
@@ -40,23 +40,23 @@ const AddSupplier = () => {
     setIsSearchActive(false);
     setAppliedCategory("");
     setAppliedName("");
-    setSuppliers([]); // Clear the suppliers list
+    // setSuppliers([]); // Clear the suppliers list
   };
 
   const handleApply = async () => {
     // Check if the user has selected a category but hasn't provided a supplier name or ID
-    if (supplierCategory && !supplierName) {
-      setSuppliers([]); // Set suppliers to an empty array to show "No suppliers found"
-      setIsSearchActive(true);
-      return;
-    }
+    // if (supplierCategory && !supplierName) {
+    //   setSuppliers([]); // Set suppliers to an empty array to show "No suppliers found"
+    //   setIsSearchActive(true);
+    //   return;
+    // }
 
-    // Check if neither category nor name is provided
-    if (!supplierCategory && !supplierName) {
-      setSuppliers([]); // Show "No suppliers found" if no category or name is provided
-      setIsSearchActive(true);
-      return;
-    }
+    // // Check if neither category nor name is provided
+    // if (!supplierCategory && !supplierName) {
+    //   setSuppliers([]); // Show "No suppliers found" if no category or name is provided
+    //   setIsSearchActive(true);
+    //   return;
+    // }
 
     setAppliedCategory(supplierCategory);
     setAppliedName(supplierName);
@@ -65,20 +65,7 @@ const AddSupplier = () => {
     // Fetch suppliers based on the entered criteria
     getSearchSupplierCategory(supplierCategory || null, supplierName || null)
       .then((x) => {
-        // Show "No suppliers found" if no results match or if random name doesn't yield a specific match
-        if (
-          !x ||
-          x.length === 0 ||
-          (supplierName &&
-            x.every((supplier) => supplier.full_name !== supplierName))
-        ) {
-          setSuppliers([]); // Show "No suppliers found" when there is no match
-        } else {
-          setSuppliers(x);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching suppliers:", error);
+        setSuppliers(x); // Show "No suppliers found" when there is no match
       });
   };
 
@@ -200,7 +187,6 @@ const AddSupplier = () => {
                   <img src={logo} alt="Supplier" />
                   <div>
                     <h3>{supplier?.full_name}</h3>
-                    <p>{supplier?.rawMaterialList?.toString()}</p>
                     <p>
                       <strong>Category:</strong> {supplier?.category}
                     </p>
