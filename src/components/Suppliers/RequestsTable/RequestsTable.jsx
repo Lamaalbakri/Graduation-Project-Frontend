@@ -406,17 +406,11 @@ function RequestsTable({ data }) {
     },
     {
       field: "action",
-      headerName: "Action",
+      headerName: "Tracking",
       width: 140,
       headerAlign: "left",
       renderCell: (params) => (
         <div className="ManageRawMaterial-action-buttons">
-          <MessageOutlined
-            className="ManageRawMaterial-table-icon message-icon"
-            onClick={() =>
-              toggleDialog("messageDialog", true, params.row.shortId)
-            }
-          />
           <button
             className="ManageRawMaterial-tracking-icon"
             onClick={() =>
