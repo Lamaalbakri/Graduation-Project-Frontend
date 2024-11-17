@@ -255,23 +255,23 @@ const ViewOrdersList = () => {
               <li>
                 {(order?.status === "inProgress" ||
                   order?.status === "delivered") && (
-                  <>
-                    <span className="name">Order Contract:</span>
-                  </>
-                )}
+                    <>
+                      <span className="name">Order Contract:</span>
+                    </>
+                  )}
               </li>
               {(order?.status === "inProgress" ||
                 order?.status === "delivered") && (
-                <div className="contract-button">
-                  <a
-                    href={`/SmartContract/${order.id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <button>View</button>
-                  </a>
-                </div>
-              )}
+                  <div className="contract-button">
+                    <a
+                      href={`/SmartContract/${order.shortId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <button>View</button>
+                    </a>
+                  </div>
+                )}
             </ul>
             {/* Import Order Timeline */}
             <div style={{ margin: "2.5rem 2.3rem" }}>
@@ -351,7 +351,7 @@ const ViewOrdersList = () => {
                             to{" "}
                             {moment(
                               order.estimated_delivery_date[
-                                order.estimated_delivery_date.length - 1
+                              order.estimated_delivery_date.length - 1
                               ]
                             ).format("DD MMM YYYY")}
                           </span>

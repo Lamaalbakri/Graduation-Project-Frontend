@@ -85,11 +85,7 @@ const AppHeader = ({
     userType
   );
 
-  const shownotificationButton = [
-    "manufacturer",
-    "distributor",
-    "retailer",
-  ].includes(userType);
+  const shownotificationButton = [].includes(userType);
 
   useEffect(() => {
     const fetchCartItemCount = async () => {

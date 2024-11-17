@@ -1,12 +1,15 @@
-const API_URL = 'http://localhost:8500/api/v1';
+const API_URL = 'http://localhost:8500/api/v1/contract';
 
-export const createContract = async (contractData) => {
+export const createContract = async (transportOrderId, purchaseOrderId) => {
     try {
-        const response = await fetch(`${API_URL}/`, {
+        const response = await fetch(`${API_URL}/create-contract`, {
             method: "POST",
             credentials: 'include',
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(contractData),
+            body: JSON.stringify({
+                transportOId: transportOrderId,
+                purchaseOId: purchaseOrderId
+            }),
         });
 
         const jsonResponse = await response.json();
@@ -24,9 +27,13 @@ export const createContract = async (contractData) => {
     }
 }
 
-export const getContract = async () => {
-    const response = await fetch(`${API_URL}/`, {
+export const getContract = async (orderId) => {
+    console.log(orderId)
+    const response = await fetch(`${API_URL}/view-contract/${orderId}`, {
         method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         credentials: 'include'
     });
 
@@ -34,19 +41,20 @@ export const getContract = async () => {
         const errorDetails = await response.text();
         throw new Error(`Failed to get contract, ${errorDetails}`);
     }
+
     const json = await response.json();
     return json.data;
 }
 
-export const updateContract = async (newStatus) => {
+export const updateContract = async (orderId) => {
     try {
-        const response = await fetch(`${API_URL}/`, {
+        const response = await fetch(`${API_URL}/update-contract`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             credentials: 'include',
-            body: JSON.stringify({ status: newStatus })
+            body: JSON.stringify({ orderId })
         });
 
         if (!response.ok) {

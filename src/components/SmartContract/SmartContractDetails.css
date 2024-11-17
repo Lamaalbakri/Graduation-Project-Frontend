@@ -1,3 +1,6 @@
+body {
+    background-color: #1c2229;
+}
 .contract-details-content {
     width: 60%;
     margin: auto;
@@ -163,6 +166,21 @@
 .order-items-table td.item {
   width: 40%;
 }
+.print-button {
+    background-color: #fff;
+    color: #1c2229; 
+    border: 1px solid #1c2229; 
+    padding: 6px 12px; 
+    font-size: 15px; 
+    cursor: pointer;  
+    display: inline-block;
+    position: absolute;
+    right: 50px;  
+}  
+.print-button:hover {
+    border-color: #f4d53f;
+    color: #f4d53f; 
+}
 
 @media (max-width: 1200px) {
     .contract-details-content {
@@ -234,5 +252,10 @@
     .order-items-table th.item,
     .order-items-table td.item {
         width: 100%;
+    }
+}
+@media print {
+    .print-button {
+      display: none;
     }
 }

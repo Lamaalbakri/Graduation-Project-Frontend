@@ -1,72 +1,50 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { notification } from "antd";
 import moment from "moment";
 import logo from "../images/SCMS.png";
-//import { fetchContractData } from "../../api/contractAPI";
+import { getContract } from "../../api/smartContractAPI";
 import "./SmartContractDetails.css";
 
 const SmartContractDetails = () => {
+  const { id } = useParams();
   const [contractData, setContractData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const mockContractData = {
-      purchaseOrderId: "#PO12345",
-      transportOrderId: "#TO98765",
-      OrderStatus: "delivered",
-      sellerName: "Seller Name",
-      sellerShortId: "#S123",
-      buyerName: "Buyer Name",
-      buyerShortId: "#B123",
-      transporterName: "Transporter Name",
-      transporterId: "#T123",
-      totalBuyerPayment: "1000",
-      totalTransportPayment: "200",
-      sellerAddress: "123 Seller St.",
-      buyerAddress: "456 Buyer Ave.",
-      items: [
-        {
-          itemName: "Item 1",
-          quantity: 10,
-          options: "Option A",
-        },
-        {
-          itemName: "Item 2",
-          quantity: 5,
-          options: "Option B",
-        },
-      ],
-      estimatedDeliveryDates: ["2024-11-20", "2024-11-25"],
-      actualDeliveryDate: "2024-11-22",
-      status: "Completed",
-      contractCreatedAt: "2024-11-10T15:30:00Z",
-      transactionHash: "0xabc123def456gh789ijklmn0",
-      blockNumber: "987654",
-      transportationType: "Regular Delivery",
-      shippingWeight: "7 to 15 tons",
-    };
-    setContractData(mockContractData);
-    setIsLoading(false);
-  }, []);
-
-  /*useEffect(() => {
-    const loadContractData = async () => {
+    // دالة لجلب العقد بناءً على id
+    const fetchContractDetails = async () => {
       try {
-        //const data = await fetchContractData();
+        setIsLoading(true);
+        const data = await getContract(id); // تمرير id عند استدعاء API
+        console.log(data)
+        if (!data) {
+          notification.warning({
+            message: "No Data",
+            description: "No contract data found for this order.",
+          });
+        }
         setContractData(data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch contract data:", error);
+      } catch (err) {
+        setError(err.message); // معالجة الأخطاء
         notification.error({
           message: "Error",
-          description: "Failed to load contract details.",
+          description: `Failed to load contract.`,
         });
+      } finally {
         setIsLoading(false);
       }
     };
 
-    loadContractData();
-  }, []);*/
+    if (id) {
+      fetchContractDetails();  // إذا كان لدينا id نبدأ في جلب البيانات
+    }
+  }, [id]);  // إعادة التفعيل عندما يتغير id
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   if (isLoading) {
     return <div className="contract-message">Loading contract details...</div>;
@@ -151,39 +129,39 @@ const SmartContractDetails = () => {
           <p>
             <strong>Order status: </strong>
             <span
-              className={`status-${contractData.OrderStatus.toLowerCase().replace(
+              className={`status-${contractData.purchaseOrderStatus.toLowerCase().replace(
                 " ",
                 "-"
               )}`}
             >
-              {contractData.OrderStatus.charAt(0).toUpperCase() +
-                contractData.OrderStatus.slice(1)}
+              {contractData.purchaseOrderStatus.charAt(0).toUpperCase() +
+                contractData.purchaseOrderStatus.slice(1)}
             </span>
           </p>
           <p>
             <strong>Estimated delivery dates:</strong>{" "}
-            {contractData.estimatedDeliveryDates.length === 2
-              ? `${moment(contractData.estimatedDeliveryDates[0]).format(
-                  "DD MMM YYYY"
-                )} to ${moment(contractData.estimatedDeliveryDates[1]).format(
-                  "DD MMM YYYY"
-                )}`
+            {contractData.estimatedDeliveryTimes && contractData.estimatedDeliveryTimes.length === 2 &&
+              moment(contractData.estimatedDeliveryTimes[0], moment.ISO_8601).isValid() &&
+              moment(contractData.estimatedDeliveryTimes[1], moment.ISO_8601).isValid()
+              ? `${moment(contractData.estimatedDeliveryTimes[0]).format("DD MMM YYYY")} to ${moment(contractData.estimatedDeliveryTimes[1]).format("DD MMM YYYY")}`
               : "Data not available"}
           </p>
           <p>
             <strong>Actual delivery date:</strong>{" "}
-            {contractData.actualDeliveryDate
-              ? moment(contractData.actualDeliveryDate).format("DD MMM YYYY")
-              : contractData.status === "In Progress"
-              ? "Order is still in progress"
-              : "Data not available"}
+            {
+              contractData.purchaseOrderStatus === "inProgress"
+                ? "Order is still in progress"
+                : contractData.actualDeliveryTime
+                  ? moment(contractData.actualDeliveryTime).format("DD MMM YYYY")
+                  : "Data not available"
+            }
           </p>
           <p>
             <strong>Transportation type:</strong>{" "}
-            {contractData.transportationType}
+            {contractData.transportType}
           </p>
           <p>
-            <strong>Shipping weight:</strong> {contractData.shippingWeight}
+            <strong>Shipping weight:</strong> {contractData.weight}
           </p>
         </div>
         <div className="contract-items">
@@ -218,6 +196,9 @@ const SmartContractDetails = () => {
           </p>
         </div>
       </div>
+      <button onClick={handlePrint} className="print-button">
+        Print Contract
+      </button>
     </div>
   );
 };

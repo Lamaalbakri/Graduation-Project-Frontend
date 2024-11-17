@@ -87,10 +87,10 @@ function RequestsTable({ data }) {
           ) =>
             request.shortId === id //Check if the shortId of the request matches the ID we want to update.
               ? {
-                  ...request,
-                  status: updatedRequest.data.status,
-                  statusClass: `ManageRawMaterial-status-${updatedRequest.data.status}`,
-                }
+                ...request,
+                status: updatedRequest.data.status,
+                statusClass: `ManageRawMaterial-status-${updatedRequest.data.status}`,
+              }
               : request //Returns the request as is if the condition is false.
         )
       );
@@ -259,11 +259,10 @@ function RequestsTable({ data }) {
           {params.row.supplyingRawMaterials.map((item, index) => (
             <div
               key={`${item.rawMaterial_id}-${index}`}
-              className={`ManageRawMaterial-supplying-item ${
-                index !== params.row.supplyingRawMaterials.length - 1
-                  ? "item-with-border"
-                  : ""
-              }`}
+              className={`ManageRawMaterial-supplying-item ${index !== params.row.supplyingRawMaterials.length - 1
+                ? "item-with-border"
+                : ""
+                }`}
             >
               {item.rawMaterial_name}
             </div>
@@ -383,7 +382,7 @@ function RequestsTable({ data }) {
       headerAlign: "left",
       renderCell: (params) => (
         <div className="ManageRawMaterial-contract-button">
-          <button onClick={() => handleViewContract(params.row.id)}>
+          <button onClick={() => handleViewContract(params.row.shortId)}>
             View
           </button>
         </div>
@@ -492,14 +491,12 @@ function RequestsTable({ data }) {
                   }}
                 />
               )}
-              {`Confirm ${
-                selectedStatus === "rejected" ? "Rejection" : "Delivery"
-              }`}
+              {`Confirm ${selectedStatus === "rejected" ? "Rejection" : "Delivery"
+                }`}
             </>
           }
-          message={`Are you sure you want to ${
-            selectedStatus === "rejected" ? "reject" : "mark as delivered"
-          } this request?`}
+          message={`Are you sure you want to ${selectedStatus === "rejected" ? "reject" : "mark as delivered"
+            } this request?`}
           onConfirm={handleConfirmAction}
           onCancel={() => toggleDialog("confirmationDialog", false)}
           stepType={selectedStatus === "viewOrder" ? "viewOrder" : "default"}
