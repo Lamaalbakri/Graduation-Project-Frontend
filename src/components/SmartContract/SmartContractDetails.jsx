@@ -89,7 +89,8 @@ const SmartContractDetails = () => {
                 <strong>ID:</strong> #{contractData.sellerShortId}
               </p>
               <p>
-                <strong>Address:</strong> {contractData.sellerAddress}
+                <strong>Address:</strong> {contractData.sellerAddress.charAt(0).toUpperCase() + contractData.sellerAddress.slice(1).toLowerCase()}
+
               </p>
             </div>
           </div>
@@ -103,7 +104,7 @@ const SmartContractDetails = () => {
                 <strong>ID:</strong> #{contractData.buyerShortId}
               </p>
               <p>
-                <strong>Address:</strong> {contractData.buyerAddress}
+                <strong>Address:</strong> {contractData.buyerAddress.charAt(0).toUpperCase() + contractData.buyerAddress.slice(1).toLowerCase()}
               </p>
             </div>
           </div>
@@ -142,20 +143,20 @@ const SmartContractDetails = () => {
           <p>
             <strong>Estimated delivery dates:</strong>{" "}
             {contractData.estimatedDeliveryTimes &&
-            contractData.estimatedDeliveryTimes.length === 2 &&
-            moment(
-              contractData.estimatedDeliveryTimes[0],
-              moment.ISO_8601
-            ).isValid() &&
-            moment(
-              contractData.estimatedDeliveryTimes[1],
-              moment.ISO_8601
-            ).isValid()
+              contractData.estimatedDeliveryTimes.length === 2 &&
+              moment(
+                contractData.estimatedDeliveryTimes[0],
+                moment.ISO_8601
+              ).isValid() &&
+              moment(
+                contractData.estimatedDeliveryTimes[1],
+                moment.ISO_8601
+              ).isValid()
               ? `${moment(contractData.estimatedDeliveryTimes[0]).format(
-                  "DD MMM YYYY"
-                )} to ${moment(contractData.estimatedDeliveryTimes[1]).format(
-                  "DD MMM YYYY"
-                )}`
+                "DD MMM YYYY"
+              )} to ${moment(contractData.estimatedDeliveryTimes[1]).format(
+                "DD MMM YYYY"
+              )}`
               : "Data not available"}
           </p>
           <p>
@@ -163,8 +164,8 @@ const SmartContractDetails = () => {
             {contractData.purchaseOrderStatus === "inProgress"
               ? "Order is still in progress"
               : contractData.actualDeliveryTime
-              ? moment(contractData.actualDeliveryTime).format("DD MMM YYYY")
-              : "Data not available"}
+                ? moment(contractData.actualDeliveryTime).format("DD MMM YYYY")
+                : "Data not available"}
           </p>
           <p>
             <strong>Transportation type:</strong> {contractData.transportType}
