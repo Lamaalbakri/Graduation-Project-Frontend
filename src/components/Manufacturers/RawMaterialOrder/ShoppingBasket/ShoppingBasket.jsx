@@ -6,7 +6,6 @@ import "./ShoppingBasket.css";
 const ShoppingBasket = ({ basket, basketIndex, basketId }) => {
   console.log(basketIndex, basketId);
   const navigate = useNavigate();
-  //const itemNames = basket.ShoppingBasketItems.map((item) => item.item_name);
   const itemCount = basket.ShoppingBasketItems.length; // Get the number of items
 
   const handleViewDetails = () => {
@@ -20,13 +19,13 @@ const ShoppingBasket = ({ basket, basketIndex, basketId }) => {
       <div className="Basket-content">
         <div className="img-container">
           <img className="supplier-img" src={logo} />
-          <p>Supplier Name: {basket.sellerName}</p>
+          <p>
+            Supplier Name: <span>{basket.sellerName}</span>
+          </p>
         </div>
         <div className="Basket-contnt-info">
           <p>
-            <strong>Items in the Shopping Basket:</strong>{" "}
-            {/*{itemNames.join(", ")}*/}
-            {itemCount} items
+            <strong>Items in the Shopping Basket:</strong> {itemCount} items
           </p>
           <p>
             <strong>Basket Total: </strong>

@@ -4,6 +4,7 @@ import {
   HomeOutlined,
   GoldOutlined,
   SnippetsOutlined,
+  ProductOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
@@ -50,10 +51,14 @@ const MenuList = ({ darkTheme, userType, userId }) => {
               <Link to={`/viewRawMaterial/${userId}`}>View Raw Material</Link>
             </Menu.Item>
             <Menu.Item key="updateRawMaterial">
-              <Link to={`/updateRawMaterial/${userId}`}>Update Raw Material</Link>
+              <Link to={`/updateRawMaterial/${userId}`}>
+                Update Raw Material
+              </Link>
             </Menu.Item>
             <Menu.Item key="deleteRawMaterial">
-              <Link to={`/deleteRawMaterial/${userId}`}>Delete Raw Material</Link>
+              <Link to={`/deleteRawMaterial/${userId}`}>
+                Delete Raw Material
+              </Link>
             </Menu.Item>
           </Menu.SubMenu>
           <Menu.SubMenu
@@ -82,13 +87,19 @@ const MenuList = ({ darkTheme, userType, userId }) => {
             title="Manage Requests"
           >
             <Menu.Item key="tCurrent">
-              <Link to={`/currentTransportRequests/${userId}`}>Current Requests</Link>
+              <Link to={`/currentTransportRequests/${userId}`}>
+                Current Requests
+              </Link>
             </Menu.Item>
             <Menu.Item key="tPrevious">
-              <Link to={`/previousTransportRequests/${userId}`}>Previous Requests</Link>
+              <Link to={`/previousTransportRequests/${userId}`}>
+                Previous Requests
+              </Link>
             </Menu.Item>
             <Menu.Item key="tSearchRequest">
-              <Link to={`/searchTransportRequests/${userId}`}>Search for Request</Link>
+              <Link to={`/searchTransportRequests/${userId}`}>
+                Search for Request
+              </Link>
             </Menu.Item>
           </Menu.SubMenu>
         </React.Fragment>
@@ -98,7 +109,7 @@ const MenuList = ({ darkTheme, userType, userId }) => {
         <React.Fragment>
           <Menu.SubMenu
             key="manageManufacturerGoods"
-            icon={<GoldOutlined />}
+            icon={<ProductOutlined />}
             title="Manage Goods"
           >
             <Menu.Item key="addGoods">
@@ -141,13 +152,19 @@ const MenuList = ({ darkTheme, userType, userId }) => {
             title="Manage Requests"
           >
             <Menu.Item key="mCurrent">
-              <Link to={`/currentManufacturerRequests/${userId}`}>Current Requests</Link>
+              <Link to={`/currentManufacturerRequests/${userId}`}>
+                Current Requests
+              </Link>
             </Menu.Item>
             <Menu.Item key="mPrevious">
-              <Link to={`/previousManufacturerRequests/${userId}`}>Previous Requests</Link>
+              <Link to={`/previousManufacturerRequests/${userId}`}>
+                Previous Requests
+              </Link>
             </Menu.Item>
             <Menu.Item key="mSearchRequest">
-              <Link to={`/searchManufacturerRequests/${userId}`}>Search for Request</Link>
+              <Link to={`/searchManufacturerRequests/${userId}`}>
+                Search for Request
+              </Link>
             </Menu.Item>
           </Menu.SubMenu>
         </React.Fragment>
