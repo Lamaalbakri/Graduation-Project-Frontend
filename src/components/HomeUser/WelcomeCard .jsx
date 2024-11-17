@@ -1,5 +1,5 @@
 import React from "react";
-import p1 from "../images/P1.jpg";
+import p1 from "../images/homePageImg1.png";
 
 const WelcomeCard = ({ welcomeText }) => {
   return (
