@@ -122,8 +122,8 @@
 }
 .TransportRequestsTable-contract-button button {
     padding: 2.5px 25px;
-    background-color: #fff; 
-    color: #1c2229;
+    background-color: #1c2229; 
+    color: #fff;
     border: 1px solid #1c2229;
     border-radius: 5px;
     cursor: pointer;
@@ -132,8 +132,8 @@
     font-size: 15px;
 }
 .TransportRequestsTable-contract-button button:hover {
-    background-color: #fff !important;
-    color: #f4d53f !important;
+    background-color: #f4d53f !important;
+    color: #fff !important;
     border: 1px solid #f4d53f !important;
 }
 

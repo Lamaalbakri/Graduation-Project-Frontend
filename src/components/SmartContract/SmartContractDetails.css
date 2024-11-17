@@ -33,24 +33,25 @@ body {
     font-size: 30px;
     margin: 0;
 }
-.contract-meta {
+.contract-createdDate-blockNumber {
     color: #1c2229;
     margin-top: -15px; 
     padding-bottom: 10px;
     position: absolute;
     top: 0;
-    left: 10px;
-    width: 100%;
-}
-.contract-meta p {
-    font-size: 12px;
+    left: 50%; 
+    transform: translateX(-50%); 
     display: flex;
     justify-content: space-between;
-    text-align: left;
+    width: 100%;
 }
-.contract-meta span {
-    display: inline-block;
-    margin-right: 20px;
+.contract-createdDate-blockNumber p {
+    font-size: 12px; 
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-left: 47px; 
+    padding-right: 50px;
 }
 .contract-details-container {
     display: flex;
@@ -181,6 +182,15 @@ body {
     border-color: #f4d53f;
     color: #f4d53f; 
 }
+.contract-hash {
+    color: #1c2229;
+    text-align: center;
+    padding-top: 30px; 
+    margin-bottom: -45px; 
+}
+.contract-hash p {
+    font-size: 12px;
+}
 
 @media (max-width: 1200px) {
     .contract-details-content {
@@ -219,18 +229,6 @@ body {
     .contract-details-content {
         width: 90%;
         padding: 20px;
-    }
-    .contract-meta {
-        position: relative;
-        margin-top: 5px; 
-    }
-    .contract-meta p {
-        font-size: 10px;
-        flex-direction: column; 
-        align-items: flex-start;
-    }
-    .contract-meta span {
-        margin-bottom: 5px; 
     }
     .contract-title {
         font-size: 20px;

@@ -13,12 +13,18 @@ const SmartContractDetails = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // دالة لجلب العقد بناءً على id
+    document.title = "Smart Contract SCMS";
+    return () => {
+      document.title = "Supply Chain Management SCMS";
+    };
+  }, []);
+
+  useEffect(() => {
     const fetchContractDetails = async () => {
       try {
         setIsLoading(true);
-        const data = await getContract(id); // تمرير id عند استدعاء API
-        console.log(data)
+        const data = await getContract(id);
+        console.log(data);
         if (!data) {
           notification.warning({
             message: "No Data",
@@ -27,7 +33,7 @@ const SmartContractDetails = () => {
         }
         setContractData(data);
       } catch (err) {
-        setError(err.message); // معالجة الأخطاء
+        setError(err.message);
         notification.error({
           message: "Error",
           description: `Failed to load contract.`,
@@ -38,9 +44,9 @@ const SmartContractDetails = () => {
     };
 
     if (id) {
-      fetchContractDetails();  // إذا كان لدينا id نبدأ في جلب البيانات
+      fetchContractDetails();
     }
-  }, [id]);  // إعادة التفعيل عندما يتغير id
+  }, [id]);
 
   const handlePrint = () => {
     window.print();
@@ -58,15 +64,10 @@ const SmartContractDetails = () => {
 
   return (
     <div className="contract-details-content">
-      <div className="contract-meta">
+      <div className="contract-createdDate-blockNumber">
         <p>
-          <span>
-            Contract created at:{" "}
-            {moment(contractData.contractCreatedAt).format(
-              "DD MMM YYYY, HH:mm"
-            )}
-          </span>
-          <span>Transaction hash: {contractData.transactionHash}</span>
+          Contract created at:{" "}
+          {moment(contractData.contractCreatedAt).format("DD MMM YYYY, HH:mm")}
           <span>Block number: {contractData.blockNumber}</span>
         </p>
       </div>
@@ -85,7 +86,7 @@ const SmartContractDetails = () => {
                 <strong>Company name:</strong> {contractData.sellerName}
               </p>
               <p>
-                <strong>ID:</strong> {contractData.sellerShortId}
+                <strong>ID:</strong> #{contractData.sellerShortId}
               </p>
               <p>
                 <strong>Address:</strong> {contractData.sellerAddress}
@@ -99,7 +100,7 @@ const SmartContractDetails = () => {
                 <strong>Company name:</strong> {contractData.buyerName}
               </p>
               <p>
-                <strong>ID:</strong> {contractData.buyerShortId}
+                <strong>ID:</strong> #{contractData.buyerShortId}
               </p>
               <p>
                 <strong>Address:</strong> {contractData.buyerAddress}
@@ -114,25 +115,25 @@ const SmartContractDetails = () => {
               <strong>Company name:</strong> {contractData.transporterName}
             </p>
             <p>
-              <strong>ID:</strong> {contractData.transporterId}
+              <strong>ID:</strong> #{contractData.transporterId}
             </p>
           </div>
         </div>
         <div className="contract-section">
           <h3>Order Details</h3>
           <p>
-            <strong>Purchase order ID:</strong> {contractData.purchaseOrderId}
+            <strong>Purchase order ID:</strong> #{contractData.purchaseOrderId}
           </p>
           <p>
-            <strong>Transport order ID:</strong> {contractData.transportOrderId}
+            <strong>Transport order ID:</strong> #
+            {contractData.transportOrderId}
           </p>
           <p>
             <strong>Order status: </strong>
             <span
-              className={`status-${contractData.purchaseOrderStatus.toLowerCase().replace(
-                " ",
-                "-"
-              )}`}
+              className={`status-${contractData.purchaseOrderStatus
+                .toLowerCase()
+                .replace(" ", "-")}`}
             >
               {contractData.purchaseOrderStatus.charAt(0).toUpperCase() +
                 contractData.purchaseOrderStatus.slice(1)}
@@ -140,25 +141,33 @@ const SmartContractDetails = () => {
           </p>
           <p>
             <strong>Estimated delivery dates:</strong>{" "}
-            {contractData.estimatedDeliveryTimes && contractData.estimatedDeliveryTimes.length === 2 &&
-              moment(contractData.estimatedDeliveryTimes[0], moment.ISO_8601).isValid() &&
-              moment(contractData.estimatedDeliveryTimes[1], moment.ISO_8601).isValid()
-              ? `${moment(contractData.estimatedDeliveryTimes[0]).format("DD MMM YYYY")} to ${moment(contractData.estimatedDeliveryTimes[1]).format("DD MMM YYYY")}`
+            {contractData.estimatedDeliveryTimes &&
+            contractData.estimatedDeliveryTimes.length === 2 &&
+            moment(
+              contractData.estimatedDeliveryTimes[0],
+              moment.ISO_8601
+            ).isValid() &&
+            moment(
+              contractData.estimatedDeliveryTimes[1],
+              moment.ISO_8601
+            ).isValid()
+              ? `${moment(contractData.estimatedDeliveryTimes[0]).format(
+                  "DD MMM YYYY"
+                )} to ${moment(contractData.estimatedDeliveryTimes[1]).format(
+                  "DD MMM YYYY"
+                )}`
               : "Data not available"}
           </p>
           <p>
             <strong>Actual delivery date:</strong>{" "}
-            {
-              contractData.purchaseOrderStatus === "inProgress"
-                ? "Order is still in progress"
-                : contractData.actualDeliveryTime
-                  ? moment(contractData.actualDeliveryTime).format("DD MMM YYYY")
-                  : "Data not available"
-            }
+            {contractData.purchaseOrderStatus === "inProgress"
+              ? "Order is still in progress"
+              : contractData.actualDeliveryTime
+              ? moment(contractData.actualDeliveryTime).format("DD MMM YYYY")
+              : "Data not available"}
           </p>
           <p>
-            <strong>Transportation type:</strong>{" "}
-            {contractData.transportType}
+            <strong>Transportation type:</strong> {contractData.transportType}
           </p>
           <p>
             <strong>Shipping weight:</strong> {contractData.weight}
@@ -199,6 +208,13 @@ const SmartContractDetails = () => {
       <button onClick={handlePrint} className="print-button">
         Print Contract
       </button>
+      <div className="contract-hash">
+        <p>
+          <span>
+            <span>Transaction hash: {contractData.transactionHash}</span>
+          </span>
+        </p>
+      </div>
     </div>
   );
 };
