@@ -6,7 +6,8 @@ import {
   MinusOutlined,
 } from "@ant-design/icons";
 
-const BasketItem = ({ item, quantity, onIncrement, onDecrement, onRemove }) => {
+const BasketItem = ({ item, quantity, stockStatus, onIncrement, onDecrement, onRemove }) => {
+
   return (
     <div className="Basket-item">
       <img
@@ -18,7 +19,13 @@ const BasketItem = ({ item, quantity, onIncrement, onDecrement, onRemove }) => {
         <h3 className="Basket-item-name">
           {item.item_name} ({item.unit}){" "}
         </h3>
-        <p className="Basket-item-price">{item.unit_price} SAR</p>
+        <p className="Basket-item-price">{item.unit_price} SAR<span className="stock-statuse-separator">|</span>
+          <span className={`stock-status ${item.stockStatus ? item.stockStatus.toLowerCase().replace(/ /g, '-') : 'unknown-status'}`}>
+            {item.stockStatus !== "Stock is Low" && item.stockStatus}
+            {item.stockStatus === "Stock is Low" && `Only ${item.stockQuantity} left`}
+          </span>
+
+        </p>
         <div className="Basket-item-type">
           {item.options.map((option) => (
             <div key={option._id} className="option-group">

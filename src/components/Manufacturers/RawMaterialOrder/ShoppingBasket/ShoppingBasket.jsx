@@ -4,7 +4,7 @@ import logo from "../../../images/User.png";
 import "./ShoppingBasket.css";
 
 const ShoppingBasket = ({ basket, basketIndex, basketId }) => {
-  console.log(basketIndex, basketId);
+
   const navigate = useNavigate();
   const itemCount = basket.ShoppingBasketItems.length; // Get the number of items
 

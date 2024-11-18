@@ -105,7 +105,7 @@ export const fetchShoppingBasketDetails = async ({ basketId }) => {
 
 export const updateBasketItemQuantity = async ({ basketId, newQuantity, itemId }) => {
     try {
-        console.log(itemId, basketId, newQuantity)
+        //console.log(itemId, basketId, newQuantity)
         const response = await fetch(`${API_URL}/itemId`, {
             method: 'PUT',
             headers: {

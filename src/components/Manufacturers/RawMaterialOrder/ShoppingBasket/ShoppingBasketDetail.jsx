@@ -31,7 +31,7 @@ function ShoppingBasketDetail() {
   const fetchBasketDetails = async () => {
     try {
       const data = await fetchShoppingBasketDetails({ basketId });
-      console.log("Fetched Basket Data:", data);
+      //console.log("Fetched Basket Data:", data);
       if (data) {
         setBasket(data.basket);
         setNumberOfBasketItems(data.numberOfBasketItems);
@@ -65,7 +65,7 @@ function ShoppingBasketDetail() {
     try {
       const newQuantity = item.quantity + 1;
       const itemId = item._id;
-      console.log(itemId, newQuantity, basketId);
+      // console.log(itemId, newQuantity, basketId);
       await updateBasketItemQuantity({ itemId, basketId, newQuantity });
       await fetchBasketDetails();
     } catch (error) {
@@ -132,17 +132,43 @@ function ShoppingBasketDetail() {
   const toggleDialog = (dialogName, value) => {
     setDialogState((prev) => ({ ...prev, [dialogName]: value }));
   };
-
   const handleCheckout = () => {
+    // تحقق من العناصر في السلة
+    const unavailableItem = updatedBasket.ShoppingBasketItems.find(
+      (item) => item.stockStatus === "Out of Stock" || (item.quantity > item.stockQuantity)
+    );
+
+    if (unavailableItem) {
+      // Show a warning message if an item is out of stock or the quantity is greater than available
+      notification.warning({
+        message: ``,
+        description: unavailableItem.stockStatus === "Out of Stock"
+          ? (
+            <div>
+              <p>{`${unavailableItem.item_name} is out of stock. Please delete it.`}</p>
+            </div>
+          )
+          : (
+            <div>
+              <p>{`${unavailableItem.item_name} exceeds stock.`}</p>
+              <p>{`Available quantity is ${unavailableItem.stockQuantity}. Please reduce quantity.`}</p>
+
+            </div>
+          ),
+        placement: "top",
+        icon: <InfoCircleOutlined style={{ color: "#f4d53f" }} />,
+      });
+      return; // Stop execution and prevent redirection to CHECKOUT page
+    }
+
+    // If all quantities are correct, proceed to the CHECKOUT page.
     navigate(`/shoppingBaskets/${basketId}/${basketIndex}/complete`, {
       state: {
-        // sellerId: updatedBasket.sellerId,
         total_price: updatedBasket.total_price,
-        // index: basketIndex,
-        // buyerId: updatedBasket.buyerId,
       },
     });
   };
+
   return (
     <div className="shoppingBasket">
       <Breadcrumb
@@ -168,6 +194,7 @@ function ShoppingBasketDetail() {
                 key={item._id}
                 item={item}
                 quantity={item.quantity}
+                stockStatus={item.stockStatus}
                 onIncrement={() => handleIncrement(item)}
                 onDecrement={() => handleDecrement(item)}
                 onRemove={() => handleRemove(item)}
