@@ -41,6 +41,8 @@ import ViewOrderList from "./components/Manufacturers/RawMaterialOrder/ManageOrd
 import { AddressProvider } from "./contexts/AddressContext";
 import { UserProvider } from "./contexts/UserContext";
 
+//fedback 
+import Feedbacks from "./components/Suppliers/RequestsTable/Feedbacks";
 const { Content } = Layout;
 
 function App() {
@@ -266,6 +268,11 @@ function MainLayout({ userType, userId, clearUserData }) {
                 {/* يمكنك إضافة المسارات الخاصة بالمستخدم الإداري هنا */}
               </>
             )}
+
+            <Route
+              path="/feedbacks/:userId"
+              element={<Feedbacks userId={userId} />}
+            />
 
             <Route
               path="/edit-account/:userId"

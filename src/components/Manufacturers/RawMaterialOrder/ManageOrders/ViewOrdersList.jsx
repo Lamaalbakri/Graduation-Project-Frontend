@@ -213,7 +213,11 @@ const ViewOrdersList = () => {
                       deliver them better.
                     </p>
                   </div>
-                  <FeedbackPopup />
+                  <FeedbackPopup
+                    orderId={order?.shortId}
+                    supplierId={order?.supplierId}
+                    manufacturerId={order?.manufacturerId}
+                  />
                 </div>
               </div>
             )}

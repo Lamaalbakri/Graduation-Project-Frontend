@@ -75,6 +75,9 @@ const MenuList = ({ darkTheme, userType, userId }) => {
             <Menu.Item key="sSearchRequests">
               <Link to={`/searchRequests/${userId}`}>Search for Request</Link>
             </Menu.Item>
+            <Menu.Item key="sFeedbacks">
+              <Link to={`/feedbacks/${userId}`}>Feedback's</Link>
+            </Menu.Item>
           </Menu.SubMenu>
         </React.Fragment>
       )}
