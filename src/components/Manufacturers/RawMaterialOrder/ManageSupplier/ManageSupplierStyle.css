@@ -229,24 +229,32 @@
   right: 10px;
 }
 
-.ManageSupplier-dialog button {
+.ManageSupplier-dialog-actions button {
   margin: 4px;
   margin-top: 25px;
   width: 70px;
-  font-size: 15px;
-  /*float: right;*/
+  font-size: 16px;
 }
-.ManageSupplier-dialog-button-No {
+.ManageSupplier-dialog-actions .ManageSupplier-dialog-button-Yes {
+  background-color: #1c2229;
+  border: 1px solid #1c2229;
+  color: #fff;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+.ManageSupplier-dialog-actions .ManageSupplier-dialog-button-No {
   background-color: #fff;
   border: 1px solid #1c2229;
   color: #1c2229;
+  border-radius: 5px;
+  padding: 5px 10px;
 }
-.ManageSupplier-dialog-button-No:hover {
+.ManageSupplier-dialog-actions .ManageSupplier-dialog-button-No:hover {
   background-color: #fff;
   border: 1px solid #f4d53f;
   color: #f4d53f;
 }
-.ManageSupplier-dialog-button-Yes:hover {
+.ManageSupplier-dialog-actions .ManageSupplier-dialog-button-Yes:hover {
   background-color: #f4d53f;
   border: 1px solid #f4d53f;
   color: #fff;

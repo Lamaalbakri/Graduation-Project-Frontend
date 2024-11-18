@@ -38,33 +38,20 @@ import ViewOrder from "./components/Manufacturers/RawMaterialOrder/ManageOrders/
 import ViewOrderList from "./components/Manufacturers/RawMaterialOrder/ManageOrders/ViewOrdersList";
 
 // Contexts
-import { AddressProvider } from "./contexts/AddressContext"; // تأكد من تحديث المسار بناءً على موقعك الفعلي
+import { AddressProvider } from "./contexts/AddressContext";
 import { UserProvider } from "./contexts/UserContext";
 
 const { Content } = Layout;
 
 function App() {
-  // when refreshing the website does not crash and show a empty white page
-  // const [userType, setUserType] = useState(localStorage.getItem('userType'));
-  // const [userId, setUserId] = useState(localStorage.getItem('userId'));
   const [userType, setUserType] = useState(sessionStorage.getItem("userType"));
   const [userId, setUserId] = useState(sessionStorage.getItem("userId"));
 
-  // useEffect(() => {
-  //   localStorage.setItem('userType', userType);
-  //   localStorage.setItem('userId', userId);
-  // }, [userType, userId])
   useEffect(() => {
     sessionStorage.setItem("userType", userType);
     sessionStorage.setItem("userId", userId);
   }, [userType, userId]);
 
-  // const clearUserData = () => {
-  //   setUserType(null);
-  //   setUserId(null);
-  //   localStorage.removeItem('userType');
-  //   localStorage.removeItem('userId');
-  // };
   const clearUserData = () => {
     setUserType(null);
     setUserId(null);
@@ -98,7 +85,6 @@ function App() {
                 />
               }
             />
-            {/*<Route path="/SmartContract" element={<SmartContract />} />*/}
             <Route path="/SmartContract/:id" element={<SmartContract />} />
           </Routes>
         </AddressProvider>
