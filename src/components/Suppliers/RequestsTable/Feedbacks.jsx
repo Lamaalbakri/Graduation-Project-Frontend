@@ -23,7 +23,7 @@ const Feedbacks = () => {
   return (
     <div className="ManageRawMaterial">
       <div className="ManageRawMaterial-header-row">
-        <div className="ManageRawMaterial-title">Feedback's</div>
+        <div className="ManageRawMaterial-title">Feedbacks</div>
         <div className="ManageRawMaterial-search-container">
           <div className="ManageRawMaterial-search-label">
             Search by Name / ID

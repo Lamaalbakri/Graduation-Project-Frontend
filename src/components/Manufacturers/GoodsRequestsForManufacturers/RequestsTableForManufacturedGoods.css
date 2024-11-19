@@ -1,0 +1,244 @@
+.ManageGoodsManufacturers{
+    font-family: "Poppins", sans-serif;
+    color: #1c2229;
+    padding: 20px;
+}
+.ManageGoodsManufacturers-action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+}
+.ManageGoodsManufacturers-status-select {
+    padding: 5px;
+    border-radius: 8px;
+    outline: none;
+    width: 90%;
+    text-align: center;
+}
+.ManageGoodsManufacturers-status-select:hover {
+    background-color: #3d3c3c3c;
+    color: #0b0b0b;
+    border: none;
+}
+.ManageGoodsManufacturers-status-select option:hover {
+    background-color: #3d3c3c3c;
+    color: #0b0b0b;
+}
+.ManageGoodsManufacturers-status-pending {
+    background-color: #ff990059;
+    color: #5e3902;
+}
+.ManageGoodsManufacturers-status-accepted {
+    background-color: #0d62a761;
+    color: #03477f;
+}
+.ManageGoodsManufacturers-status-delivered {
+    background-color: #4caf4f71;
+    color: #023404;
+}
+.ManageGoodsManufacturers-status-inProgress {
+    background-color: #7a4caf71;
+    color: #400188;
+}
+.ManageGoodsManufacturers-status-rejected {
+    background-color: #f443366d;
+    color: #7e0901;
+}
+.ManageGoodsManufacturers-status-text-no-drop-inProgress {
+    padding: 5px;
+    border-radius: 8px;
+    display: inline-block;
+    background-color: #7a4caf71;
+    color: #400188;
+    border-radius: 8px;
+    outline: none;
+    width: 85%;
+    text-align: center;
+}
+.ManageGoodsManufacturers-status-text-no-drop-accepted {
+    padding: 5px;
+    border-radius: 8px;
+    display: inline-block;
+    background-color: #0d62a761;
+    color: #03477f;
+    border-radius: 8px;
+    outline: none;
+    width: 85%;
+    text-align: center;
+}
+.ManageGoodsManufacturers-status-text-no-drop-rejected {
+    padding: 5px;
+    border-radius: 8px;
+    display: inline-block;
+    background-color: #f443366d;
+    color: #7e0901;
+    border-radius: 8px;
+    outline: none;
+    width: 85%;
+    text-align: center;
+}
+.ManageGoodsManufacturers-status-text-no-drop-delivered {
+    padding: 5px;
+    border-radius: 8px;
+    display: inline-block;
+    background-color: #4caf4f71;
+    color: #023404;
+    border-radius: 8px;
+    outline: none;
+    width: 85%;
+    text-align: center;
+}
+.ManageGoodsManufacturers-action-buttons .ManageGoodsManufacturers-tracking-icon {
+    margin-top: 5px;
+    margin-left: 10px;
+    height: 30px;
+    width: 30px;
+    background: url("../../images/tracking.png") no-repeat center center;
+    background-size: contain;
+    border: none;
+    cursor: pointer;
+}
+.ManageGoodsManufacturers-table-icon {
+    margin-bottom: 10px;
+    margin-left: 0px;
+    font-size: 17px;
+    color: #1c2229af;
+}
+.ManageGoodsManufacturers-tableButton {
+    border: none;
+    border-radius: 5px;
+    padding: 8px 8px;
+    background-color: #1c2229;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+.ManageGoodsManufacturers-tableButton:hover {
+    background-color: #595a5b;
+}
+.ManageGoodsManufacturers-cell-content div {
+    line-height: 2;
+    text-align: left;
+}
+.ManageGoodsManufacturers-cell-content {
+    display: flex; /* Use flex to manage the layout */
+    flex-direction: column; /* Ensure items stack vertically */
+}
+.ManageGoodsManufacturers-goods-item {
+    white-space: nowrap; /* Prevents line breaks for the options */
+    overflow: hidden;    /* Hides overflow content */
+    text-overflow: ellipsis; /* Adds ellipsis for overflowed content */
+    margin-bottom: 5px; /* Optional: adds space between items */
+}
+  /* Optional: Style the strong element if you want specific font styles */
+.ManageGoodsManufacturers-goods-item strong {
+    font-weight: bold; /* Ensures bold weight */
+}
+.ManageGoodsManufacturers-header-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+    margin-top: 25px;
+    flex-wrap: wrap;  
+}
+.ManageGoodsManufacturers-title {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 0;
+}
+.ManageGoodsManufacturers-search-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+}
+.ManageGoodsManufacturers-search-label {
+    margin-right: 15px;
+    font-size: 14px;
+    color: #1c2229;
+}
+.ManageGoodsManufacturers-search-container input {
+    padding-left: 35px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    outline: none;
+    font-size: 14px;
+    width: 300px;
+    transition: border-color 0.3s ease;
+}
+.ManageGoodsManufacturers-input-with-icon {
+    padding-right: 40px;
+    height: 35px;
+    width: 250px;
+    margin-right: 10px;
+    background: url("../images/iconsSearch.png") no-repeat 8px center;
+    background-size: 15px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.ManageGoodsManufacturers-search-container input:focus {
+    border-color: #1c2229;
+}
+.ManageGoodsManufacturers-search-container input::placeholder {
+    color: #999;
+}
+.ManageGoodsManufacturers-background-message {
+    color: #999999bd;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    margin: 300px;
+}
+.MuiDataGrid-columnHeaderTitleContainer {
+    white-space: normal !important;
+    line-height: 1.2 !important;
+    text-overflow: clip !important; 
+    overflow-wrap: break-word !important; 
+}
+.ManageGoodsManufacturers-contract-button button {
+    padding: 2.5px 25px;
+    background-color: #1c2229; 
+    color: #fff;
+    border: 1px solid #1c2229;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 2.1px;
+    font-size: 15px;
+}
+.ManageGoodsManufacturers-contract-button button:hover {
+    background-color: #f4d53f !important;
+    color: #fff !important;
+    border: 1px solid #f4d53f !important;
+}
+
+@media (max-width: 768px) {
+    .ManageGoodsManufacturers-header-row {
+        flex-direction: column; 
+        align-items: flex-start;
+    }
+    .ManageGoodsManufacturers-title {
+        font-size: 20px; 
+    }
+    .ManageGoodsManufacturers-search-container input {
+        max-width: 100%; 
+    }
+}
+
+@media (max-width: 480px) {
+    .ManageGoodsManufacturers {
+        padding: 10px; 
+    }
+    .ManageGoodsManufacturers-title {
+        font-size: 18px; 
+    }
+    .ManageGoodsManufacturers-action-buttons {
+        flex-direction: column; 
+    }
+}

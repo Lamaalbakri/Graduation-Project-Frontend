@@ -36,12 +36,15 @@ import ViewSupplier from "./components/Manufacturers/RawMaterialOrder/ManageSupp
 import ViewRawMaterials from "./components/Manufacturers/RawMaterialOrder/ViewMaterials/ViewRawMaterials";
 import ViewOrder from "./components/Manufacturers/RawMaterialOrder/ManageOrders/ViewOrder";
 import ViewOrderList from "./components/Manufacturers/RawMaterialOrder/ManageOrders/ViewOrdersList";
+import ManufacturedGoodsCurrentRequests from "./components/Manufacturers/GoodsRequestsForManufacturers/ManufacturedGoodsCurrentRequests";
+import ManufacturedGoodsPreviousRequests from "./components/Manufacturers/GoodsRequestsForManufacturers/ManufacturedGoodsPreviousRequests";
+import SearchRequestsManufacturedGoods from "./components/Manufacturers/GoodsRequestsForManufacturers/SearchRequestsManufacturedGoods";
 
 // Contexts
 import { AddressProvider } from "./contexts/AddressContext";
 import { UserProvider } from "./contexts/UserContext";
 
-//fedback 
+// Feedback
 import Feedbacks from "./components/Suppliers/RequestsTable/Feedbacks";
 const { Content } = Layout;
 
@@ -227,7 +230,6 @@ function MainLayout({ userType, userId, clearUserData }) {
                   path="/shoppingBaskets/:basketId/:basketIndex/complete"
                   element={<CompleteOrder userId={userId} />}
                 />
-
                 <Route
                   path="/ViewOrderList"
                   element={<ViewOrderList userId={userId} />}
@@ -235,6 +237,20 @@ function MainLayout({ userType, userId, clearUserData }) {
                 <Route
                   path="/ViewOrders"
                   element={<ViewOrder userId={userId} />}
+                />
+                <Route
+                  path="/currentManufacturerRequests/:userId"
+                  element={<ManufacturedGoodsCurrentRequests userId={userId} />}
+                />
+                <Route
+                  path="/previousManufacturerRequests/:userId"
+                  element={
+                    <ManufacturedGoodsPreviousRequests userId={userId} />
+                  }
+                />
+                <Route
+                  path="/searchManufacturerRequests/:userId"
+                  element={<SearchRequestsManufacturedGoods userId={userId} />}
                 />
               </>
             )}

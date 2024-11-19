@@ -2,8 +2,8 @@ const API_URL = 'http://localhost:8500/api/v1';
 
 //get request 
 
-export const fetchAllCurrentRequests = async () => {
-    const response = await fetch(`${API_URL}/rawMaterialCurrentRequest`, {
+export const fetchAllManufacturerGoodsCurrentRequests = async () => {
+    const response = await fetch(`${API_URL}/goodsManufacturersCurrentRequest`, {
         method: 'GET',
         credentials: 'include'
     });
@@ -15,8 +15,8 @@ export const fetchAllCurrentRequests = async () => {
     return json.data; //return all data
 };
 
-export const fetchAllPreviousRequests = async () => {
-    const response = await fetch(`${API_URL}/rawMaterialPreviousRequest`, {
+export const fetchAllManufacturerGoodsPreviousRequests = async () => {
+    const response = await fetch(`${API_URL}/goodsManufacturersPreviousRequest`, {
         method: 'GET',
         credentials: 'include'
     });
@@ -29,10 +29,10 @@ export const fetchAllPreviousRequests = async () => {
 };
 
 // change status
-export const updateRawMaterialRequestStatus = async (id, newStatus) => {
+export const updateManufacturerGoodsRequestStatus = async (id, newStatus) => {
     //console.log("Sending request to update status:", newStatus, id);
     try {
-        const response = await fetch(`${API_URL}/rawMaterialCurrentRequest/${id}`, {
+        const response = await fetch(`${API_URL}/goodsManufacturersCurrentRequest/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -51,8 +51,8 @@ export const updateRawMaterialRequestStatus = async (id, newStatus) => {
     }
 };
 
-export const deleteCurrentRequestById = async (id) => {
-    const response = await fetch(`${API_URL}/rawMaterialCurrentRequest/${id}`, {
+export const deleteManufacturerGoodsCurrentRequestById = async (id) => {
+    const response = await fetch(`${API_URL}/goodsManufacturersCurrentRequest/${id}`, {
         method: 'DELETE',
         credentials: 'include'
     });
@@ -70,8 +70,8 @@ export const deleteCurrentRequestById = async (id) => {
     return { msg: 'Request deleted successfully' };
 }
 
-export const deletePreviousRequestById = async (id) => {
-    const response = await fetch(`${API_URL}/rawMaterialPreviousRequest/${id}`, {
+export const deleteManufacturerGoodsPreviousRequestById = async (id) => {
+    const response = await fetch(`${API_URL}/goodsManufacturersPreviousRequest/${id}`, {
         method: 'DELETE',
         credentials: 'include'
     });
@@ -89,9 +89,9 @@ export const deletePreviousRequestById = async (id) => {
     return { msg: 'Request deleted successfully' };
 }
 //search current by id
-export const searchCurrentRequestById = async (id) => {
+export const searchManufacturerGoodsCurrentRequestById = async (id) => {
     try {
-        const response = await fetch(`${API_URL}/rawMaterialCurrentRequest/${id}`, {
+        const response = await fetch(`${API_URL}/goodsManufacturersCurrentRequest/${id}`, {
             method: 'GET',
             credentials: 'include'
         });
@@ -113,17 +113,17 @@ export const searchCurrentRequestById = async (id) => {
 };
 
 
-//search current by manufacturer name
-export const searchCurrentRequestByMName = async (MName) => {
+//search current by distributor name
+export const searchManufacturerGoodsCurrentRequestByMName = async (MName) => {
     try {
-        const response = await fetch(`${API_URL}/rawMaterialCurrentRequest/manufacturerName/${MName}`, {
+        const response = await fetch(`${API_URL}/goodsManufacturersCurrentRequest/distributorName/${MName}`, {
             method: 'GET',
             credentials: 'include'
         });
 
         if (!response.ok) {
             if (response.status === 404) {
-                return { error: `No requests found for manufacturer name: ${MName}` }; //msg for not found req error
+                return { error: `No requests found for Distributor name: ${MName}` }; //msg for not found req error
             } else if (response.status === 401) {
                 return { error: 'Unauthorized access. Please check your permissions.' }; //msg for unauth access error
             }
@@ -138,9 +138,9 @@ export const searchCurrentRequestByMName = async (MName) => {
 };
 
 //search Previous by id
-export const searchPreviousRequestById = async (id) => {
+export const searchManufacturerGoodsPreviousRequestById = async (id) => {
     try {
-        const response = await fetch(`${API_URL}/rawMaterialPreviousRequest/${id}`, {
+        const response = await fetch(`${API_URL}/goodsManufacturersPreviousRequest/${id}`, {
             method: 'GET',
             credentials: 'include'
         });
@@ -160,17 +160,17 @@ export const searchPreviousRequestById = async (id) => {
     }
 };
 
-//search Previous by manufacturer name
-export const searchPreviousRequestByMName = async (MName) => {
+//search Previous by distributor name
+export const searchManufacturerGoodsPreviousRequestByMName = async (MName) => {
     try {
-        const response = await fetch(`${API_URL}/rawMaterialPreviousRequest/manufacturerName/${MName}`, {
+        const response = await fetch(`${API_URL}/goodsManufacturersPreviousRequest/distributorName/${MName}`, {
             method: 'GET',
             credentials: 'include'
         });
 
         if (!response.ok) {
             if (response.status === 404) {
-                return { error: `No requests found for manufacturer name: ${MName}` }; //msg for not found req error
+                return { error: `No requests found for distributor name: ${MName}` }; //msg for not found req error
             } else if (response.status === 401) {
                 return { error: 'Unauthorized access. Please check your permissions.' }; //msg for unauth access error
             }
@@ -184,22 +184,22 @@ export const searchPreviousRequestByMName = async (MName) => {
 };
 
 //move currnt request to preveious request
-export const moveCurrentToPrevious = async (id) => {
+export const moveManufacturerGoodsCurrentToPrevious = async (id) => {
 
     try {
         // Step 1: Get the request from the current requests
-        const currentRequestID = await searchCurrentRequestById(id);
+        const currentRequestID = await searchManufacturerGoodsCurrentRequestById(id);
 
         console.log(`called here searchCurrentRequestById ${currentRequestID}`)
         // Step 2: Send the request to the previous requests list
-        const response = await fetch(`${API_URL}/rawMaterialPreviousRequest`, {
+        const response = await fetch(`${API_URL}/goodsManufacturersPreviousRequest`, {
             method: 'POST',
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                ...currentRequestID, 
+                ...currentRequestID,
                 shortId: currentRequestID.shortId 
             })
         });
@@ -209,7 +209,7 @@ export const moveCurrentToPrevious = async (id) => {
         }
 
         // Step 3: Delete the request from the current requests list
-        await deleteCurrentRequestById(id);
+        await deleteManufacturerGoodsCurrentRequestById(id);
         return await response.json(); //return responce
     } catch (error) {
         return { error: `Error moving request to current` };
@@ -217,9 +217,9 @@ export const moveCurrentToPrevious = async (id) => {
 };
 
 // create new raw matireal request
-export const createNewRawMaterialRequest = async (data) => {
+export const createNewManufacturerGoodsRequest = async (data) => {
     try {
-        const response = await fetch(`${API_URL}/rawMaterialCurrentRequest`, {
+        const response = await fetch(`${API_URL}/goodsManufacturersCurrentRequest`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

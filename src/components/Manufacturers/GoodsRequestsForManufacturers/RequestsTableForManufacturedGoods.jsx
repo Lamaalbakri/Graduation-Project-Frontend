@@ -7,21 +7,20 @@ import ConfirmationDialog from "../../Dialog/ConfirmationDialog";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import {
-  updateRawMaterialRequestStatus,
-  moveCurrentToPrevious,
-} from "../../../api/rawMaterialRequestAPI";
+  updateManufacturerGoodsRequestStatus,
+  moveManufacturerGoodsCurrentToPrevious,
+} from "../../../api/manufacturerGoodsRequestsAPI";
 import { DataGrid } from "@mui/x-data-grid";
-import "./RequestsTable.css";
+import "./RequestsTableForManufacturedGoods.css";
 
-// The RequestsTable component receives and displays a list of data such as previous and current requests.
-function RequestsTable({ data }) {
+function RequestsTableForManufacturedGoods({ data }) {
   //Prepare the state for each request individually.
   const [requests, setRequests] = useState(
     data.map((request) => ({
       ...request, //A new object is created containing all the properties in the request.
-      statusClass: `ManageRawMaterial-status-${request.status}`, //Add a new property to the object, statusClass to style the drop-down list status.
-      receiverId: request.manufacturerId,
-      receiverType: request.receiverType || "manufacturer",
+      statusClass: `ManageGoodsManufacturers-status-${request.status}`, //Add a new property to the object, statusClass to style the drop-down list status.
+      receiverId: request.distributorId,
+      receiverType: request.receiverType || "distributor",
     }))
   );
 
@@ -65,7 +64,7 @@ function RequestsTable({ data }) {
   const updateRequestStatus = async (id, newStatus) => {
     try {
       //update in DB, get the request info after update
-      const updatedRequest = await updateRawMaterialRequestStatus(
+      const updatedRequest = await updateManufacturerGoodsRequestStatus(
         id,
         newStatus
       );
@@ -83,7 +82,7 @@ function RequestsTable({ data }) {
               ? {
                   ...request,
                   status: updatedRequest.data.status,
-                  statusClass: `ManageRawMaterial-status-${updatedRequest.data.status}`,
+                  statusClass: `ManageGoodsManufacturers-status-${updatedRequest.data.status}`,
                 }
               : request //Returns the request as is if the condition is false.
         )
@@ -105,10 +104,10 @@ function RequestsTable({ data }) {
   const handleStatusChange = (id, newStatus) => {
     const request = requests.find((req) => req.shortId === id);
     const arrivalAddress = request ? request.arrivalAddress : null;
-    const receiverId = request ? request.manufacturerId : null;
+    const receiverId = request ? request.distributorId : null;
     const receiverType = request
-      ? request.receiverType || "manufacturer"
-      : "manufacturer";
+      ? request.receiverType || "distributor"
+      : "distributor";
 
     switch (newStatus) {
       case "accepted":
@@ -131,8 +130,6 @@ function RequestsTable({ data }) {
           );
         }
         break;
-      // case "delivered":
-      //   break;
       case "rejected":
         toggleDialog("confirmationDialog", true, id, newStatus);
         break;
@@ -161,7 +158,9 @@ function RequestsTable({ data }) {
       }
 
       //remove request from current table to previous
-      const moveResult = await moveCurrentToPrevious(selectedRequestId);
+      const moveResult = await moveManufacturerGoodsCurrentToPrevious(
+        selectedRequestId
+      );
 
       if (moveResult.error || !moveResult) {
         errorMoveCurrentToPrevious = true;
@@ -214,7 +213,7 @@ function RequestsTable({ data }) {
   //If there are no requests in DB, the message is displayed.
   if (!requests.length) {
     return (
-      <div className="ManageRawMaterial-background-message">
+      <div className="ManageGoodsManufacturers-background-message">
         No results found
       </div>
     );
@@ -230,8 +229,8 @@ function RequestsTable({ data }) {
       renderCell: (params) => `#${params.value}`,
     },
     {
-      field: "manufacturerName",
-      headerName: "Manufacturer Name",
+      field: "distributorName",
+      headerName: "Distributor Name",
       width: 150,
       headerAlign: "left",
     },
@@ -244,22 +243,22 @@ function RequestsTable({ data }) {
         moment(params.row.createdAt).format("YYYY-MM-DD HH:mm:ss"),
     },
     {
-      field: "supplyingRawMaterials",
-      headerName: "Supplying Items",
+      field: "goodsForDistributors",
+      headerName: "Goods",
       width: 140,
       headerAlign: "left",
       renderCell: (params) => (
-        <div className="ManageRawMaterial-cell-content">
-          {params.row.supplyingRawMaterials.map((item, index) => (
+        <div className="ManageGoodsManufacturers-cell-content">
+          {params.row.goodsForDistributors.map((item, index) => (
             <div
-              key={`${item.rawMaterial_id}-${index}`}
-              className={`ManageRawMaterial-supplying-item ${
-                index !== params.row.supplyingRawMaterials.length - 1
+              key={`${item.goods_id}-${index}`}
+              className={`ManageGoodsManufacturers-goods-item ${
+                index !== params.row.goodsForDistributors.length - 1
                   ? "item-with-border"
                   : ""
               }`}
             >
-              {item.rawMaterial_name}
+              {item.goods_name}
             </div>
           ))}
         </div>
@@ -272,11 +271,11 @@ function RequestsTable({ data }) {
       width: 80,
       headerAlign: "left",
       renderCell: (params) => (
-        <div className="ManageRawMaterial-cell-content">
-          {params.row.supplyingRawMaterials.map((item, index) => (
+        <div className="ManageGoodsManufacturers-cell-content">
+          {params.row.goodsForDistributors.map((item, index) => (
             <div
-              key={`${item.rawMaterial_id}-${index}`}
-              className="ManageRawMaterial-supplying-item"
+              key={`${item.goods_id}-${index}`}
+              className="ManageGoodsManufacturers-goods-item"
             >
               {item.quantity} {item.unit}
             </div>
@@ -290,11 +289,11 @@ function RequestsTable({ data }) {
       width: 150,
       headerAlign: "left",
       renderCell: (params) => (
-        <div className="ManageRawMaterial-cell-content">
-          {params.row.supplyingRawMaterials.map((item, index) => (
+        <div className="ManageGoodsManufacturers-cell-content">
+          {params.row.goodsForDistributors.map((item, index) => (
             <div
-              key={`${item.rawMaterial_id}-${index}`}
-              className="ManageRawMaterial-supplying-item"
+              key={`${item.goods_id}-${index}`}
+              className="ManageGoodsManufacturers-goods-item"
             >
               {item.options && item.options.length > 0 ? (
                 // If options exist, display them
@@ -324,7 +323,7 @@ function RequestsTable({ data }) {
       renderCell: (params) => {
         const price = params.row.total_price;
         return (
-          <div className="ManageRawMaterial-cell-content">
+          <div className="ManageGoodsManufacturers-cell-content">
             {price !== undefined ? `${price} SAR` : "Price not available"}
           </div>
         );
@@ -336,7 +335,7 @@ function RequestsTable({ data }) {
       width: 130,
       headerAlign: "left",
       renderCell: (params) => {
-        const statusClass = `ManageRawMaterial-status-${params.row.status}`;
+        const statusClass = `ManageGoodsManufacturers-status-${params.row.status}`;
         const formattedStatus =
           params.row.status.charAt(0).toUpperCase() +
           params.row.status.slice(1);
@@ -349,7 +348,7 @@ function RequestsTable({ data }) {
         ) {
           return (
             <div
-              className={`ManageRawMaterial-status-text-no-drop-${params.row.status}`}
+              className={`ManageGoodsManufacturers-status-text-no-drop-${params.row.status}`}
             >
               {formattedStatus}
             </div>
@@ -358,7 +357,7 @@ function RequestsTable({ data }) {
         return (
           <select
             value={params.row.status}
-            className={`ManageRawMaterial-status-select ${statusClass}`}
+            className={`ManageGoodsManufacturers-status-select ${statusClass}`}
             onChange={(e) =>
               handleStatusChange(params.row.shortId, e.target.value)
             }
@@ -376,7 +375,7 @@ function RequestsTable({ data }) {
       width: 110,
       headerAlign: "left",
       renderCell: (params) => (
-        <div className="ManageRawMaterial-contract-button">
+        <div className="ManageGoodsManufacturers-contract-button">
           <button onClick={() => handleViewContract(params.row.shortId)}>
             View
           </button>
@@ -391,7 +390,7 @@ function RequestsTable({ data }) {
       renderCell: (params) => {
         const address = params.row.arrivalAddress;
         return (
-          <div className="ManageRawMaterial-cell-content">
+          <div className="ManageGoodsManufacturers-cell-content">
             {address
               ? `${address.street}, ${address.neighborhood}, ${address.city}, ${address.postal_code}, ${address.country}`
               : "No Address"}
@@ -405,9 +404,9 @@ function RequestsTable({ data }) {
       width: 140,
       headerAlign: "left",
       renderCell: (params) => (
-        <div className="ManageRawMaterial-action-buttons">
+        <div className="ManageGoodsManufacturers-action-buttons">
           <button
-            className="ManageRawMaterial-tracking-icon"
+            className="ManageGoodsManufacturers-tracking-icon"
             onClick={() =>
               toggleDialog(
                 "trackingDialog",
@@ -423,7 +422,7 @@ function RequestsTable({ data }) {
   ];
 
   return (
-    <div className="ManageRawMaterial">
+    <div className="ManageGoodsManufacturers">
       <DataGrid
         rows={requests}
         disableRowSelectionOnClick
@@ -514,8 +513,8 @@ function RequestsTable({ data }) {
   );
 }
 
-RequestsTable.propTypes = {
+RequestsTableForManufacturedGoods.propTypes = {
   data: PropTypes.array.isRequired, // Ensures that Prop 'data' is an array and is required to be provided.
 };
 
-export default RequestsTable;
+export default RequestsTableForManufacturedGoods;
