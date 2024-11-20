@@ -27,7 +27,7 @@ import SearchRequests from "./components/Suppliers/RequestsTable/SearchRequests"
 import CurrentTransportRequests from "./components/Transporters/TransportRequestsTable/CurrentTransportRequests";
 import PreviousTransportRequests from "./components/Transporters/TransportRequestsTable/PreviousTransportRequests";
 import SearchTransportRequests from "./components/Transporters/TransportRequestsTable/SearchTransportRequests";
-//Manufacturers imports
+// Manufacturers imports
 import ShoppingBasketList from "./components/Manufacturers/RawMaterialOrder/ShoppingBasket/ShoppingBasketList";
 import ShoppingBasketDetail from "./components/Manufacturers/RawMaterialOrder/ShoppingBasket/ShoppingBasketDetail";
 import CompleteOrder from "./components/Manufacturers/RawMaterialOrder/ShoppingBasket/CompleteOrder";
@@ -39,6 +39,11 @@ import ViewOrderList from "./components/Manufacturers/RawMaterialOrder/ManageOrd
 import ManufacturedGoodsCurrentRequests from "./components/Manufacturers/GoodsRequestsForManufacturers/ManufacturedGoodsCurrentRequests";
 import ManufacturedGoodsPreviousRequests from "./components/Manufacturers/GoodsRequestsForManufacturers/ManufacturedGoodsPreviousRequests";
 import SearchRequestsManufacturedGoods from "./components/Manufacturers/GoodsRequestsForManufacturers/SearchRequestsManufacturedGoods";
+import AddManufacturerGoods from "./components/Manufacturers/MangeGoods/AddManufacturerGoods";
+import ViewManufacturerGoods from "./components/Manufacturers/MangeGoods/ViewManufacturerGoods";
+import UpdateManufacturerGoods from "./components/Manufacturers/MangeGoods/UpdateManufacturerGoods";
+import DeleteManufacturerGoods from "./components/Manufacturers/MangeGoods/DeleteManufacturerGoods";
+// Distributors imports
 
 // Contexts
 import { AddressProvider } from "./contexts/AddressContext";
@@ -251,6 +256,22 @@ function MainLayout({ userType, userId, clearUserData }) {
                 <Route
                   path="/searchManufacturerRequests/:userId"
                   element={<SearchRequestsManufacturedGoods userId={userId} />}
+                />
+                <Route
+                  path="/addManufacturerGoods/:userId"
+                  element={<AddManufacturerGoods userId={userId} />}
+                />
+                <Route
+                  path="/viewManufacturerGoods/:userId"
+                  element={<ViewManufacturerGoods userId={userId} />}
+                />
+                <Route
+                  path="/updateManufacturerGoods/:userId"
+                  element={<UpdateManufacturerGoods userId={userId} />}
+                />
+                <Route
+                  path="/deleteManufacturerGoods/:userId"
+                  element={<DeleteManufacturerGoods userId={userId} />}
                 />
               </>
             )}

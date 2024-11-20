@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "./RawMaterial.css";
-import Loader from '../../../Utils/Loader';
-import { notification } from "antd";
+import Loader from "../../../Utils/Loader";
+import { Modal, notification } from "antd";
+import { CloseCircleOutlined } from "@ant-design/icons";
 import { deleteMaterial, getMaterial } from "../../../api/manageRawMaterialApi";
 
 const DeleteRawMaterial = () => {
@@ -21,7 +21,7 @@ const DeleteRawMaterial = () => {
         setRawMaterials(response.data.data);
         setFilteredMaterials(response.data.data);
       } catch (error) {
-        console.error('Error fetching materials:', error);
+        console.error("Error fetching materials:", error);
         notification.error({
           message: "Error fetching materials",
           description: "Please try again later.",
@@ -61,8 +61,8 @@ const DeleteRawMaterial = () => {
       const response = await deleteMaterial(currentMaterial);
       if (response.data.success) {
         notification.success({
-          message: "Successfully deleted ",
-          description: "Material has been Dleted",
+          message: "Successfully Deleted ",
+          description: "Raw Material has been Deleted",
           placement: "top",
         });
         setFilteredMaterials((prevMaterials) =>
@@ -70,7 +70,7 @@ const DeleteRawMaterial = () => {
             (material) => material.shortId !== currentMaterial
           )
         );
-      } else {   
+      } else {
         notification.error({
           message: "Error deleting material",
           description: "Failed to delete material. Please try again later.",
@@ -78,7 +78,6 @@ const DeleteRawMaterial = () => {
         });
       }
     } catch (error) {
-
       console.error("Error deleting material:", error);
     }
     setLoading(false);
@@ -125,7 +124,9 @@ const DeleteRawMaterial = () => {
                       {material.name}
                     </h3>
                     <p>Quantity: {material.quantity}</p>
-                    <p>Price: ${material.price.toFixed(2)}</p>
+                    <p>
+                      Price: <span>{material.price.toFixed(2)} SAR</span>
+                    </p>
                     <p>{material.description}</p>
                     <div className="button-container">
                       <button
@@ -139,45 +140,54 @@ const DeleteRawMaterial = () => {
                 </div>
               ))
             ) : (
-              <p>No materials found for your search.</p>
+              <p style={{ textAlign: "center" }}>
+                No materials were found for your search.
+              </p>
             )}
           </div>
         )}
 
-        {isModalOpen && (
-          <DeleteModal
-            material={currentMaterial}
-            onConfirm={confirmDelete}
-            onClose={() => setIsModalOpen(false)}
-          />
-        )}
+        <Modal
+          title={
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                fontSize: "18px",
+              }}
+            >
+              <CloseCircleOutlined
+                style={{ color: "red", marginRight: 8, fontSize: "30px" }}
+              />
+              <span>Confirm Deletion</span>
+            </div>
+          }
+          visible={isModalOpen}
+          onOk={confirmDelete}
+          onCancel={() => setIsModalOpen(false)}
+          okText="Yes, Delete"
+          cancelText="Cancel"
+          okButtonProps={{
+            style: {
+              backgroundColor: "#1c2229",
+              color: "#fff",
+              border: "none",
+            },
+            className: "yes-delete-button",
+          }}
+          cancelButtonProps={{
+            style: {
+              backgroundColor: "transparent",
+              color: "#1c2229",
+              border: "1px solid #1c2229",
+            },
+            className: "cancel-material-button",
+          }}
+        >
+          <p>Are you sure you want to delete this material?</p>
+        </Modal>
       </div>
     </>
-  );
-};
-
-// DeleteModal Component
-const DeleteModal = ({ material, onConfirm, onClose }) => {
-  return (
-    <div className="modal">
-      <div className="modal-content">
-        <div className="modal-header">
-          <span className="close" onClick={onClose}>
-            &times;
-          </span>
-        </div>
-        <h2>Confirm Deletion</h2>
-        <p>Are you sure you want to delete "{material}"?</p>
-        <div className="button-container">
-          <button className="edit-button" onClick={onClose}>
-            Cancel
-          </button>
-          <button className="edit-button" onClick={onConfirm}>
-            Yes, Delete
-          </button>
-        </div>
-      </div>
-    </div>
   );
 };
 

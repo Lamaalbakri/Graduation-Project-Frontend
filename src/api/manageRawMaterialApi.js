@@ -6,7 +6,7 @@ export const fetchAllCurrentRequests = async () => {
     const response = await axios.get(`${API_URL}/manageRawMaterial/get-materials`, {
       withCredentials: true,
     });
-    return response.data.data; // إعادة جميع البيانات
+    return response.data.data; 
   } catch (error) {
     throw new Error(`Error: ${error.response?.status}`);
   }
@@ -18,7 +18,7 @@ export const fetchMaterialForListOfSupplier = async () => {
     const response = await axios.get(`${API_URL}/manageRawMaterial/get-specific-material-list`, {
       withCredentials: true,
     });
-    return response.data.data; // إعادة جميع البيانات
+    return response.data.data;
   } catch (error) {
     throw new Error(`Error: ${error.response?.status}`);
   }

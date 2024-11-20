@@ -115,17 +115,21 @@ const MenuList = ({ darkTheme, userType, userId }) => {
             icon={<ProductOutlined />}
             title="Manage Goods"
           >
-            <Menu.Item key="addGoods">
-              <Link to={`/addGoods/${userId}`}>Add Goods</Link>
+            <Menu.Item key="addMGoods">
+              <Link to={`/addManufacturerGoods/${userId}`}>Add Goods</Link>
             </Menu.Item>
-            <Menu.Item key="viewGoods">
-              <Link to={`/viewGoods/${userId}`}>View Goods</Link>
+            <Menu.Item key="viewMGoods">
+              <Link to={`/viewManufacturerGoods/${userId}`}>View Goods</Link>
             </Menu.Item>
-            <Menu.Item key="updateGoods">
-              <Link to={`/updateGoods/${userId}`}>Update Goods</Link>
+            <Menu.Item key="updateMGoods">
+              <Link to={`/updateManufacturerGoods/${userId}`}>
+                Update Goods
+              </Link>
             </Menu.Item>
-            <Menu.Item key="deleteGoods">
-              <Link to={`/deleteGoods/${userId}`}>Delete Goods</Link>
+            <Menu.Item key="deleteMGoods">
+              <Link to={`/deleteManufacturerGoods/${userId}`}>
+                Delete Goods
+              </Link>
             </Menu.Item>
           </Menu.SubMenu>
           <Menu.SubMenu

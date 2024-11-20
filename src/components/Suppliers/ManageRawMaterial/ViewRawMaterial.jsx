@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./RawMaterial.css";
-import Loader from '../../../Utils/Loader';
-import { notification } from "antd";
-import { deleteMaterial, getMaterial, updateMaterial, uploadImage } from "../../../api/manageRawMaterialApi";
-
+import Loader from "../../../Utils/Loader";
+import { Modal, notification } from "antd";
+import { CloseCircleOutlined } from "@ant-design/icons";
+import {
+  deleteMaterial,
+  getMaterial,
+  updateMaterial,
+  uploadImage,
+} from "../../../api/manageRawMaterialApi";
 
 const ViewRawMaterial = () => {
   const [rawMaterials, setRawMaterials] = useState([]);
@@ -15,7 +20,7 @@ const ViewRawMaterial = () => {
   const [loading, setLoading] = useState(false);
 
   const fetchMaterials = async () => {
-    console.log("HERe")
+    console.log("HERe");
     setLoading(true);
     try {
       const response = await getMaterial();
@@ -77,8 +82,8 @@ const ViewRawMaterial = () => {
       const response = await deleteMaterial(currentMaterial);
       if (response.data.success) {
         notification.success({
-          message: "Successfully deleted",
-          description: "Material has been deleted.",
+          message: "Successfully Deleted",
+          description: "Raw Material has been Deleted",
           placement: "top",
         });
         fetchMaterials(); // Refresh the materials list
@@ -134,12 +139,14 @@ const ViewRawMaterial = () => {
                     {material.name}
                   </h3>
                   <p>Quantity: {material.quantity}</p>
-                  <p>Price: ${material.price.toFixed(2)}</p>
+                  <p>
+                    Price: <span>{material.price.toFixed(2)} SAR</span>
+                  </p>
                   <p>{material.description}</p>
                   {/* Access materialOption and map through it */}
                   {material.materialOption?.map((option, index) => (
                     <p key={index}>
-                      {option.optionName}: {option.menuList.join(', ')}
+                      {option.optionName}: {option.menuList.join(", ")}
                     </p>
                   ))}
                   <p>Units: {material.units.join(", ")}</p>
@@ -161,7 +168,9 @@ const ViewRawMaterial = () => {
               </div>
             ))
           ) : (
-            <p>No materials found for your search.</p>
+            <p style={{ textAlign: "center" }}>
+              No materials were found for your search.
+            </p>
           )}
         </div>
 
@@ -175,7 +184,6 @@ const ViewRawMaterial = () => {
 
         {isDeleteModalOpen && (
           <DeleteModal
-            material={currentMaterial}
             onConfirm={confirmDelete}
             onClose={() => setIsDeleteModalOpen(false)}
           />
@@ -186,46 +194,60 @@ const ViewRawMaterial = () => {
 };
 
 // DeleteModal Component
-const DeleteModal = ({ material, onConfirm, onClose }) => {
+const DeleteModal = ({ onConfirm, onClose }) => {
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <div className="modal-header">
-          <span className="close" onClick={onClose}>
-            &times;
-          </span>
+    <Modal
+      title={
+        <div
+          style={{ display: "flex", alignItems: "center", fontSize: "18px" }}
+        >
+          <CloseCircleOutlined
+            style={{ color: "red", marginRight: 8, fontSize: "30px" }}
+          />
+          <span>Confirm Deletion</span>
         </div>
-        <h2>Confirm Deletion</h2>
-        <p>Are you sure you want to delete this material?</p>
-        <div className="button-container">
-          <button className="edit-button" onClick={onClose}>
-            Cancel
-          </button>
-          <button className="edit-button" onClick={onConfirm}>
-            Yes, Delete
-          </button>
-        </div>
-      </div>
-    </div>
+      }
+      visible={true}
+      onOk={onConfirm}
+      onCancel={onClose}
+      okText="Yes, Delete"
+      cancelText="Cancel"
+      okButtonProps={{
+        style: {
+          backgroundColor: "#1c2229",
+          color: "#fff",
+          border: "none",
+        },
+        className: "yes-delete-button",
+      }}
+      cancelButtonProps={{
+        style: {
+          backgroundColor: "transparent",
+          color: "#1c2229",
+          border: "1px solid #1c2229",
+        },
+        className: "cancel-material-button",
+      }}
+    >
+      <p>Are you sure you want to delete this material?</p>
+    </Modal>
   );
 };
 
 // UpdateModal Component
-
 const UpdateModal = ({ material, onSave, onClose }) => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [image, setImage] = useState(null);
-  const [previewImage, setPreviewImage] = useState('');
+  const [previewImage, setPreviewImage] = useState("");
   const [price, setPrice] = useState(0);
   const [materialOption, setMaterialOption] = useState([]);
   const [units, setUnits] = useState([]);
-  const [currentUnit, setCurrentUnit] = useState('');
+  const [currentUnit, setCurrentUnit] = useState("");
   const [currentMenuValues, setCurrentMenuValues] = useState([]);
   const [loading, setLoading] = useState(false);
   const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1 MB
-
 
   useEffect(() => {
     if (material) {
@@ -236,19 +258,24 @@ const UpdateModal = ({ material, onSave, onClose }) => {
       setPreviewImage(material.image);
       setMaterialOption(material.materialOption || []);
       setUnits(material.units || []);
-      setCurrentMenuValues(material.materialOption ? material.materialOption.map(() => '') : []);
+      setCurrentMenuValues(
+        material.materialOption ? material.materialOption.map(() => "") : []
+      );
     }
   }, [material]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
       if (!allowedTypes.includes(file.type) || file.size > MAX_FILE_SIZE) {
         notification.error({
-          message: file.size > MAX_FILE_SIZE ? 'File Size Exceeded' : 'Invalid File Type',
-          description: 'Only JPEG, JPG, and PNG under 1 MB are allowed.',
-          placement: 'top',
+          message:
+            file.size > MAX_FILE_SIZE
+              ? "File Size Exceeded"
+              : "Invalid File Type",
+          description: "Only JPEG, JPG, and PNG under 1 MB are allowed.",
+          placement: "top",
         });
         return;
       }
@@ -261,10 +288,13 @@ const UpdateModal = ({ material, onSave, onClose }) => {
 
   const handleAddMenuValue = (index) => {
     const updatedOptions = [...materialOption];
-    if (currentMenuValues[index] && !updatedOptions[index].menuList.includes(currentMenuValues[index])) {
+    if (
+      currentMenuValues[index] &&
+      !updatedOptions[index].menuList.includes(currentMenuValues[index])
+    ) {
       updatedOptions[index].menuList.push(currentMenuValues[index]);
       const updatedMenuValues = [...currentMenuValues];
-      updatedMenuValues[index] = '';
+      updatedMenuValues[index] = "";
       setCurrentMenuValues(updatedMenuValues);
       setMaterialOption(updatedOptions);
     }
@@ -284,11 +314,9 @@ const UpdateModal = ({ material, onSave, onClose }) => {
   const handleAddUnit = () => {
     if (currentUnit && !units.includes(currentUnit)) {
       setUnits((prevUnits) => [...prevUnits, currentUnit]);
-      setCurrentUnit('');
+      setCurrentUnit("");
     }
   };
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -311,23 +339,21 @@ const UpdateModal = ({ material, onSave, onClose }) => {
       };
       await onSave(updatedMaterial);
       notification.success({
-        message: "Material updated successfully!",
-        description: "The material has been updated.",
-        placement: 'top',
-
+        message: "Raw Material Updated Successfully!",
+        description: "The Raw Material has been Updated.",
+        placement: "top",
       });
       onClose(); // Close the modal after saving
     } catch (error) {
       notification.error({
-        message: 'Error updating material',
-        description: 'Please try again later.',
-        placement: 'top',
+        message: "Error updating material",
+        description: "Please try again later.",
+        placement: "top",
       });
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleDeleteUnit = (index) => {
     const updatedUnits = [...units];
@@ -348,19 +374,41 @@ const UpdateModal = ({ material, onSave, onClose }) => {
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Name:</label>
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
             </div>
             <div className="form-group">
               <label>Description:</label>
-              <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
             </div>
             <div className="form-group">
               <label>Quantity:</label>
-              <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} required min="0" />
+              <input
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                required
+                min="0"
+              />
             </div>
             <div className="form-group">
               <label>Price:</label>
-              <input type="number" value={price} onChange={(e) => setPrice(parseFloat(e.target.value))} required min="0" step="0.01" />
+              <input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(parseFloat(e.target.value))}
+                required
+                min="0"
+                step="0.01"
+              />
             </div>
 
             {materialOption.map((option, index) => (
@@ -383,7 +431,13 @@ const UpdateModal = ({ material, onSave, onClose }) => {
                   }}
                   placeholder={`Add value for ${option.optionName}`}
                 />
-                <button className='material-add-button' type="button" onClick={() => handleAddMenuValue(index)}>Add Value</button>
+                <button
+                  className="material-add-button"
+                  type="button"
+                  onClick={() => handleAddMenuValue(index)}
+                >
+                  Add Value
+                </button>
                 <ul>
                   {option.menuList.map((value, valIndex) => (
                     <li key={valIndex}>
@@ -391,7 +445,15 @@ const UpdateModal = ({ material, onSave, onClose }) => {
                       <button
                         type="button"
                         onClick={() => handleDeleteMenuValue(index, valIndex)}
-                        style={{ marginLeft: '10px', marginBottom: '10px', marginTop: '10px', color: 'red', cursor: 'pointer', backgroundColor: '#c3c3c3' }}
+                        style={{
+                          marginLeft: "10px",
+                          marginBottom: "10px",
+                          marginTop: "10px",
+                          color: "red",
+                          cursor: "pointer",
+                          backgroundColor: "#c3c3c3",
+                          padding: "0px 5px",
+                        }}
                       >
                         &times;
                       </button>
@@ -402,7 +464,7 @@ const UpdateModal = ({ material, onSave, onClose }) => {
             ))}
 
             <div className="form-group">
-              <label>Units</label>
+              <label>Units:</label>
               <input
                 type="text"
                 value={currentUnit}
@@ -410,7 +472,7 @@ const UpdateModal = ({ material, onSave, onClose }) => {
                 placeholder="Add Unit"
               />
               <button
-                className='material-add-button'
+                className="material-add-button"
                 type="button"
                 onClick={handleAddUnit}
               >
@@ -423,7 +485,15 @@ const UpdateModal = ({ material, onSave, onClose }) => {
                     <button
                       type="button"
                       onClick={() => handleDeleteUnit(index)}
-                      style={{ marginLeft: '10px', marginBottom: '10px', marginTop: '10px', color: 'red', cursor: 'pointer', backgroundColor: '#c3c3c3' }}
+                      style={{
+                        marginLeft: "10px",
+                        marginBottom: "10px",
+                        marginTop: "10px",
+                        color: "red",
+                        cursor: "pointer",
+                        backgroundColor: "#c3c3c3",
+                        padding: "0px 5px",
+                      }}
                     >
                       &times;
                     </button>
@@ -433,16 +503,35 @@ const UpdateModal = ({ material, onSave, onClose }) => {
             </div>
 
             <div className="form-group">
-              <label>Image</label>
+              <label>Image:</label>
               <div className="image-upload-container">
-                {previewImage && <img src={previewImage} alt="Preview" className="material-image" />}
-                <button className="submit-button" type="button" onClick={() => document.getElementById('file-input').click()}>Choose File</button>
-                <input type="file" id="file-input" onChange={handleImageChange} style={{ display: 'none' }} />
+                {previewImage && (
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    className="material-image"
+                  />
+                )}
+                <button
+                  className="submit-button"
+                  type="button"
+                  onClick={() => document.getElementById("file-input").click()}
+                >
+                  Choose File
+                </button>
+                <input
+                  type="file"
+                  id="file-input"
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
+                />
               </div>
             </div>
 
             <div className="button-container">
-              <button type="submit" className="submit-button">Save</button>
+              <button type="submit" className="submit-button">
+                Save
+              </button>
             </div>
           </form>
         </div>

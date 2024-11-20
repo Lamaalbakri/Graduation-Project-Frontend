@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./RawMaterial.css";
 import { useNavigate, useParams } from "react-router-dom";
 import upload_image from "../../images/upload_image.png";
-import { CheckCircleOutlined } from "@ant-design/icons";
 import Loader from "../../../Utils/Loader";
 import { notification } from "antd";
 import ConfirmationDialog from "../../Dialog/ConfirmationDialog";
@@ -139,13 +138,6 @@ const AddRawMaterials = () => {
       }
       const response = await createMaterial(updatedFormData);
       if (response.data.success) {
-        // notification.success({
-        //   message: response.data.message,
-        //   description: "Material has been created successfully.",
-        //   placement: "top",
-        // });
-        // console.log("response", response.data.data);
-
         setFormData({
           name: "",
           quantity: 1,
@@ -221,6 +213,7 @@ const AddRawMaterials = () => {
                 name="description"
                 value={formData.description}
                 placeholder="Should be at least 10 characters"
+                style={{ fontSize: "16px" }}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
@@ -264,6 +257,7 @@ const AddRawMaterials = () => {
                       type="button"
                       onClick={handleMoreMaterial}
                       style={{
+                        padding: "4px 8px",
                         marginLeft: "10px",
                         marginBottom: "10px",
                         cursor: "pointer",
@@ -277,7 +271,7 @@ const AddRawMaterials = () => {
                   type="text"
                   value={option.optionName}
                   onChange={(e) => handleOptionChange(index, e.target.value)}
-                  placeholder="e.g., Color"
+                  placeholder="e.g Color"
                 />
                 <br />
                 <label>Specific Values for {option.optionName}</label>
@@ -287,7 +281,7 @@ const AddRawMaterials = () => {
                   onChange={(e) =>
                     handleCurrentMenuValueChange(index, e.target.value)
                   }
-                  placeholder={`Add value for ${option.optionName} (e.g., Black, Red)`}
+                  placeholder={`Add value for ${option.optionName} (e.g Black, Red)`}
                 />
                 <button
                   className="material-add-button"
@@ -358,21 +352,8 @@ const AddRawMaterials = () => {
         </div>
         {isModalOpen && (
           <ConfirmationDialog
-            title={
-              <>
-                {/* <CheckCircleOutlined
-                  style={{
-                    color: "green",
-                    marginRight: 8,
-                    fontSize: "35px",
-                    position: "relative",
-                    top: "6px",
-                  }}
-                /> */}
-                {"Raw Material is added"}
-              </>
-            }
-            message="Do you want to see added raw material on the View page?"
+            title={<>{"Raw Material is added"}</>}
+            message="Do you want to see added raw material on the view page?"
             onConfirm={confirmRedirect}
             onCancel={() => setIsModalOpen(false)}
             stepType="viewOrder"

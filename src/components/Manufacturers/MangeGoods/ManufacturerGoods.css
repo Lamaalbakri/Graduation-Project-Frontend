@@ -1,0 +1,330 @@
+/* Container for the whole application */
+.container {
+    max-width: 730px; /* Adjusted to match the design */
+    margin: auto;
+    padding: 20px;
+    background-color: #ffffff; /* Light gray/white background */
+    border-radius: 10px;
+}
+.RequestsTable{
+    padding: 20px;
+
+}
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 0;
+}
+.search-label {
+    margin-right: 15px;
+    font-size: 14px;
+    color: #1c2229;
+}
+.search-container input {
+    padding-left: 35px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    outline: none;
+    font-size: 14px;
+    width: 300px;
+    transition: border-color 0.3s ease;
+}
+.search-container input::placeholder {
+    color: #999;
+}
+.input-with-icon {
+    padding-right: 40px;
+    height: 35px;
+    width: 250px;
+    margin-right: 10px;
+    background: url("../images/iconsSearch.png") no-repeat 8px center;
+    background-size: 15px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.search-instruction p {
+    text-align: center; /* Center the text */
+    font-size: 16px; /* Slightly larger font size for better visibility */
+    margin: 0; /* Remove default margin for better spacing */
+}
+/* Hide the search instruction when there is a query */
+.search-instruction {
+    display: none; /* Initially hidden */
+}
+/* Show the search instruction when there's no query */
+.container .search-instruction.visible {
+    display: block; /* Show when the class is applied */
+}
+.image-upload-container {
+    display: flex; /* Align items horizontally */
+    align-items: center; /* Center items vertically */
+    gap: 15px; /* Space between the image preview and the button */
+    margin-top: 10px; /* Add some space above the container */
+}
+/* Add Page Specific Styles */
+.add-page h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1c2229; 
+    margin-bottom: 20px;
+}
+.add-page .form-group {
+    margin-bottom: 15px; /* Space between form groups */
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+}
+.add-page input,
+.add-page textarea {
+    width: 100%; /* Full width input and textarea */
+    padding: 10px; /* Padding for inputs */
+    border: 1px solid #ced4da; /* Border style */
+    border-radius: 6px; /* Rounded corners */
+}
+.add-page .material-image {
+    margin-top: 10px; /* Space above the image */
+    max-width: 150px; /* Limit the width of the image */
+    height: auto; /* Maintain aspect ratio */
+}
+/* Button styles */
+.add-page .custom-file-upload,
+.add-page .submit-button,
+.cancel-button,.view-button {
+    margin-top: 10px; /* Space above the button */
+    padding: 10px; /* Padding for the button */
+    width: 100%; /* Make buttons full width of the container */
+    max-width: 120px; /* Maximum width for buttons */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer on hover */
+    font-size: 14px; /* Font size */
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+    background-color: #1c2229;
+}
+.form-group label {
+    font-weight: normal;
+    font-size: 16px;
+}
+.add-page .custom-file-upload:hover,
+.cancel-button, .edit-button:hover,
+.submit-button:hover,
+.view-button:hover {
+    background-color:  #f4d53f; /* Darker blue on hover */
+}
+.submit-button {
+    background-color:#1c2229;
+}
+/* Align buttons to the right */
+.add-page .button-container {
+    display: flex; /* Flexbox for button layout */
+    justify-content: flex-end; /* Align to the right */
+    gap: 10px; /* Space between buttons */
+    margin-top: 10px; /* Space above button container */
+}
+.button-container {
+    display: flex; /* Flexbox for button layout */
+    justify-content: flex-end; /* Align to the right */
+    gap: 10px; /* Space between buttons */
+    margin-top: 10px; /* Space above button container */
+}
+/* Additional styles (unchanged) */
+.search-input {
+    width: 100%; /* Full width input */
+    padding: 10px; /* Padding for input */
+    border: 1px solid #ced4da; /* Border style */
+    border-radius: 6px; /* Rounded corners */
+    margin-bottom: 20px; /* Space below input */
+}
+.materials-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between cards */
+}
+.material-card {
+    display: flex; /* Flexbox for horizontal layout */
+    align-items: flex-start; /* Align items at the top */
+    background-color: #f0f0f0; /* Light gray background */
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+.image-section {
+    flex: 0 0 150px; /* Fixed width for the image section */
+    margin-right: 20px; /* Space between image and text */
+}
+.info-section {
+    flex: 1; /* Allow text section to take remaining space */
+}
+.info-section h3 {
+    font-size: 20px
+}
+.info-section p {
+    margin: 15px 0; /* Adjust the margin to reduce space between paragraphs */
+}
+.info-section p span{
+    color: #f4d53f;
+    font-weight: bold;
+}
+.material-image {
+    width: 100%; /* Responsive image */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 4px; /* Slightly rounded corners */
+}
+/* Yes, Delete button hover */
+.yes-delete-button:hover {
+    background-color: #f4d53f !important;
+    color: #fff !important;
+} 
+  /* Cancel button hover */
+.cancel-material-button:hover {
+    background-color: #fff !important;
+    border-color: #f4d53f !important;
+    color: #f4d53f !important;
+}
+.modal {
+    display: flex; /* Flexbox for centering */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    position: fixed; /* Fixed position for covering the screen */
+    top: 0; /* Top of the viewport */
+    left: 0; /* Left of the viewport */
+    right: 0; /* Right of the viewport */
+    bottom: 0; /* Bottom of the viewport */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 1000; /* Ensure it appears above other content */
+    overflow: auto; /* Allow scrolling if content exceeds the viewport */
+}
+.modal-content {
+    background: white; /* White background for modal */
+    border-radius: 5px; /* Rounded corners */
+    padding: 20px; /* Padding inside the modal */
+    position: relative; /* Allow positioning of children */
+    width: 600px; /* Width of the modal */
+    max-height: 80%; /* Max height to control modal size */
+    overflow-y: auto; /* Enable vertical scrolling */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 6px;
+}
+.modal-content::-webkit-scrollbar-thumb {
+    background-color: #a8a8a8;
+    border-radius: 6px;
+    border: 2px solid #f1f1f1;
+}
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background-color: #808080;
+}
+.modal-header {
+    display: flex; /* Flexbox for alignment */
+    justify-content: flex-end; /* Align to the right */
+}
+.close {
+    font-size: 24px; /* Size of the close icon */
+    color: #1c2229; /* Color for the close icon */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: color 0.3s ease; /* Smooth transition for color change */
+}
+.material-id {
+    font-weight: normal; /* Adjust weight as needed */
+    color: #666; /* Change color to match design */
+    margin-right: 5px; /* Add some spacing */
+}
+/* Table title styles */
+.title {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 0;
+}
+.header-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+    margin-top: 25px;
+}
+.material-add-button {
+    cursor: pointer;
+    background-color: #1c2229 !important;
+    color: white;
+    border-radius: 5px;
+}
+.material-add-button:hover {
+    background-color: #f4d53f !important;
+    color: white;
+}
+/* Button styles */
+.edit-button,
+.delete-button {
+    margin-top: 10px; /* Space above the button */
+    padding: 10px; /* Padding for the button */
+    width: 100%; /* Make buttons full width of the container */
+    max-width: 120px; /* Maximum width for buttons */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer on hover */
+    font-size: 14px; /* Font size */
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+    background-color: #1c2229; /* Blue for edit button */
+}
+.delete-button {
+    background-color: red; /* Red background for delete button */
+}
+.delete-button:hover {
+    background-color: darkred; /* Darker red on hover */
+}
+.form-rawmaterial-thumbnail-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+    object-fit: contain;
+    margin: 10px 0px;
+    border: 1px solid #dabeae;
+    cursor: pointer;
+}
+.form-upload-text {
+    color: rgb(112, 109, 109);
+    margin-bottom: 0rem;
+    font-size: 15px;
+}
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px; /* Reduce padding on smaller screens */
+    }
+
+    .add-page .button-container {
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: stretch; /* Stretch buttons to full width */
+    }
+
+    .material-card {
+        flex-direction: column; /* Stack image and text vertically on small screens */
+        align-items: center; /* Center align items */
+    }
+
+    .image-section {
+        margin-right: 0; /* Remove margin on smaller screens */
+        margin-bottom: 10px; /* Space below image */
+        flex: 1; /* Allow image section to grow */
+    }
+
+    .info-section {
+        text-align: center; /* Center text on smaller screens */
+    }
+
+    .modal-content {
+        width: 95%; /* Make modal width responsive */
+    }
+}
