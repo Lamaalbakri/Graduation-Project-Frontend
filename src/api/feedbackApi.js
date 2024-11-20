@@ -45,3 +45,25 @@ export const createFeedback = async (feedbackData) => {
         return { success: false, message: error.message };
     }
 };
+
+export const getBuyerFeedback = async () => {
+    try {
+        const response = await fetch(`${API_URL}/buyer-feedback`, {
+            method: "GET",
+            credentials: 'include', //send request with token
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error fetching feedback by ID');
+        }
+
+        const data = await response.json();
+        return data.data; // Returns the address data
+    } catch (error) {
+        //console.error('Error fetching address by ID:', error);
+        throw error;
+    }
+};

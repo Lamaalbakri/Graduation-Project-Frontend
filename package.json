@@ -19,6 +19,7 @@
     "@mui/styles": "^6.0.2",
     "@mui/system": "^6.0.2",
     "@mui/x-data-grid": "^7.16.0",
+    "@paypal/react-paypal-js": "^8.7.0",
     "antd": "^5.20.5",
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",

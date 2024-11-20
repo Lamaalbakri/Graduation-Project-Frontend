@@ -6,10 +6,12 @@ import "./ViewOrderList.css";
 import { getSingleOrder } from "../../../../api/orders";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import FeedbackPopup from "./FeedbackPopup";
+import { getBuyerFeedback } from "../../../../api/feedbackApi";
 
 const ViewOrdersList = () => {
   const location = useLocation();
   const [order, setOrder] = useState(null);
+  const [done, setDone] = useState(false);
 
   // Extract the 'id' from the query string
   const queryParams = new URLSearchParams(location.search);
@@ -31,6 +33,14 @@ const ViewOrdersList = () => {
     0
   );
 
+  useEffect(() => {
+    getBuyerFeedback().then((x) => {
+      const found = x.find((d) => d.order_id === id);
+      if (found) {
+        setDone(true);
+      }
+    });
+  }, [id]);
   return (
     <div>
       <div>
@@ -217,6 +227,8 @@ const ViewOrdersList = () => {
                     orderId={order?.shortId}
                     supplierId={order?.supplierId}
                     manufacturerId={order?.manufacturerId}
+                    done={done}
+                    setDone={setDone}
                   />
                 </div>
               </div>

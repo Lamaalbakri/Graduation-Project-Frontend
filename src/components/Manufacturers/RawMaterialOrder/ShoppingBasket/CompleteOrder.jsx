@@ -270,16 +270,14 @@ function CompleteOrder() {
       </div>
       {dialogState.confirmationDialog && (
         <ConfirmationDialog
-          title={`${
-            stepType === "confirmPay"
+          title={`${stepType === "confirmPay"
               ? "Are you ready to confirm your payment?"
               : "Your Order Has Been Created"
-          }`}
-          message={` ${
-            stepType === "confirmPay"
+            }`}
+          message={` ${stepType === "confirmPay"
               ? "Once confirmed, you won't be able to cancel your order."
               : "Would you like to view the Request? "
-          }`}
+            }`}
           onConfirm={handleConfirmAction}
           onCancel={handelCancel}
           stepType={stepType} // Pass stepType as a prop to control icon and buttons

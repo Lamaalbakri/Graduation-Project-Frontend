@@ -24,18 +24,7 @@ const Feedbacks = () => {
     <div className="ManageRawMaterial">
       <div className="ManageRawMaterial-header-row">
         <div className="ManageRawMaterial-title">Feedbacks</div>
-        <div className="ManageRawMaterial-search-container">
-          <div className="ManageRawMaterial-search-label">
-            Search by Name / ID
-          </div>
-          <input
-            type="search"
-            placeholder="Search by Name / ID"
-            //value={query}
-            //onChange={handleSearch}
-            className="ManageRawMaterial-input-with-icon"
-          />
-        </div>
+
       </div>
 
       {feedback.length > 0 && (
