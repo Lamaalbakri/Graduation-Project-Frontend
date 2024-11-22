@@ -44,6 +44,13 @@ import ViewManufacturerGoods from "./components/Manufacturers/MangeGoods/ViewMan
 import UpdateManufacturerGoods from "./components/Manufacturers/MangeGoods/UpdateManufacturerGoods";
 import DeleteManufacturerGoods from "./components/Manufacturers/MangeGoods/DeleteManufacturerGoods";
 // Distributors imports
+import AddDistributorsGoods from "./components/Distributors/MangeDistributorsGoods/AddDistributorsGoods";
+import ViewDistributorsGoods from "./components/Distributors/MangeDistributorsGoods/ViewDistributorsGoods";
+import UpdateDistributorGoods from "./components/Distributors/MangeDistributorsGoods/UpdateDistributorGoods";
+import DeleteDistributorsGoods from "./components/Distributors/MangeDistributorsGoods/DeleteDistributorsGoods";
+import DistributedGoodsCurrentRequests from "./components/Distributors/GoodsRequestsForDistributors/DistributedGoodsCurrentRequests";
+import DistributedGoodsPreviousRequests from "./components/Distributors/GoodsRequestsForDistributors/DistributedGoodsPreviousRequests";
+import SearchRequestsDistributedGoods from "./components/Distributors/GoodsRequestsForDistributors/SearchRequestsDistributedGoods";
 
 // Contexts
 import { AddressProvider } from "./contexts/AddressContext";
@@ -282,7 +289,35 @@ function MainLayout({ userType, userId, clearUserData }) {
                   path="/distributor-home/:userId"
                   element={<HomeUser userType="distributor" userId={userId} />}
                 />
-                {/* يمكنك إضافة المسارات الخاصة بالمستخدم الموزع هنا */}
+
+                <Route
+                  path="/addDistributorsGoods/:userId"
+                  element={<AddDistributorsGoods userId={userId} />}
+                />
+                <Route
+                  path="/viewDistributorsGoods/:userId"
+                  element={<ViewDistributorsGoods userId={userId} />}
+                />
+                <Route
+                  path="/updateDistributorsGoods/:userId"
+                  element={<UpdateDistributorGoods userId={userId} />}
+                />
+                <Route
+                  path="/deleteDistributorsGoods/:userId"
+                  element={<DeleteDistributorsGoods userId={userId} />}
+                />
+                <Route
+                  path="/currentDistributorRequests/:userId"
+                  element={<DistributedGoodsCurrentRequests userId={userId} />}
+                />
+                <Route
+                  path="/previousDistributorRequests/:userId"
+                  element={<DistributedGoodsPreviousRequests userId={userId} />}
+                />
+                <Route
+                  path="/searchDistributorRequests/:userId"
+                  element={<SearchRequestsDistributedGoods userId={userId} />}
+                />
               </>
             )}
 

@@ -1,8 +1,8 @@
 const API_URL = 'http://localhost:8500/api/v1';
 
 //get request 
-export const fetchAllManufacturerGoodsCurrentRequests = async () => {
-    const response = await fetch(`${API_URL}/goodsManufacturersCurrentRequest`, {
+export const fetchAllDistributorsGoodsCurrentRequests = async () => {
+    const response = await fetch(`${API_URL}/goodsDistributorsCurrentRequest`, {
         method: 'GET',
         credentials: 'include'
     });
@@ -14,8 +14,8 @@ export const fetchAllManufacturerGoodsCurrentRequests = async () => {
     return json.data; //return all data
 };
 
-export const fetchAllManufacturerGoodsPreviousRequests = async () => {
-    const response = await fetch(`${API_URL}/goodsManufacturersPreviousRequest`, {
+export const fetchAllDistributorsGoodsPreviousRequests = async () => {
+    const response = await fetch(`${API_URL}/goodsDistributorsPreviousRequest`, {
         method: 'GET',
         credentials: 'include'
     });
@@ -28,10 +28,10 @@ export const fetchAllManufacturerGoodsPreviousRequests = async () => {
 };
 
 // change status
-export const updateManufacturerGoodsRequestStatus = async (id, newStatus) => {
+export const updateDistributorsGoodsRequestStatus = async (id, newStatus) => {
     //console.log("Sending request to update status:", newStatus, id);
     try {
-        const response = await fetch(`${API_URL}/goodsManufacturersCurrentRequest/${id}`, {
+        const response = await fetch(`${API_URL}/goodsDistributorsCurrentRequest/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -50,8 +50,8 @@ export const updateManufacturerGoodsRequestStatus = async (id, newStatus) => {
     }
 };
 
-export const deleteManufacturerGoodsCurrentRequestById = async (id) => {
-    const response = await fetch(`${API_URL}/goodsManufacturersCurrentRequest/${id}`, {
+export const deleteDistributorsGoodsCurrentRequestById = async (id) => {
+    const response = await fetch(`${API_URL}/goodsDistributorsCurrentRequest/${id}`, {
         method: 'DELETE',
         credentials: 'include'
     });
@@ -69,8 +69,8 @@ export const deleteManufacturerGoodsCurrentRequestById = async (id) => {
     return { msg: 'Request deleted successfully' };
 }
 
-export const deleteManufacturerGoodsPreviousRequestById = async (id) => {
-    const response = await fetch(`${API_URL}/goodsManufacturersPreviousRequest/${id}`, {
+export const deleteDistributorsGoodsPreviousRequestById = async (id) => {
+    const response = await fetch(`${API_URL}/goodsDistributorsPreviousRequest/${id}`, {
         method: 'DELETE',
         credentials: 'include'
     });
@@ -88,9 +88,9 @@ export const deleteManufacturerGoodsPreviousRequestById = async (id) => {
     return { msg: 'Request deleted successfully' };
 }
 //search current by id
-export const searchManufacturerGoodsCurrentRequestById = async (id) => {
+export const searchDistributorsGoodsCurrentRequestById = async (id) => {
     try {
-        const response = await fetch(`${API_URL}/goodsManufacturersCurrentRequest/${id}`, {
+        const response = await fetch(`${API_URL}/goodsDistributorsCurrentRequest/${id}`, {
             method: 'GET',
             credentials: 'include'
         });
@@ -112,17 +112,16 @@ export const searchManufacturerGoodsCurrentRequestById = async (id) => {
 };
 
 
-//search current by distributor name
-export const searchManufacturerGoodsCurrentRequestByMName = async (MName) => {
+export const searchDistributorsGoodsCurrentRequestByMName = async (MName) => {
     try {
-        const response = await fetch(`${API_URL}/goodsManufacturersCurrentRequest/distributorName/${MName}`, {
+        const response = await fetch(`${API_URL}/goodsDistributorsCurrentRequest/retailerName/${MName}`, {
             method: 'GET',
             credentials: 'include'
         });
 
         if (!response.ok) {
             if (response.status === 404) {
-                return { error: `No requests found for Distributor name: ${MName}` }; //msg for not found req error
+                return { error: `No requests found for retailer name: ${MName}` }; //msg for not found req error
             } else if (response.status === 401) {
                 return { error: 'Unauthorized access. Please check your permissions.' }; //msg for unauth access error
             }
@@ -137,9 +136,9 @@ export const searchManufacturerGoodsCurrentRequestByMName = async (MName) => {
 };
 
 //search Previous by id
-export const searchManufacturerGoodsPreviousRequestById = async (id) => {
+export const searchDistributorsGoodsPreviousRequestById = async (id) => {
     try {
-        const response = await fetch(`${API_URL}/goodsManufacturersPreviousRequest/${id}`, {
+        const response = await fetch(`${API_URL}/goodsDistributorsPreviousRequest/${id}`, {
             method: 'GET',
             credentials: 'include'
         });
@@ -159,17 +158,16 @@ export const searchManufacturerGoodsPreviousRequestById = async (id) => {
     }
 };
 
-//search Previous by distributor name
-export const searchManufacturerGoodsPreviousRequestByMName = async (MName) => {
+export const searchDistributorsGoodsPreviousRequestByMName = async (MName) => {
     try {
-        const response = await fetch(`${API_URL}/goodsManufacturersPreviousRequest/distributorName/${MName}`, {
+        const response = await fetch(`${API_URL}/goodsDistributorsPreviousRequest/retailerName/${MName}`, {
             method: 'GET',
             credentials: 'include'
         });
 
         if (!response.ok) {
             if (response.status === 404) {
-                return { error: `No requests found for distributor name: ${MName}` }; //msg for not found req error
+                return { error: `No requests found for retailer name: ${MName}` }; //msg for not found req error
             } else if (response.status === 401) {
                 return { error: 'Unauthorized access. Please check your permissions.' }; //msg for unauth access error
             }
@@ -183,15 +181,15 @@ export const searchManufacturerGoodsPreviousRequestByMName = async (MName) => {
 };
 
 //move currnt request to preveious request
-export const moveManufacturerGoodsCurrentToPrevious = async (id) => {
+export const moveDistributorsGoodsCurrentToPrevious = async (id) => {
 
     try {
         // Step 1: Get the request from the current requests
-        const currentRequestID = await searchManufacturerGoodsCurrentRequestById(id);
+        const currentRequestID = await searchDistributorsGoodsCurrentRequestById(id);
 
         console.log(`called here searchCurrentRequestById ${currentRequestID}`)
         // Step 2: Send the request to the previous requests list
-        const response = await fetch(`${API_URL}/goodsManufacturersPreviousRequest`, {
+        const response = await fetch(`${API_URL}/goodsDistributorsPreviousRequest`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -208,16 +206,16 @@ export const moveManufacturerGoodsCurrentToPrevious = async (id) => {
         }
 
         // Step 3: Delete the request from the current requests list
-        await deleteManufacturerGoodsCurrentRequestById(id);
+        await deleteDistributorsGoodsCurrentRequestById(id);
         return await response.json(); //return responce
     } catch (error) {
         return { error: `Error moving request to current` };
     }
 };
 
-export const createNewManufacturerGoodsRequest = async (data) => {
+export const createNewDistributorsGoodsRequest = async (data) => {
     try {
-        const response = await fetch(`${API_URL}/goodsManufacturersCurrentRequest`, {
+        const response = await fetch(`${API_URL}/goodsDistributorsCurrentRequest`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

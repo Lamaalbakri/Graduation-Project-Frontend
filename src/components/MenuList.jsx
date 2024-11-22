@@ -182,7 +182,57 @@ const MenuList = ({ darkTheme, userType, userId }) => {
 
       {userType === "distributor" && (
         <React.Fragment>
-          {/* قائمة العناصر التي تخص الـ "distributor" */}
+          <Menu.SubMenu
+            key="manageDistributorGoods"
+            icon={<ProductOutlined />}
+            title="Manage Goods"
+          >
+            <Menu.Item key="addMGoods">
+              <Link to={`/addDistributorsGoods/${userId}`}>Add Goods</Link>
+            </Menu.Item>
+            <Menu.Item key="viewMGoods">
+              <Link to={`/viewDistributorsGoods/${userId}`}>View Goods</Link>
+            </Menu.Item>
+            <Menu.Item key="updateMGoods">
+              <Link to={`/updateDistributorsGoods/${userId}`}>
+                Update Goods
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="deleteMGoods">
+              <Link to={`/deleteDistributorsGoods/${userId}`}>
+                Delete Goods
+              </Link>
+            </Menu.Item>
+          </Menu.SubMenu>
+          <Menu.SubMenu
+            key="manageGoodsDistributorOrders"
+            icon={<GoldOutlined />}
+            title="Manage Orders"
+          ></Menu.SubMenu>
+          <Menu.SubMenu
+            key="manageDistributorRequests"
+            icon={<SnippetsOutlined />}
+            title="Manage Requests"
+          >
+            <Menu.Item key="dCurrent">
+              <Link to={`/currentDistributorRequests/${userId}`}>
+                Current Requests
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="dPrevious">
+              <Link to={`/previousDistributorRequests/${userId}`}>
+                Previous Requests
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="dSearchRequest">
+              <Link to={`/searchDistributorRequests/${userId}`}>
+                Search for Request
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="dFeedbacks">
+              <Link to={`/feedbacks/${userId}`}>Feedbacks</Link>
+            </Menu.Item>
+          </Menu.SubMenu>
         </React.Fragment>
       )}
 

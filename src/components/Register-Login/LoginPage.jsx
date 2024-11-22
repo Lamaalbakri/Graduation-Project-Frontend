@@ -53,9 +53,9 @@ function LoginPage({ setUserType, setUserId }) {
         case "manufacturer":
           navigate(`/manufacturer-home/${userId}`);
           break;
-        // case "distributor":
-        //   navigate(`/distributor-home/${userId}`);
-        //   break;
+        case "distributor":
+          navigate(`/distributor-home/${userId}`);
+          break;
         // case "retailer":
         //   navigate(`/retailer-home/${userId}`);
         //   break;
