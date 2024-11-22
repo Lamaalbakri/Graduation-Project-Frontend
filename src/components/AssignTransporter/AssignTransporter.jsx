@@ -1,19 +1,13 @@
 import { useState, useEffect } from "react";
-import {
-  EditOutlined,
-  CloseOutlined,
-  InfoCircleOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, CloseOutlined, } from "@ant-design/icons";
 import Address from "../Dialog/Address";
 import { DatePicker, Modal, Radio } from "antd";
 import "./AssignTransporter.css";
 import { calculatePrice } from "./TransportationServicesPrice";
-import {
-  fetchCompanies,
-  sendTransportRequest,
-} from "../../api/transportRequestsAPI";
+import { fetchCompanies, sendTransportRequest, } from "../../api/transportRequestsAPI";
 import { useAddress } from "../../contexts/AddressContext";
-
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { config } from "../../../config";
 function AssignTransporter({
   onClose,
   onRequestSent,
@@ -22,18 +16,19 @@ function AssignTransporter({
   receiverId,
   receiverType,
 }) {
+
   const [temperature, setTemperature] = useState("");
   const [weight, setWeight] = useState("");
   const [distance, setDistance] = useState("");
-  const [dialogState, setDialogState] = useState({
-    address: false,
-  });
+  const [dialogState, setDialogState] = useState({ address: false, });
   const [dateRange, setDateRange] = useState([]);
   const [company, setCompany] = useState("");
   const [companyList, setCompanyList] = useState([]);
   const [currentForm, setCurrentForm] = useState(1);
+  const [selectedCompany, setSelectedCompany] = useState(null);
   const { RangePicker } = DatePicker;
   const [isPriceModalVisible, setIsPriceModalVisible] = useState(false);
+  const clientId = config.clientId;
   const { address } = useAddress();
   const handleRadioChange = (setter) => (event) => {
     setter(event.target.value);
@@ -58,7 +53,7 @@ function AssignTransporter({
 
   const calculatedPrice = calculatePrice({ temperature, weight, distance });
 
-  // View the dialog to confirm the price
+  // View the price dialog
   const showPriceConfirmation = () => {
     setIsPriceModalVisible(true);
   };
@@ -68,11 +63,21 @@ function AssignTransporter({
     setIsPriceModalVisible(false); // Hide the dialog and return to editing
   };
 
-  // Confirm the price and move to the next dialog
-  const handleConfirmPrice = () => {
-    setIsPriceModalVisible(false);
-    setCurrentForm(2);
-  };
+  const handlePayment = () => {
+    const responce = companyList.find((comp) => comp._id === company);
+    if (!responce) {
+      Modal.error({
+        title: "Error",
+        content: "Please select the transport company.",
+        okButtonProps: {
+          className: "confirm-buttonn",
+        },
+      });
+      return; // Stop here if no company is selected
+    }
+    setSelectedCompany(responce);
+    showPriceConfirmation();
+  }
 
   const handleNext = () => {
     let errors = [];
@@ -92,7 +97,7 @@ function AssignTransporter({
       });
       return;
     }
-    showPriceConfirmation();
+    setCurrentForm(2);
   };
 
   // Fetch company list
@@ -118,69 +123,65 @@ function AssignTransporter({
 
   // Handle sending the request in form 2
   const handleSendRequest = async (event) => {
+
+    try {
+      const requestData = {
+        temperature,
+        weight,
+        distance,
+        departureAddress: {
+          street: address.street,
+          city: address.city,
+          neighborhood: address.neighborhood,
+          postal_code: address.postal_code,
+          country: address.country,
+        },
+        estimated_delivery_date: dateRange.map((date) =>
+          date.format("YYYY-MM-DD")
+        ),
+        totalPrice: calculatedPrice,
+        transporterId: selectedCompany._id,
+        transporterName: selectedCompany.full_name,
+        request_id: requestId,
+        arrivalAddress: arrivalAddress,
+        receiver_id: receiverId,
+        receiver_type: receiverType,
+      };
+
+      console.log("Request Data:", requestData);
+      await sendTransportRequest(requestData);
+      console.log("Request sent successfully.");
+      setIsPriceModalVisible(false);
+      onRequestSent();
+    } catch (error) {
+      console.error("Error details:", error); // Print the error details
+      Modal.error({
+        title: "Error",
+        content: "Failed to send request.",
+        okButtonProps: {
+          className: "confirm-buttonn",
+        },
+      });
+    }
+
+  };
+  const handleFormSubmit = (event) => {
     event.preventDefault();
 
-    // Ensure we are in the second form and the company field is selected
-    if (currentForm === 2) {
-      const selectedCompany = companyList.find((comp) => comp._id === company);
-      if (!selectedCompany) {
-        Modal.error({
-          title: "Error",
-          content: "Please select the transport company.",
-          okButtonProps: {
-            className: "confirm-buttonn",
-          },
-        });
-        return; // Stop here if no company is selected
-      }
+  };
 
-      try {
-        const requestData = {
-          temperature,
-          weight,
-          distance,
-          departureAddress: {
-            street: address.street,
-            city: address.city,
-            neighborhood: address.neighborhood,
-            postal_code: address.postal_code,
-            country: address.country,
-          },
-          estimated_delivery_date: dateRange.map((date) =>
-            date.format("YYYY-MM-DD")
-          ),
-          totalPrice: calculatedPrice,
-          transporterId: selectedCompany._id,
-          transporterName: selectedCompany.full_name,
-          request_id: requestId,
-          arrivalAddress: arrivalAddress,
-          receiver_id: receiverId,
-          receiver_type: receiverType,
-        };
-
-        console.log("Request Data:", requestData);
-        await sendTransportRequest(requestData);
-        console.log("Request sent successfully.");
-
-        onRequestSent();
-      } catch (error) {
-        console.error("Error details:", error); // Print the error details
-        Modal.error({
-          title: "Error",
-          content: "Failed to send request.",
-          okButtonProps: {
-            className: "confirm-buttonn",
-          },
-        });
-      }
+  const formatPrice = (price) => {
+    if (price && price > 0) {
+      return price.toFixed(2);
     }
+    return "0.00";
   };
 
   return (
     <div className="AssignTransporter">
       <div className="transporterDialog">
         <div className="transporterDialogContent">
-          <form onSubmit={handleSendRequest}>
+          <form onSubmit={handleFormSubmit}>
             {currentForm === 1 && (
               <>
                 <h2>Select the transport service type</h2>
@@ -348,9 +349,9 @@ function AssignTransporter({
                     <div className="button-container">
                       <button
                         className="sendButtonStyle"
-                        onClick={handleSendRequest}
+                        onClick={handlePayment}
                       >
-                        Send Request
+                        CHECKOUT
                       </button>
                     </div>
                     <div className="closeButtonStyle" onClick={onClose}>
@@ -364,40 +365,55 @@ function AssignTransporter({
         </div>
       </div>
       <Modal
-        title={
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <InfoCircleOutlined
-              style={{ marginRight: "8px", color: "#f4d53f", fontSize: "23px" }}
-            />{" "}
-            Estimated Price
-          </div>
-        }
-        visible={isPriceModalVisible}
+        title="Payment Methods"
+        open={isPriceModalVisible}
         onCancel={handleCancelPrice}
-        footer={[
-          <div>
-            <button
-              key="cancel"
-              onClick={handleCancelPrice}
-              className="cancel-buttonn"
-              style={{ marginRight: "5px" }}
-            >
-              Cancel
-            </button>
-            <button
-              key="confirm"
-              onClick={handleConfirmPrice}
-              className="confirm-buttonn"
-            >
-              Confirm
-            </button>
-          </div>,
-        ]}
+        footer={null}
+        style={{ width: '800px', height: '600px', top: '200px' }}
+        styles={{
+          body: { paddingTop: '20px', paddingLeft: '20px', paddingRight: '20px' },
+          mask: { backgroundColor: 'rgba(0, 0, 0, 0.5)' },
+        }}
       >
         <p style={{ marginBottom: "30px" }}>
-          The estimated price based on your selections is:{" "}
+          Shipping price based on your selections is:{" "}
           <strong>{calculatedPrice} SAR</strong>
         </p>
+
+        <PayPalScriptProvider options={{ "client-id": clientId }}>
+          <PayPalButtons
+            style={{
+              layout: "vertical",
+            }}
+            fundingSource="paypal"
+            disableFunding="credit,card"
+            createOrder={(data, actions) => {
+              const formattedPrice = formatPrice(calculatedPrice);
+              if (formattedPrice === null || parseFloat(formattedPrice) <= 0) {
+                console.error("Invalid price value");
+                return;
+              }
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    amount: {
+                      value: formattedPrice,
+                      currency_code: "USD"
+                    }
+                  }
+                ]
+              });
+            }}
+            onApprove={async (data, actions) => {
+              return actions.order.capture().then(async (details) => {
+                await handleSendRequest(data, details);
+              });
+            }}
+            onError={(err) => {
+              console.error("PayPal Checkout Error:", err);
+            }}
+          />
+        </PayPalScriptProvider>
       </Modal>
     </div>
   );
