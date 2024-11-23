@@ -150,6 +150,7 @@
     font-weight:normal ;
     margin-left: 10px;
     margin-top: 10px;
+    text-transform: capitalize;
 }
 /* The style of the displayed items on the shopping Basket details page. */
 .Basket {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Breadcrumb from "./Breadcrumb";
-import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import BasketItem from "./BasketItem";
 import { notification } from "antd";
@@ -12,7 +12,6 @@ import {
 } from "../../../../api/shoppingBasket";
 import ConfirmationDialog from "../../../Dialog/ConfirmationDialog";
 import { CloseCircleOutlined } from "@ant-design/icons";
-import "./ShoppingBasket.css";
 
 function ShoppingBasketDetail() {
   const { basketId, basketIndex } = useParams();
@@ -181,7 +180,7 @@ function ShoppingBasketDetail() {
         <div className="detail-container-title">
           <div>Shopping Basket {basketIndex}</div>
           <div className="supplier-name">
-            Supplier Name: {updatedBasket.sellerName}
+            Distributor Name: {updatedBasket.sellerName}
           </div>
         </div>
         <div className="Basket">

@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../../images/User.png";
-import "./ManageSupplierStyle.css";
+import "./ManageDistributorStyle.css";
 import { CloseOutlined, CheckCircleOutlined } from "@ant-design/icons";
-import { getSearchSupplierCategory } from "../../../../api/CategoryAPI";
+import { getSearchDistributorCategory } from "../../../../api/CategoryAPI";
 import { fetchUserData, updateUserData } from "../../../../api/userAPI";
 
-const AddSupplier = () => {
-  const [supplierCategory, setSupplierCategory] = useState("");
-  const [supplierName, setSupplierName] = useState("");
+const AddDistributor = () => {
+  const [distributorCategory, setDistributorCategory] = useState("");
+  const [distributorName, setDistributorName] = useState("");
   const [isSearchActive, setIsSearchActive] = useState(false);
-  const [suppliers, setSuppliers] = useState();
+  const [distributors, setDistributors] = useState();
   const [user, setUser] = useState([]);
   const [appliedCategory, setAppliedCategory] = useState("");
   const [appliedName, setAppliedName] = useState("");
   const [showDialog, setShowDialog] = useState(false);
-  const [supplierToToggle, setSupplierToToggle] = useState(null);
+  const [distributorToToggle, setDistributorToToggle] = useState(null);
 
   const closeDialog = () => {
     setShowDialog(false);
@@ -26,57 +26,56 @@ const AddSupplier = () => {
     });
   }, []);
 
-  const handleSupplierCategoryChange = (e) => {
-    setSupplierCategory(e.target.value);
+  const handleCategoryChange = (e) => {
+    setDistributorCategory(e.target.value);
   };
 
-  const handleSupplierNameChange = (e) => {
-    setSupplierName(e.target.value);
+  const handleNameChange = (e) => {
+    setDistributorName(e.target.value);
   };
 
   const handleClear = () => {
-    setSupplierCategory("");
-    setSupplierName("");
+    setDistributorCategory("");
+    setDistributorName("");
     setIsSearchActive(false);
     setAppliedCategory("");
     setAppliedName("");
   };
 
   const handleApply = async () => {
-    setAppliedCategory(supplierCategory);
-    setAppliedName(supplierName);
+    setAppliedCategory(distributorCategory);
+    setAppliedName(distributorName);
     setIsSearchActive(true);
 
-    // Fetch suppliers based on the entered criteria
-    getSearchSupplierCategory(
-      supplierCategory || null,
-      supplierName || null
+    getSearchDistributorCategory(
+      distributorCategory || null,
+      distributorName || null
     ).then((x) => {
-      setSuppliers(x); // Show "No suppliers found" when there is no match
+      setDistributors(x);
     });
   };
 
-  const handleToggleSupplier = (id) => {
-    const isSupplierAdded = user?.suppliersList.includes(id);
+  const handleToggle = (id) => {
+    const isManufacturerAdded = user?.distributorsList.includes(id);
 
-    if (isSupplierAdded) {
-      confirmToggleSupplier(id, true);
+    if (isManufacturerAdded) {
+      confirmToggle(id, true);
     } else {
-      setSupplierToToggle(id);
+      setDistributorToToggle(id);
       setShowDialog(true);
     }
   };
 
-  const confirmToggleSupplier = (id, skipDialog = false) => {
+  const confirmToggle = (id, skipDialog = false) => {
     let updatedUser = { ...user };
-    const isSupplierAdded = updatedUser.suppliersList.includes(id);
+    const isManufacturerAdded = updatedUser.distributorsList.includes(id);
 
-    if (isSupplierAdded) {
-      updatedUser.suppliersList = updatedUser.suppliersList.filter(
-        (supplierId) => supplierId !== id
+    if (isManufacturerAdded) {
+      updatedUser.distributorsList = updatedUser.distributorsList.filter(
+        (distributorId) => distributorId !== id
       );
     } else {
-      updatedUser.suppliersList.push(id);
+      updatedUser.distributorsList.push(id);
     }
 
     updatedUser.id = updatedUser._id;
@@ -92,25 +91,27 @@ const AddSupplier = () => {
 
     if (!skipDialog) {
       setShowDialog(false);
-      setSupplierToToggle(null);
+      setDistributorToToggle(null);
     }
   };
 
   return (
-    <div className="ManageSupplier-Suppliercontainer">
-      <div className="ManageSupplier-header-row">
-        <h2 className="ManageSupplier-title">Search for Supplier to Add</h2>
+    <div className="ManageDistributor-Suppliercontainer">
+      <div className="ManageDistributor-header-row">
+        <h2 className="ManageDistributor-title">
+          Search for Distributor to Add
+        </h2>
       </div>
 
-      <div className="ManageSupplier-card-container">
-        <div className="ManageSupplier-searchcontainer">
-          <div className="ManageSupplier-search-inputs">
+      <div className="ManageDistributor-card-container">
+        <div className="ManageDistributor-searchcontainer">
+          <div className="ManageDistributor-search-inputs">
             <select
               name="supplier-category"
-              value={supplierCategory}
-              onChange={handleSupplierCategoryChange}
+              value={distributorCategory}
+              onChange={handleCategoryChange}
             >
-              <option value="">Select Supplier Category</option>
+              <option value="">Select Distributor Category</option>
               <option value="Agriculture and Food Products">
                 Agriculture and Food Products
               </option>
@@ -140,20 +141,20 @@ const AddSupplier = () => {
             </select>
             <input
               type="text"
-              placeholder="Search for Supplier By Name / ID"
-              value={supplierName}
-              onChange={handleSupplierNameChange}
+              placeholder="Search for Distributor By Name / ID"
+              value={distributorName}
+              onChange={handleNameChange}
             />
           </div>
-          <div className="ManageSupplier-search-buttons">
+          <div className="ManageDistributor-search-buttons">
             <button
-              className="ManageSupplier-clear-button"
+              className="ManageDistributor-clear-button"
               onClick={handleClear}
             >
               Clear
             </button>
             <button
-              className="ManageSupplier-apply-button"
+              className="ManageDistributor-apply-button"
               onClick={handleApply}
             >
               Apply
@@ -164,43 +165,49 @@ const AddSupplier = () => {
 
       {isSearchActive && (
         <>
-          <div className="ManageSupplier-results-header">
+          <div className="ManageDistributor-results-header">
             <h3>Search Results</h3>
           </div>
-          {suppliers?.length > 0 ? (
-            suppliers.map((supplier) => (
-              <div key={supplier._id} className="ManageSupplier-search-result">
-                <div className="ManageSupplier-supplier-info">
-                  <img src={logo} alt="Supplier" />
+          {distributors?.length > 0 ? (
+            distributors.map((distributor) => (
+              <div
+                key={distributor._id}
+                className="ManageDistributor-search-result"
+              >
+                <div className="ManageDistributor-supplier-info">
+                  <img src={logo} alt="Manufacturer" />
                   <div>
-                    <h3>{supplier?.full_name}</h3>
+                    <h3>{distributor?.full_name}</h3>
                     <p>
-                      <strong>Category:</strong> {supplier?.category}
+                      <strong>Category:</strong> {distributor?.category}
                     </p>
                   </div>
                 </div>
-                <div className="ManageSupplier-toggle-switch">
-                  <label className="ManageSupplier-switch">
+                <div className="ManageDistributor-toggle-switch">
+                  <label className="ManageDistributor-switch">
                     <input
                       type="checkbox"
-                      checked={user?.suppliersList.includes(supplier._id)}
-                      onChange={() => handleToggleSupplier(supplier._id)}
+                      checked={user?.distributorsList.includes(distributor._id)}
+                      onChange={() => handleToggle(distributor._id)}
                     />
-                    <span className="ManageSupplier-slider round"></span>
+                    <span className="ManageDistributor-slider round"></span>
                   </label>
                 </div>
               </div>
             ))
           ) : (
-            <div className="background-message">No suppliers found</div>
+            <div className="background-message">No distributors found</div>
           )}
         </>
       )}
 
       {showDialog && (
-        <div className="ManageSupplier-dialog-overlay">
-          <div className="ManageSupplier-dialog">
-            <span className="ManageSupplier-dialog-close" onClick={closeDialog}>
+        <div className="ManageDistributor-dialog-overlay">
+          <div className="ManageDistributor-dialog">
+            <span
+              className="ManageDistributor-dialog-close"
+              onClick={closeDialog}
+            >
               <CloseOutlined
                 style={{
                   fontSize: "16px",
@@ -213,7 +220,7 @@ const AddSupplier = () => {
               />
             </span>
             <div
-              className="ManageSupplier-dialog-header"
+              className="ManageDistributor-dialog-header"
               style={{ display: "flex", alignItems: "center" }}
             >
               <CheckCircleOutlined
@@ -225,17 +232,17 @@ const AddSupplier = () => {
               />
               <h3 style={{ margin: 0 }}>Confirm Action</h3>
             </div>
-            <p>Are you sure you want to add this supplier?</p>
-            <div className="ManageSupplier-dialog-actions">
+            <p>Are you sure you want to add this distributor?</p>
+            <div className="ManageDistributor-dialog-actions">
               <button
-                className="ManageSupplier-dialog-button-No"
+                className="ManageDistributor-dialog-button-No"
                 onClick={() => setShowDialog(false)}
               >
                 No
               </button>
               <button
-                className="ManageSupplier-dialog-button-Yes"
-                onClick={() => confirmToggleSupplier(supplierToToggle)}
+                className="ManageDistributor-dialog-button-Yes"
+                onClick={() => confirmToggle(distributorToToggle)}
               >
                 Yes
               </button>
@@ -247,4 +254,4 @@ const AddSupplier = () => {
   );
 };
 
-export default AddSupplier;
+export default AddDistributor;

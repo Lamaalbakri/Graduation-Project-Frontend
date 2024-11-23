@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import "./ViewMaterials.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { Modal, Select } from "antd";
 import { addItemToBasket } from "../../../../api/shoppingBasket";
-const ProductCard = ({ d }) => {
-  console.log(d);
+
+const ProductCardDistributors = ({ d }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState({});
@@ -28,7 +27,7 @@ const ProductCard = ({ d }) => {
       values: [selectedOptions[optionName]],
     }));
 
-    d.materialOption.forEach((option) => {
+    d.goodsOption.forEach((option) => {
       if (!selectedOptions[option.optionName]) {
         finalOptions.push({
           optionType: option.optionName,
@@ -43,8 +42,8 @@ const ProductCard = ({ d }) => {
       item_id: d._id,
       quantity: finalQuantity,
       options: finalOptions,
-      sellerId: d.supplierId._id,
-      sellerName: d.supplierId.full_name,
+      sellerId: d.manufacturerId._id,
+      sellerName: d.manufacturerId.full_name,
     });
 
     console.log(response);
@@ -80,7 +79,7 @@ const ProductCard = ({ d }) => {
               <p className="description">
                 {d.description} {d.storageInfo}
               </p>
-              {d.materialOption?.map((option) => (
+              {d.goodsOption?.map((option) => (
                 <div key={option._id} className="product-option">
                   <p className="option-label">{option.optionName}:</p>
                   <Select
@@ -119,7 +118,7 @@ const ProductCard = ({ d }) => {
           </div>
         </Modal>
         <p className="by-text">
-          By <span>{d?.supplierId?.full_name}</span>
+          By <span>{d?.manufacturerId?.full_name}</span>
         </p>
         <div className="price">
           <p>{d.price} SAR</p>
@@ -139,4 +138,4 @@ const ProductCard = ({ d }) => {
   );
 };
 
-export default ProductCard;
+export default ProductCardDistributors;

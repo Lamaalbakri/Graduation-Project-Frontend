@@ -12,7 +12,7 @@ export const fetchAllGoodsCurrentRequests = async () => {
     }
 };
   
-export const fetchGoodsForListOfManufacturer = async () => {
+export const fetchGoodsForListOfDistributor = async () => {
     try {
       const response = await axios.get(`${API_URL}/manageGoodsDistributor/getSpecificDistributorGoodsList`, {
         withCredentials: true,

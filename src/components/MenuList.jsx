@@ -208,7 +208,25 @@ const MenuList = ({ darkTheme, userType, userId }) => {
             key="manageGoodsDistributorOrders"
             icon={<GoldOutlined />}
             title="Manage Orders"
-          ></Menu.SubMenu>
+          >
+            <Menu.Item key="addManufacturers">
+              <Link to={`/addManufacturers/${userId}`}>Add Manufacturers</Link>
+            </Menu.Item>
+            <Menu.Item key="viewManufacturers">
+              <Link to={`/viewManufacturers/${userId}`}>
+                View Manufacturers
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="ViewManufacturersGoods">
+              <Link to={`/ViewManufacturersGoods/${userId}`}>View Goods</Link>
+            </Menu.Item>
+            <Menu.Item key="shoppingBaskets">
+              <Link to={`/shoppingBaskets`}>Shopping Baskets</Link>
+            </Menu.Item>
+            <Menu.Item key="viewOrders">
+              <Link to={`/ViewOrders/`}>View Orders</Link>
+            </Menu.Item>
+          </Menu.SubMenu>
           <Menu.SubMenu
             key="manageDistributorRequests"
             icon={<SnippetsOutlined />}
@@ -238,7 +256,27 @@ const MenuList = ({ darkTheme, userType, userId }) => {
 
       {userType === "retailer" && (
         <React.Fragment>
-          {/* قائمة العناصر التي تخص الـ "retailer" */}
+          <Menu.SubMenu
+            key="manageGoodsRetailerOrders"
+            icon={<GoldOutlined />}
+            title="Manage Orders"
+          >
+            <Menu.Item key="addDistributors">
+              <Link to={`/addDistributors/${userId}`}>Add Distributors</Link>
+            </Menu.Item>
+            <Menu.Item key="viewDistributors">
+              <Link to={`/viewDistributors/${userId}`}>View Distributors</Link>
+            </Menu.Item>
+            <Menu.Item key="ViewDistributorsGoods">
+              <Link to={`/ViewDistributorsGoods/${userId}`}>View Goods</Link>
+            </Menu.Item>
+            <Menu.Item key="shoppingBaskets">
+              <Link to={`/shoppingBaskets`}>Shopping Baskets</Link>
+            </Menu.Item>
+            <Menu.Item key="viewOrders">
+              <Link to={`/ViewOrders/`}>View Orders</Link>
+            </Menu.Item>
+          </Menu.SubMenu>
         </React.Fragment>
       )}
     </Menu>

@@ -51,6 +51,23 @@ import DeleteDistributorsGoods from "./components/Distributors/MangeDistributors
 import DistributedGoodsCurrentRequests from "./components/Distributors/GoodsRequestsForDistributors/DistributedGoodsCurrentRequests";
 import DistributedGoodsPreviousRequests from "./components/Distributors/GoodsRequestsForDistributors/DistributedGoodsPreviousRequests";
 import SearchRequestsDistributedGoods from "./components/Distributors/GoodsRequestsForDistributors/SearchRequestsDistributedGoods";
+import AddManufacturer from "./components/Distributors/GoodsOrder/ManageManufacturer/AddManufacturer";
+import ViewManufacturers from "./components/Distributors/GoodsOrder/ManageManufacturer/ViewManufacturers";
+import ViewGoods from "./components/Distributors/GoodsOrder/ViewGoods/ViewGoods";
+import ShoppingBasketListManufacturer from "./components/Distributors/GoodsOrder/ShoppingBasket/ShoppingBasketList";
+import ShoppingBasketDetailManufacturer from "./components/Distributors/GoodsOrder/ShoppingBasket/ShoppingBasketDetail";
+import CompleteOrderManufacturer from "./components/Distributors/GoodsOrder/ShoppingBasket/CompleteOrder";
+import ViewOrderDistributor from "./components/Distributors/GoodsOrder/ManageOrders/ViewOrder";
+import ViewOrderListDistributor from "./components/Distributors/GoodsOrder/ManageOrders/ViewOrdersList";
+// Retailers imports
+import AddDistributor from "./components/Retailers/ManageOrders/ManageDistributors/AddDistributor";
+import ViewDistributors from "./components/Retailers/ManageOrders/ManageDistributors/ViewDistributors";
+import ViewDGoods from "./components/Retailers/ManageOrders/ViewGoods/ViewGoods";
+import ShoppingBasketListDistributor from "./components/Retailers/ManageOrders/ShoppingBasket/ShoppingBasketList";
+import ShoppingBasketDetailDistributor from "./components/Retailers/ManageOrders/ShoppingBasket/ShoppingBasketDetail";
+import CompleteOrderDistributor from "./components/Retailers/ManageOrders/ShoppingBasket/CompleteOrder";
+import ViewOrderRetailer from "./components/Retailers/ManageOrders/GoodsOrders/ViewOrder";
+import ViewOrderListRetailer from "./components/Retailers/ManageOrders/GoodsOrders/ViewOrdersList";
 
 // Contexts
 import { AddressProvider } from "./contexts/AddressContext";
@@ -111,7 +128,6 @@ function App() {
 }
 
 function MainLayout({ userType, userId, clearUserData }) {
-  // console.log("Main Layout - User ID:", userId, "User Type:", userType);
   const [darkTheme, setDarkTheme] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
   const toggleTheme = () => setDarkTheme(!darkTheme);
@@ -318,6 +334,38 @@ function MainLayout({ userType, userId, clearUserData }) {
                   path="/searchDistributorRequests/:userId"
                   element={<SearchRequestsDistributedGoods userId={userId} />}
                 />
+                <Route
+                  path="/addManufacturers/:userId"
+                  element={<AddManufacturer userId={userId} />}
+                />
+                <Route
+                  path="/viewManufacturers/:userId"
+                  element={<ViewManufacturers userId={userId} />}
+                />
+                <Route
+                  path="/ViewManufacturersGoods/:userId"
+                  element={<ViewGoods userId={userId} />}
+                />
+                <Route
+                  path="/shoppingBaskets"
+                  element={<ShoppingBasketListManufacturer userId={userId} />}
+                />
+                <Route
+                  path="/shoppingBaskets/:basketId/:basketIndex"
+                  element={<ShoppingBasketDetailManufacturer userId={userId} />}
+                />
+                <Route
+                  path="/shoppingBaskets/:basketId/:basketIndex/complete"
+                  element={<CompleteOrderManufacturer userId={userId} />}
+                />
+                <Route
+                  path="/ViewOrderList"
+                  element={<ViewOrderListDistributor userId={userId} />}
+                />
+                <Route
+                  path="/ViewOrders"
+                  element={<ViewOrderDistributor userId={userId} />}
+                />
               </>
             )}
 
@@ -327,17 +375,39 @@ function MainLayout({ userType, userId, clearUserData }) {
                   path="/retailer-home/:userId"
                   element={<HomeUser userType="retailer" userId={userId} />}
                 />
-                {/* يمكنك إضافة المسارات الخاصة بالمستخدم البائع بالتجزئة هنا */}
-              </>
-            )}
 
-            {userType === "admin" && (
-              <>
                 <Route
-                  path="/admin-home/:userId"
-                  element={<HomeUser userType="admin" userId={userId} />}
+                  path="/addDistributors/:userId"
+                  element={<AddDistributor userId={userId} />}
                 />
-                {/* يمكنك إضافة المسارات الخاصة بالمستخدم الإداري هنا */}
+                <Route
+                  path="/viewDistributors/:userId"
+                  element={<ViewDistributors userId={userId} />}
+                />
+                <Route
+                  path="/ViewDistributorsGoods/:userId"
+                  element={<ViewDGoods userId={userId} />}
+                />
+                <Route
+                  path="/shoppingBaskets"
+                  element={<ShoppingBasketListDistributor userId={userId} />}
+                />
+                <Route
+                  path="/shoppingBaskets/:basketId/:basketIndex"
+                  element={<ShoppingBasketDetailDistributor userId={userId} />}
+                />
+                <Route
+                  path="/shoppingBaskets/:basketId/:basketIndex/complete"
+                  element={<CompleteOrderDistributor userId={userId} />}
+                />
+                <Route
+                  path="/ViewOrderList"
+                  element={<ViewOrderListRetailer userId={userId} />}
+                />
+                <Route
+                  path="/ViewOrders"
+                  element={<ViewOrderRetailer userId={userId} />}
+                />
               </>
             )}
 

@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../../images/User.png";
-import "./ManageSupplierStyle.css";
+import "./ManageManufacturerStyle.css";
 import { CloseOutlined, CheckCircleOutlined } from "@ant-design/icons";
-import { getSearchSupplierCategory } from "../../../../api/CategoryAPI";
+import { getSearchManufacturerCategory } from "../../../../api/CategoryAPI";
 import { fetchUserData, updateUserData } from "../../../../api/userAPI";
 
-const AddSupplier = () => {
-  const [supplierCategory, setSupplierCategory] = useState("");
-  const [supplierName, setSupplierName] = useState("");
+const AddManufacturer = () => {
+  const [manufacturerCategory, setManufacturerCategory] = useState("");
+  const [manufacturerName, setManufacturerName] = useState("");
   const [isSearchActive, setIsSearchActive] = useState(false);
-  const [suppliers, setSuppliers] = useState();
+  const [manufacturers, setManufacturers] = useState();
   const [user, setUser] = useState([]);
   const [appliedCategory, setAppliedCategory] = useState("");
   const [appliedName, setAppliedName] = useState("");
   const [showDialog, setShowDialog] = useState(false);
-  const [supplierToToggle, setSupplierToToggle] = useState(null);
+  const [manufacturerToToggle, setManufacturerToToggle] = useState(null);
 
   const closeDialog = () => {
     setShowDialog(false);
@@ -26,57 +26,56 @@ const AddSupplier = () => {
     });
   }, []);
 
-  const handleSupplierCategoryChange = (e) => {
-    setSupplierCategory(e.target.value);
+  const handleManufacturerCategoryChange = (e) => {
+    setManufacturerCategory(e.target.value);
   };
 
-  const handleSupplierNameChange = (e) => {
-    setSupplierName(e.target.value);
+  const handleManufacturerNameChange = (e) => {
+    setManufacturerName(e.target.value);
   };
 
   const handleClear = () => {
-    setSupplierCategory("");
-    setSupplierName("");
+    setManufacturerCategory("");
+    setManufacturerName("");
     setIsSearchActive(false);
     setAppliedCategory("");
     setAppliedName("");
   };
 
   const handleApply = async () => {
-    setAppliedCategory(supplierCategory);
-    setAppliedName(supplierName);
+    setAppliedCategory(manufacturerCategory);
+    setAppliedName(manufacturerName);
     setIsSearchActive(true);
 
-    // Fetch suppliers based on the entered criteria
-    getSearchSupplierCategory(
-      supplierCategory || null,
-      supplierName || null
+    getSearchManufacturerCategory(
+      manufacturerCategory || null,
+      manufacturerName || null
     ).then((x) => {
-      setSuppliers(x); // Show "No suppliers found" when there is no match
+      setManufacturers(x);
     });
   };
 
-  const handleToggleSupplier = (id) => {
-    const isSupplierAdded = user?.suppliersList.includes(id);
+  const handleToggleManufacturer = (id) => {
+    const isManufacturerAdded = user?.manufacturersList.includes(id);
 
-    if (isSupplierAdded) {
-      confirmToggleSupplier(id, true);
+    if (isManufacturerAdded) {
+      confirmToggleManufacturer(id, true);
     } else {
-      setSupplierToToggle(id);
+      setManufacturerToToggle(id);
       setShowDialog(true);
     }
   };
 
-  const confirmToggleSupplier = (id, skipDialog = false) => {
+  const confirmToggleManufacturer = (id, skipDialog = false) => {
     let updatedUser = { ...user };
-    const isSupplierAdded = updatedUser.suppliersList.includes(id);
+    const isManufacturerAdded = updatedUser.manufacturersList.includes(id);
 
-    if (isSupplierAdded) {
-      updatedUser.suppliersList = updatedUser.suppliersList.filter(
-        (supplierId) => supplierId !== id
+    if (isManufacturerAdded) {
+      updatedUser.manufacturersList = updatedUser.manufacturersList.filter(
+        (manufacturerId) => manufacturerId !== id
       );
     } else {
-      updatedUser.suppliersList.push(id);
+      updatedUser.manufacturersList.push(id);
     }
 
     updatedUser.id = updatedUser._id;
@@ -92,25 +91,27 @@ const AddSupplier = () => {
 
     if (!skipDialog) {
       setShowDialog(false);
-      setSupplierToToggle(null);
+      setManufacturerToToggle(null);
     }
   };
 
   return (
-    <div className="ManageSupplier-Suppliercontainer">
-      <div className="ManageSupplier-header-row">
-        <h2 className="ManageSupplier-title">Search for Supplier to Add</h2>
+    <div className="ManageManufacturer-Suppliercontainer">
+      <div className="ManageManufacturer-header-row">
+        <h2 className="ManageManufacturer-title">
+          Search for Manufacturer to Add
+        </h2>
       </div>
 
-      <div className="ManageSupplier-card-container">
-        <div className="ManageSupplier-searchcontainer">
-          <div className="ManageSupplier-search-inputs">
+      <div className="ManageManufacturer-card-container">
+        <div className="ManageManufacturer-searchcontainer">
+          <div className="ManageManufacturer-search-inputs">
             <select
               name="supplier-category"
-              value={supplierCategory}
-              onChange={handleSupplierCategoryChange}
+              value={manufacturerCategory}
+              onChange={handleManufacturerCategoryChange}
             >
-              <option value="">Select Supplier Category</option>
+              <option value="">Select Manufacturer Category</option>
               <option value="Agriculture and Food Products">
                 Agriculture and Food Products
               </option>
@@ -140,20 +141,20 @@ const AddSupplier = () => {
             </select>
             <input
               type="text"
-              placeholder="Search for Supplier By Name / ID"
-              value={supplierName}
-              onChange={handleSupplierNameChange}
+              placeholder="Search for Manufacturer By Name / ID"
+              value={manufacturerName}
+              onChange={handleManufacturerNameChange}
             />
           </div>
-          <div className="ManageSupplier-search-buttons">
+          <div className="ManageManufacturer-search-buttons">
             <button
-              className="ManageSupplier-clear-button"
+              className="ManageManufacturer-clear-button"
               onClick={handleClear}
             >
               Clear
             </button>
             <button
-              className="ManageSupplier-apply-button"
+              className="ManageManufacturer-apply-button"
               onClick={handleApply}
             >
               Apply
@@ -164,43 +165,53 @@ const AddSupplier = () => {
 
       {isSearchActive && (
         <>
-          <div className="ManageSupplier-results-header">
+          <div className="ManageManufacturer-results-header">
             <h3>Search Results</h3>
           </div>
-          {suppliers?.length > 0 ? (
-            suppliers.map((supplier) => (
-              <div key={supplier._id} className="ManageSupplier-search-result">
-                <div className="ManageSupplier-supplier-info">
-                  <img src={logo} alt="Supplier" />
+          {manufacturers?.length > 0 ? (
+            manufacturers.map((manufacturer) => (
+              <div
+                key={manufacturer._id}
+                className="ManageManufacturer-search-result"
+              >
+                <div className="ManageManufacturer-supplier-info">
+                  <img src={logo} alt="Manufacturer" />
                   <div>
-                    <h3>{supplier?.full_name}</h3>
+                    <h3>{manufacturer?.full_name}</h3>
                     <p>
-                      <strong>Category:</strong> {supplier?.category}
+                      <strong>Category:</strong> {manufacturer?.category}
                     </p>
                   </div>
                 </div>
-                <div className="ManageSupplier-toggle-switch">
-                  <label className="ManageSupplier-switch">
+                <div className="ManageManufacturer-toggle-switch">
+                  <label className="ManageManufacturer-switch">
                     <input
                       type="checkbox"
-                      checked={user?.suppliersList.includes(supplier._id)}
-                      onChange={() => handleToggleSupplier(supplier._id)}
+                      checked={user?.manufacturersList.includes(
+                        manufacturer._id
+                      )}
+                      onChange={() =>
+                        handleToggleManufacturer(manufacturer._id)
+                      }
                     />
-                    <span className="ManageSupplier-slider round"></span>
+                    <span className="ManageManufacturer-slider round"></span>
                   </label>
                 </div>
               </div>
             ))
           ) : (
-            <div className="background-message">No suppliers found</div>
+            <div className="background-message">No manufacturers found</div>
           )}
         </>
       )}
 
       {showDialog && (
-        <div className="ManageSupplier-dialog-overlay">
-          <div className="ManageSupplier-dialog">
-            <span className="ManageSupplier-dialog-close" onClick={closeDialog}>
+        <div className="ManageManufacturer-dialog-overlay">
+          <div className="ManageManufacturer-dialog">
+            <span
+              className="ManageManufacturer-dialog-close"
+              onClick={closeDialog}
+            >
               <CloseOutlined
                 style={{
                   fontSize: "16px",
@@ -213,7 +224,7 @@ const AddSupplier = () => {
               />
             </span>
             <div
-              className="ManageSupplier-dialog-header"
+              className="ManageManufacturer-dialog-header"
               style={{ display: "flex", alignItems: "center" }}
             >
               <CheckCircleOutlined
@@ -225,17 +236,17 @@ const AddSupplier = () => {
               />
               <h3 style={{ margin: 0 }}>Confirm Action</h3>
             </div>
-            <p>Are you sure you want to add this supplier?</p>
-            <div className="ManageSupplier-dialog-actions">
+            <p>Are you sure you want to add this manufacturer?</p>
+            <div className="ManageManufacturer-dialog-actions">
               <button
-                className="ManageSupplier-dialog-button-No"
+                className="ManageManufacturer-dialog-button-No"
                 onClick={() => setShowDialog(false)}
               >
                 No
               </button>
               <button
-                className="ManageSupplier-dialog-button-Yes"
-                onClick={() => confirmToggleSupplier(supplierToToggle)}
+                className="ManageManufacturer-dialog-button-Yes"
+                onClick={() => confirmToggleManufacturer(manufacturerToToggle)}
               >
                 Yes
               </button>
@@ -247,4 +258,4 @@ const AddSupplier = () => {
   );
 };
 
-export default AddSupplier;
+export default AddManufacturer;

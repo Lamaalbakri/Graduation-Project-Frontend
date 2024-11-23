@@ -172,7 +172,7 @@ const AddDistributorsGoods = () => {
   };
 
   const confirmRedirect = () => {
-    navigate(`/viewDistributorGoods/${userId}`);
+    navigate(`/viewDistributorsGoods/${userId}`);
     setIsModalOpen(false);
   };
 

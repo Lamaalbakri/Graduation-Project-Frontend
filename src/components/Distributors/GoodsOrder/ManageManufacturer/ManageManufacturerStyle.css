@@ -1,0 +1,352 @@
+.ManageManufacturer-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .ManageManufacturer-header-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+    margin-top: 25px;
+  }
+  
+  .ManageManufacturer-results-header {
+    display: flex;
+    margin-bottom: 18px;
+  }
+  
+  .ManageManufacturer-title {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 0;
+    padding-left: 20px;
+  
+  }
+  
+  .ManageManufacturer-searchcontainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid rgb(186, 185, 185);
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .ManageManufacturer-search-inputs {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .ManageManufacturer-search-inputs select,
+  .ManageManufacturer-search-inputs input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  .ManageManufacturer-search-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+  }
+  
+  /* General Button Styles */
+  .ManageManufacturer-search-buttons button {
+    padding: 12px 24px;
+    background-color: #1c2229;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  /* Clear Button Styling */
+  .ManageManufacturer-search-buttons .ManageManufacturer-clear-button {
+    background-color: #fff !important; /* White background */
+    color: #1c2229 !important;
+    border: 1px solid #1c2229 !important;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+  }
+  
+  .ManageManufacturer-background-message {
+    color: #999999bd;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin: 250px;
+  }
+  
+  .ManageManufacturer-search-buttons .ManageManufacturer-clear-button:hover {
+    border-color: #f4d53f !important; /* Change border color on hover */
+    color: #f4d53f !important; /* Ensure text color remains consistent */
+  }
+  
+  /* General Button Hover */
+  .ManageManufacturer-search-buttons button:hover {
+    background-color: #f4d53f;
+    color: #fff;
+  }
+  
+  .ManageManufacturer-search-result {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    margin: 10px 35px;
+  }
+  
+  .ManageManufacturer-supplier-info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .ManageManufacturer-supplier-info img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    margin-right: 16px;
+  }
+  
+  .ManageManufacturer-supplier-info h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .ManageManufacturer-supplier-info p {
+    margin: 4px 0 0 0;
+    font-size: 14px;
+    color: #6b7280;
+  }
+  
+  .ManageManufacturer-toggle-switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+  }
+  
+  .ManageManufacturer-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+  }
+  
+  .ManageManufacturer-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .ManageManufacturer-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #d1d5db;
+    transition: 0.4s;
+  }
+  
+  .ManageManufacturer-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+  }
+  
+  .ManageManufacturer-switch input:checked + .ManageManufacturer-slider {
+    background-color: #1c2229;
+  }
+  
+  .ManageManufacturer-switch input:focus + .ManageManufacturer-slider {
+    box-shadow: 0 0 1px #1c2229;
+  }
+  
+  .ManageManufacturer-switch input:checked + .ManageManufacturer-slider:before {
+    transform: translateX(20px);
+  }
+  
+  .ManageManufacturer-slider.round {
+    border-radius: 34px;
+  }
+  
+  .ManageManufacturer-slider.round:before {
+    border-radius: 50%;
+  }
+  
+  /* Dialog Styles */
+  .ManageManufacturer-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .ManageManufacturer-dialog {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .ManageManufacturer-dialog-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  
+  .ManageManufacturer-dialog-actions button {
+    margin: 4px;
+    margin-top: 25px;
+    width: 70px;
+    font-size: 16px;
+  }
+  .ManageManufacturer-dialog-actions .ManageManufacturer-dialog-button-Yes {
+    background-color: #1c2229;
+    border: 1px solid #1c2229;
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
+  }
+  .ManageManufacturer-dialog-actions .ManageManufacturer-dialog-button-No {
+    background-color: #fff;
+    border: 1px solid #1c2229;
+    color: #1c2229;
+    border-radius: 5px;
+    padding: 5px 10px;
+  }
+  .ManageManufacturer-dialog-actions .ManageManufacturer-dialog-button-No:hover {
+    background-color: #fff;
+    border: 1px solid #f4d53f;
+    color: #f4d53f;
+  }
+  .ManageManufacturer-dialog-actions .ManageManufacturer-dialog-button-Yes:hover {
+    background-color: #f4d53f;
+    border: 1px solid #f4d53f;
+    color: #fff;
+  }
+  
+  /* Media Queries for Responsive Design */
+  @media (max-width: 768px) {
+    .ManageManufacturer-header-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .ManageManufacturer-search-inputs {
+      flex-direction: column;
+      gap: 12px;
+    }
+  
+    .ManageManufacturer-search-buttons {
+      justify-content: center;
+    }
+  
+    .ManageManufacturer-search-result {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+  
+    .ManageManufacturer-supplier-info img {
+      width: 48px;
+      height: 48px;
+    }
+  
+    .ManageManufacturer-supplier-info h3 {
+      font-size: 14px;
+    }
+  
+    .ManageManufacturer-supplier-info p {
+      font-size: 12px;
+    }
+  
+    .ManageManufacturer-switch {
+      width: 36px;
+      height: 20px;
+    }
+  
+    .ManageManufacturer-slider:before {
+      width: 14px;
+      height: 14px;
+      left: 3px;
+      bottom: 3px;
+    }
+  
+    .ManageManufacturer-switch input:checked + .ManageManufacturer-slider:before {
+      transform: translateX(16px);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .ManageManufacturer-title {
+      font-size: 24px;
+    }
+  
+    .ManageManufacturer-search-buttons button {
+      padding: 10px 20px;
+      font-size: 12px;
+    }
+  
+    .ManageManufacturer-supplier-info img {
+      width: 40px;
+      height: 40px;
+    }
+  
+    .ManageManufacturer-search-inputs select,
+    .ManageManufacturer-search-inputs input {
+      padding: 10px;
+      font-size: 12px;
+    }
+  
+    .ManageManufacturer-search-result {
+      padding: 12px;
+    }
+  
+    .ManageManufacturer-switch {
+      width: 30px;
+      height: 16px;
+    }
+  
+    .ManageManufacturer-slider:before {
+      width: 12px;
+      height: 12px;
+      left: 2px;
+      bottom: 2px;
+    }
+  
+    .ManageManufacturer-switch input:checked + .ManageManufacturer-slider:before {
+      transform: translateX(12px);
+    }
+}

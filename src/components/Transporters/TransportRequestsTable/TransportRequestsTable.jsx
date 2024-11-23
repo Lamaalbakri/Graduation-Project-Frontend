@@ -10,8 +10,7 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import { Modal } from "antd";
 import "./TransportRequestsTable.css";
-import { createContract, updateContract } from "../../../api/smartContractAPI"; // استيراد الدوال
-import { moveCurrentToPrevious } from "../../../api/rawMaterialRequestAPI";
+import { createContract, updateContract } from "../../../api/smartContractAPI";
 
 function TransportRequestsTable({ data }) {
   const [requests, setRequests] = useState(
@@ -54,7 +53,7 @@ function TransportRequestsTable({ data }) {
         //throw new Error("Failed to update status in the backend");
         Modal.error({
           title: "Error:",
-          content: `Failed to update sender,Call customer service.`,
+          content: `Failed to update sender, Call customer service.`,
           okButtonProps: {
             className: "confirm-buttonn",
           },
@@ -69,10 +68,10 @@ function TransportRequestsTable({ data }) {
           ) =>
             request.shortId === id
               ? {
-                ...request,
-                status: updatedTransportRequest.data.status,
-                statusClass: `TransportRequestsTable-status-${updatedTransportRequest.data.status}`,
-              }
+                  ...request,
+                  status: updatedTransportRequest.data.status,
+                  statusClass: `TransportRequestsTable-status-${updatedTransportRequest.data.status}`,
+                }
               : request
         )
       );
@@ -87,22 +86,26 @@ function TransportRequestsTable({ data }) {
     }
   };
 
-  const handleStatusChange = async (transportOrderId, purchaseOrderId, newStatus) => {
+  const handleStatusChange = async (
+    transportOrderId,
+    purchaseOrderId,
+    newStatus
+  ) => {
     try {
       if (newStatus === "accepted") {
-        // استدعاء API لإنشاء عقد جديد عند اختيار "Accepted"
-        const createResponse = await createContract(transportOrderId, purchaseOrderId);
+        const createResponse = await createContract(
+          transportOrderId,
+          purchaseOrderId
+        );
         if (createResponse.error) {
           throw new Error("Failed to create contract");
         }
-        // تحديث الحالة في الواجهة الأمامية
         updateRequestStatus(transportOrderId, newStatus);
       } else if (newStatus === "delivered") {
         toggleDialog("confirmationDialog", true, transportOrderId, newStatus);
       } else if (newStatus === "rejected") {
-        toggleDialog("confirmationDialog", true, transportOrderId, newStatus); // فتح حوار التأكيد
+        toggleDialog("confirmationDialog", true, transportOrderId, newStatus);
       } else {
-        // حالات أخرى (مثل "Pending")
         updateRequestStatus(transportOrderId, newStatus);
       }
     } catch (error) {
@@ -118,9 +121,7 @@ function TransportRequestsTable({ data }) {
 
   const handleConfirmAction = async () => {
     try {
-
       if (selectedStatus === "delivered") {
-        // تحديث العقد عند اختيار "Delivered"
         const updateResponse = await updateContract(selectedRequestId);
         if (updateResponse.error) {
           throw new Error("Failed to update contract");
@@ -254,7 +255,11 @@ function TransportRequestsTable({ data }) {
             value={params.row.status}
             className={`TransportRequestsTable-status-select ${statusClass}`}
             onChange={(e) =>
-              handleStatusChange(params.row.shortId, params.row.request_id, e.target.value)
+              handleStatusChange(
+                params.row.shortId,
+                params.row.request_id,
+                e.target.value
+              )
             }
           >
             {params.row.status === "pending" && (
@@ -379,12 +384,14 @@ function TransportRequestsTable({ data }) {
                   }}
                 />
               )}
-              {`Confirm ${selectedStatus === "rejected" ? "Rejection" : "Delivery"
-                }`}
+              {`Confirm ${
+                selectedStatus === "rejected" ? "Rejection" : "Delivery"
+              }`}
             </>
           }
-          message={`Are you sure you want to ${selectedStatus === "rejected" ? "reject" : "mark as delivered"
-            } this transport request?`}
+          message={`Are you sure you want to ${
+            selectedStatus === "rejected" ? "reject" : "mark as delivered"
+          } this transport request?`}
           onConfirm={handleConfirmAction}
           onCancel={() => toggleDialog("confirmationDialog", false)}
         />

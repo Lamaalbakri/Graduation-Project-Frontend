@@ -11,7 +11,6 @@ export const addItemToBasket = async ({ item_id, quantity, options, sellerName, 
             credentials: 'include',
             body: JSON.stringify({ item_id, quantity, options, sellerName, sellerId })
         });
-        // const { item_id, quantity, options, sellerName, sellerId } = req.body;
         if (!response.ok) {
             if (response.status === 404) {
                 return { error: `Item not found` };
@@ -96,7 +95,6 @@ export const fetchShoppingBasketDetails = async ({ basketId }) => {
         }
 
         const data = await response.json();
-        // console.log(data)
         return { basket: data.data, numberOfBasketItems: data.numberOfBasketItems };
     } catch (err) {
         return { error: `Error fetching shopping basket` };
@@ -105,7 +103,6 @@ export const fetchShoppingBasketDetails = async ({ basketId }) => {
 
 export const updateBasketItemQuantity = async ({ basketId, newQuantity, itemId }) => {
     try {
-        //console.log(itemId, basketId, newQuantity)
         const response = await fetch(`${API_URL}/itemId`, {
             method: 'PUT',
             headers: {
@@ -123,7 +120,6 @@ export const updateBasketItemQuantity = async ({ basketId, newQuantity, itemId }
         }
 
         const data = await response.json();
-        // console.log(data)
         return { basket: data.data, numberOfBasketItems: data.numberOfBasketItems };
     } catch (err) {
         return { error: `Error fetching shopping basket` };
@@ -149,7 +145,6 @@ export const deleteItemFromBasket = async ({ itemId, basketId }) => {
         }
 
         const data = await response.json();
-        // console.log(data)
         return { basket: data.data, numberOfBasketItems: data.numberOfBasketItems };
     } catch (err) {
         return { error: `Error fetching shopping basket` };

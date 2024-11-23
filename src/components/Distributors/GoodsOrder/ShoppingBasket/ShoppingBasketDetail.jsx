@@ -12,7 +12,6 @@ import {
 } from "../../../../api/shoppingBasket";
 import ConfirmationDialog from "../../../Dialog/ConfirmationDialog";
 import { CloseCircleOutlined } from "@ant-design/icons";
-import "./ShoppingBasket.css";
 
 function ShoppingBasketDetail() {
   const { basketId, basketIndex } = useParams();
@@ -181,7 +180,7 @@ function ShoppingBasketDetail() {
         <div className="detail-container-title">
           <div>Shopping Basket {basketIndex}</div>
           <div className="supplier-name">
-            Supplier Name: {updatedBasket.sellerName}
+            Manufacturer Name: {updatedBasket.sellerName}
           </div>
         </div>
         <div className="Basket">
