@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import OrderTimeline from "./OrderTimeline";
 import moment from "moment";
-import { getSingleDOrder } from "../../../../api/orders";
+import { getSingleMOrder } from "../../../../api/orders";
 import { CheckCircleOutlined } from "@ant-design/icons";
 import FeedbackPopup from "./FeedbackPopup";
 import { getBuyerFeedback } from "../../../../api/feedbackApi";
@@ -18,13 +18,13 @@ const ViewOrdersList = () => {
 
   useEffect(() => {
     if (id) {
-      getSingleDOrder(id).then((x) => {
+      getSingleMOrder(id).then((x) => {
         setOrder(x);
       });
     }
   }, [id]);
 
-  const totalItemsCount = order?.goodsForRetailers?.reduce((total, item) => {
+  const totalItemsCount = order?.goodsForDistributors?.reduce((total, item) => {
     return total + (item.quantity || 0);
   }, 0);
 
@@ -54,10 +54,10 @@ const ViewOrdersList = () => {
         </p>
       </div>
       <div className="view_order_list_wrapper">
-        {order?.goodsForRetailers?.length > 0 && (
+        {order?.goodsForDistributors?.length > 0 && (
           <div className="view_order_list_left">
             {/*  map products */}
-            {order?.goodsForRetailers?.map((item, index) => (
+            {order?.goodsForDistributors?.map((item, index) => (
               <div key={item._id} className="view_order_list_card">
                 <div className="view_order_list_card_image_wrapper">
                   <img src={item?.image} alt={item?.goods_name} />
@@ -266,23 +266,23 @@ const ViewOrdersList = () => {
               <li>
                 {(order?.status === "inProgress" ||
                   order?.status === "delivered") && (
-                  <>
-                    <span className="name">Order Contract:</span>
-                  </>
-                )}
+                    <>
+                      <span className="name">Order Contract:</span>
+                    </>
+                  )}
               </li>
               {(order?.status === "inProgress" ||
                 order?.status === "delivered") && (
-                <div className="contract-button">
-                  <a
-                    href={`/SmartContract/${order.shortId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <button>View</button>
-                  </a>
-                </div>
-              )}
+                  <div className="contract-button">
+                    <a
+                      href={`/SmartContract/${order.shortId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <button>View</button>
+                    </a>
+                  </div>
+                )}
             </ul>
             {/* Import Order Timeline */}
             <div style={{ margin: "2.5rem 2.3rem" }}>
@@ -362,7 +362,7 @@ const ViewOrdersList = () => {
                             to{" "}
                             {moment(
                               order.estimated_delivery_date[
-                                order.estimated_delivery_date.length - 1
+                              order.estimated_delivery_date.length - 1
                               ]
                             ).format("DD MMM YYYY")}
                           </span>

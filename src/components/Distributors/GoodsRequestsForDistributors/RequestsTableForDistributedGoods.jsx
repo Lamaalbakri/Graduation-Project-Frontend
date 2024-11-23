@@ -80,10 +80,10 @@ function RequestsTableForDistributedGoods({ data }) {
           ) =>
             request.shortId === id //Check if the shortId of the request matches the ID we want to update.
               ? {
-                  ...request,
-                  status: updatedRequest.data.status,
-                  statusClass: `ManageGoodsDistributors-status-${updatedRequest.data.status}`,
-                }
+                ...request,
+                status: updatedRequest.data.status,
+                statusClass: `ManageGoodsDistributors-status-${updatedRequest.data.status}`,
+              }
               : request //Returns the request as is if the condition is false.
         )
       );
@@ -104,7 +104,7 @@ function RequestsTableForDistributedGoods({ data }) {
   const handleStatusChange = (id, newStatus) => {
     const request = requests.find((req) => req.shortId === id);
     const arrivalAddress = request ? request.arrivalAddress : null;
-    const receiverId = request ? request.distributorId : null;
+    const receiverId = request ? request.retailerId : null;
     const receiverType = request
       ? request.receiverType || "retailer"
       : "retailer";
@@ -229,7 +229,7 @@ function RequestsTableForDistributedGoods({ data }) {
       renderCell: (params) => `#${params.value}`,
     },
     {
-      field: "distributorName",
+      field: "retailerName",
       headerName: "Retailer Name",
       width: 150,
       headerAlign: "left",
@@ -252,11 +252,10 @@ function RequestsTableForDistributedGoods({ data }) {
           {params.row.goodsForRetailers.map((item, index) => (
             <div
               key={`${item.goods_id}-${index}`}
-              className={`ManageGoodsDistributors-goods-item ${
-                index !== params.row.goodsForRetailers.length - 1
-                  ? "item-with-border"
-                  : ""
-              }`}
+              className={`ManageGoodsDistributors-goods-item ${index !== params.row.goodsForRetailers.length - 1
+                ? "item-with-border"
+                : ""
+                }`}
             >
               {item.goods_name}
             </div>
@@ -479,14 +478,12 @@ function RequestsTableForDistributedGoods({ data }) {
                   }}
                 />
               )}
-              {`Confirm ${
-                selectedStatus === "rejected" ? "Rejection" : "Delivery"
-              }`}
+              {`Confirm ${selectedStatus === "rejected" ? "Rejection" : "Delivery"
+                }`}
             </>
           }
-          message={`Are you sure you want to ${
-            selectedStatus === "rejected" ? "reject" : "mark as delivered"
-          } this request?`}
+          message={`Are you sure you want to ${selectedStatus === "rejected" ? "reject" : "mark as delivered"
+            } this request?`}
           onConfirm={handleConfirmAction}
           onCancel={() => toggleDialog("confirmationDialog", false)}
           stepType={selectedStatus === "viewOrder" ? "viewOrder" : "default"}
