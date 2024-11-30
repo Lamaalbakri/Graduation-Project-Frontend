@@ -24,7 +24,6 @@ const Feedbacks = () => {
     <div className="ManageRawMaterial">
       <div className="ManageRawMaterial-header-row">
         <div className="ManageRawMaterial-title">Feedbacks</div>
-
       </div>
 
       {feedback.length > 0 && (
@@ -34,7 +33,7 @@ const Feedbacks = () => {
               <span
                 style={{
                   fontSize: "20px",
-                  color: "#878787",
+                  color: "#f4d53f",
                   padding: "10px",
                   fontWeight: "bold",
                 }}
@@ -50,7 +49,7 @@ const Feedbacks = () => {
                     fontWeight: "600",
                   }}
                 >
-                  ID: {feed?.order_id}
+                  ID: #{feed?.order_id}
                 </span>
               </div>
               <FeedbackPopup feed={feed} />

@@ -115,7 +115,35 @@
 }
 .Feedback-card:hover {
   transform: scale(1.02);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+.give-feedback-button {
+  padding: 8px 12px;
+  background-color: #1c2229; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: relative;
+  top: 30px;
+}
+.give-feedback-button:hover {
+  background-color: #f4d53f !important;
+  color: #fff !important;
+}
+.submit-feedback-button {
+  padding: 8px 12px;
+  background-color: #1c2229; 
+  color: white !important;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.submit-feedback-button:hover {
+  background-color: #f4d53f !important;
+  color: #fff !important;
 }
 .order_list_details_list {
   display: flex;

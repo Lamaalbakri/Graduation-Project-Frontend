@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import { Modal, Button, Rate, Input, Form } from "antd";
 import { createFeedback } from "../../../../api/feedbackApi";
-import { fontWeight } from "@mui/system";
+import { SmileOutlined } from "@ant-design/icons";
 
-const FeedbackPopup = ({ orderId, supplierId, manufacturerId, done, setDone }) => {
+const FeedbackPopup = ({
+  orderId,
+  supplierId,
+  manufacturerId,
+  done,
+  setDone,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rating, setRating] = useState(null);
   const [review, setReview] = useState("");
@@ -32,12 +38,25 @@ const FeedbackPopup = ({ orderId, supplierId, manufacturerId, done, setDone }) =
 
   return (
     <div>
-      <Button type="primary" onClick={openModal}>
+      <Button
+        className="give-feedback-button"
+        type="primary"
+        onClick={openModal}
+      >
         Give Feedback
       </Button>
 
       <Modal
-        title="Feedback"
+        title={
+          <span
+            style={{ fontSize: "20px", fontWeight: "bold", color: "#1c2229" }}
+          >
+            <SmileOutlined
+              style={{ fontSize: "25px", marginRight: "8px", color: "#f4d53f" }}
+            />
+            Feedback
+          </span>
+        }
         visible={isModalOpen}
         onCancel={closeModal}
         footer={null}
@@ -47,7 +66,15 @@ const FeedbackPopup = ({ orderId, supplierId, manufacturerId, done, setDone }) =
           <center>
             <br />
             <br />
-            <p style={{ textAlign: "center", fontSize: "24px", fontWeight: "bold" }}>Your feedback was submitted</p>
+            <p
+              style={{
+                textAlign: "center",
+                fontSize: "20px",
+                fontWeight: "bold",
+              }}
+            >
+              Your feedback was submitted
+            </p>
             <br />
             <br />
             <br />
@@ -81,7 +108,7 @@ const FeedbackPopup = ({ orderId, supplierId, manufacturerId, done, setDone }) =
 
               <Button
                 type="primary"
-                style={{ color: "white" }}
+                className="submit-feedback-button"
                 onClick={handleSubmit}
                 disabled={!rating} // Disable until stars are selected
               >

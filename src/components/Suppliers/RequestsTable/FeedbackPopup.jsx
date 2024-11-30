@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Modal, Button, Rate, Input, Form } from "antd";
+import { Modal, Button, Rate, Form } from "antd";
+import { SmileOutlined } from "@ant-design/icons";
 
 const FeedbackPopup = ({ feed }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,7 +29,16 @@ const FeedbackPopup = ({ feed }) => {
       </Button>
 
       <Modal
-        title="Feedback"
+        title={
+          <span
+            style={{ fontSize: "20px", fontWeight: "bold", color: "#1c2229" }}
+          >
+            <SmileOutlined
+              style={{ fontSize: "25px", marginRight: "8px", color: "#f4d53f" }}
+            />
+            Feedback
+          </span>
+        }
         visible={isModalOpen}
         onCancel={closeModal}
         footer={null}
@@ -43,14 +53,16 @@ const FeedbackPopup = ({ feed }) => {
           <span
             style={{ fontSize: "14px", color: "#878787", fontWeight: "600" }}
           >
-            ID: {feed?.order_id}
+            ID: #{feed?.order_id}
           </span>
-          <p className="rating">
-            {feed?.rating}/5
-          </p>
+          <p className="rating">{feed?.rating}/5</p>
           <Form layout="vertical">
             <Form.Item>
-              <Rate style={{ fontSize: "30px" }} disabled defaultValue={feed?.rating} />
+              <Rate
+                style={{ fontSize: "30px" }}
+                disabled
+                defaultValue={feed?.rating}
+              />
             </Form.Item>
 
             <div className="review">
