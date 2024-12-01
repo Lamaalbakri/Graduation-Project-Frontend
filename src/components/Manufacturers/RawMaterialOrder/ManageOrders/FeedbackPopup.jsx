@@ -12,7 +12,7 @@ const FeedbackPopup = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rating, setRating] = useState(null);
-  const [review, setReview] = useState("");
+  const [review, setReview] = useState(null);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -110,7 +110,7 @@ const FeedbackPopup = ({
                 type="primary"
                 className="submit-feedback-button"
                 onClick={handleSubmit}
-                disabled={!rating} // Disable until stars are selected
+                disabled={!rating || !review} // Disable until stars are selected // Disable until stars are selected
               >
                 Submit Feedback
               </Button>
