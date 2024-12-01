@@ -1,33 +1,33 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getAddressByUserId } from '../api/addressApi';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { getAddressByUserId } from "../api/addressApi";
 
 const AddressContext = createContext();
 
 export const AddressProvider = ({ children }) => {
-    const [address, setAddress] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [userId, setUserId] = useState(null); // يمكن تعديل userId حسب كيفية إدارته في التطبيق
+  const [address, setAddress] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState(null);
 
-    useEffect(() => {
-        const fetchAddress = async () => {
-            try {
-                const fetchedAddress = await getAddressByUserId();
-                setAddress(fetchedAddress);
-            } catch (error) {
-                console.error("Error fetching address:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+  useEffect(() => {
+    const fetchAddress = async () => {
+      try {
+        const fetchedAddress = await getAddressByUserId();
+        setAddress(fetchedAddress);
+      } catch (error) {
+        console.error("Error fetching address:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        fetchAddress();
-    }, []);
+    fetchAddress();
+  }, []);
 
-    return (
-        <AddressContext.Provider value={{ address, setAddress }}>
-            {children}
-        </AddressContext.Provider>
-    );
+  return (
+    <AddressContext.Provider value={{ address, setAddress }}>
+      {children}
+    </AddressContext.Provider>
+  );
 };
 
 export const useAddress = () => useContext(AddressContext);

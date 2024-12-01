@@ -6,14 +6,13 @@ import { createAddress, updateAddress } from "../../api/addressApi";
 import { useAddress } from "../../contexts/AddressContext";
 
 function Address({ onClose }) {
-  const { address, setAddress } = useAddress(); // الحصول على العنوان من السياق
+  const { address, setAddress } = useAddress();
   const [city, setCity] = useState("");
   const [street, setStreet] = useState("");
   const [neighborhood, setNeighborhood] = useState("");
   const [postal_code, setPostalCode] = useState("");
   const [country, setCountry] = useState("");
 
-  // جلب العنوان الموجود عند تحميل المكون
   useEffect(() => {
     if (address) {
       setCity(address.city);
@@ -22,9 +21,8 @@ function Address({ onClose }) {
       setPostalCode(address.postal_code);
       setCountry(address.country);
     }
-  }, [address]); // تنفيذ التأثير عندما يتغير العنوان
+  }, [address]);
 
-  // دالة الحفظ
   const handleSaveAddress = async (event) => {
     event.preventDefault();
     const newAddress = {
@@ -38,10 +36,8 @@ function Address({ onClose }) {
     try {
       let savedAddress;
       if (address && address._id) {
-        // إذا كان هناك عنوان موجود، قم بالتحديث
         savedAddress = await updateAddress(address._id, newAddress);
       } else {
-        // إذا لم يكن هناك عنوان موجود، قم بإنشاء عنوان جديد
         const response = await createAddress(newAddress);
 
         if (!response.success) {
@@ -56,7 +52,6 @@ function Address({ onClose }) {
           return;
         }
 
-        // إذا نجحت العملية، خذ البيانات المحفوظة
         savedAddress = response.data;
       }
       setAddress(savedAddress);
@@ -87,7 +82,7 @@ function Address({ onClose }) {
               </label>
               <input
                 type="text"
-                value={country} //إذا كانت فارغة، سيظهر placeholder
+                value={country}
                 onChange={(e) => setCountry(e.target.value)}
                 id="country"
                 name="country"
@@ -101,7 +96,7 @@ function Address({ onClose }) {
               </label>
               <input
                 type="text"
-                value={city} //إذا كانت فارغة، سيظهر placeholder
+                value={city}
                 onChange={(e) => setCity(e.target.value)}
                 id="city"
                 name="city"
@@ -116,7 +111,7 @@ function Address({ onClose }) {
               <input
                 type="text"
                 onChange={(e) => setStreet(e.target.value)}
-                value={street} // استخدام القيمة من الحالة
+                value={street}
                 id="street"
                 name="street"
                 placeholder="Enter street"
@@ -129,7 +124,7 @@ function Address({ onClose }) {
               </label>
               <input
                 type="text"
-                value={neighborhood} // استخدام القيمة من الحالة
+                value={neighborhood}
                 onChange={(e) => setNeighborhood(e.target.value)}
                 id="neighborhood"
                 name="neighborhood"
@@ -141,7 +136,7 @@ function Address({ onClose }) {
               <label htmlFor="postal_code">Postal Code (Optional)</label>
               <input
                 type="text"
-                value={postal_code} // استخدام القيمة من الحالة
+                value={postal_code}
                 onChange={(e) => setPostalCode(e.target.value)}
                 id="postal_code"
                 name="postal_code"

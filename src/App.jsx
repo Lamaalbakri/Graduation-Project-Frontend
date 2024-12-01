@@ -68,11 +68,9 @@ import ShoppingBasketDetailDistributor from "./components/Retailers/ManageOrders
 import CompleteOrderDistributor from "./components/Retailers/ManageOrders/ShoppingBasket/CompleteOrder";
 import ViewOrderRetailer from "./components/Retailers/ManageOrders/GoodsOrders/ViewOrder";
 import ViewOrderListRetailer from "./components/Retailers/ManageOrders/GoodsOrders/ViewOrdersList";
-
 // Contexts
 import { AddressProvider } from "./contexts/AddressContext";
 import { UserProvider } from "./contexts/UserContext";
-
 // Feedback
 import Feedbacks from "./components/Suppliers/RequestsTable/Feedbacks";
 const { Content } = Layout;
@@ -420,7 +418,7 @@ function MainLayout({ userType, userId, clearUserData }) {
               path="/edit-account/:userId"
               element={<EditAccountLayout userId={userId} />}
             />
-            {/* يمكنك وضع مسار افتراضي أو صفحة غير موجودة */}
+
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
         </Content>

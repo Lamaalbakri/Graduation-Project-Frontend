@@ -20,7 +20,7 @@
   transition: background-color 0.3s !important;
   box-shadow: none !important;
   top: 6px;
-  min-width: 100px; /* إضافة عرض أدنى للزر */
+  min-width: 100px; 
   display: block;
 }
 .confirmation-dialog .confirmation-dialog-cancel-button{

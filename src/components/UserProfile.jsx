@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import logo from "./images/User.png"; // استيراد الشعار
+import logo from "./images/User.png";
 import { fetchUserData } from "../api/userAPI";
 import { useUserContext } from "../contexts/UserContext";
 
@@ -9,9 +9,9 @@ const UserProfile = ({ userType }) => {
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const data = await fetchUserData(); // جلب بيانات المستخدم باستخدام التوكن
+        const data = await fetchUserData();
         console.log("User data fetched:", data);
-        setUserData(data); // حفظ بيانات المستخدم في الحالة
+        setUserData(data);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       }
@@ -46,7 +46,6 @@ const UserProfile = ({ userType }) => {
             whiteSpace: "nowrap",
           }}
         >
-          {/* عرض اسم المستخدم إذا كان متوفرًا، وإلا عرض نوع المستخدم */}
           {userData ? userData.full_name : getUserRole(userType)}
         </span>
       </div>

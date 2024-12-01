@@ -24,7 +24,7 @@ const Actions = ({ userType, userId }) => {
             </Link>
             <Link to="/viewRawMaterial/:userId">
               <button>
-                <i className="fas fa-search"></i>  Search for Raw Materials
+                <i className="fas fa-search"></i> Search for Raw Materials
               </button>
             </Link>
             <Link to="/currentRequests/:userId">
@@ -79,17 +79,17 @@ const Actions = ({ userType, userId }) => {
       {userType === "manufacturer" && (
         <>
           <div className="actions">
-            <Link to="/addGoods/:userId">
+            <Link to="/addManufacturerGoods/:userId">
               <button>
                 <i className="fas fa-plus"></i> Add Goods
               </button>
             </Link>
-            <Link to="/viewGoods/:userId">
+            <Link to="/viewManufacturerGoods/:userId">
               <button>
                 <i className="fas fa-eye"></i> View Goods
               </button>
             </Link>
-            <Link to="/updateGoods/:userId">
+            <Link to="/updateManufacturerGoods/:userId">
               <button>
                 <i className="fa-sharp fa-solid fa-pen-to-square"></i> Update
                 Goods
@@ -97,22 +97,37 @@ const Actions = ({ userType, userId }) => {
             </Link>
             <Link to="/addSuppliers/:userId">
               <button>
-                <i className="fas fa-tachometer-alt"></i> Add Suppliers
+                <i className="fas fa-plus"></i> Add Suppliers
               </button>
             </Link>
             <Link to="/viewSuppliers/:userId">
               <button>
-                <i className="fas fa-history"></i> View Suppliers
+                <i className="fas fa-eye"></i> View Suppliers
               </button>
             </Link>
             <Link to="/shoppingBaskets">
               <button>
-                <i className="fas fa-history"></i> Shopping Basket
+                <i className="fas fa-shopping-cart"></i> Shopping Basket
               </button>
             </Link>
-            <Link to="/viewOrders/:userId">
+            <Link to="/ViewOrders">
               <button>
-                <i className="fas fa-search"></i> View Orders
+                <i className="fas fa-eye"></i> View Orders
+              </button>
+            </Link>
+            <Link to="/currentManufacturerRequests/:userId">
+              <button>
+                <i className="fas fa-tachometer-alt"></i> Current Requests
+              </button>
+            </Link>
+            <Link to="/previousManufacturerRequests/:userId">
+              <button>
+                <i className="fas fa-history"></i>Previous Requests
+              </button>
+            </Link>
+            <Link to="/searchManufacturerRequests/:userId">
+              <button>
+                <i className="fas fa-search"></i> Search for Request
               </button>
             </Link>
           </div>
