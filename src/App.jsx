@@ -71,8 +71,9 @@ import ViewOrderListRetailer from "./components/Retailers/ManageOrders/GoodsOrde
 // Contexts
 import { AddressProvider } from "./contexts/AddressContext";
 import { UserProvider } from "./contexts/UserContext";
-// Feedback
+// Feedbacks
 import Feedbacks from "./components/Suppliers/RequestsTable/Feedbacks";
+
 const { Content } = Layout;
 
 function App() {
