@@ -17,11 +17,11 @@ const OrderTimeline = ({ orderStatus }) => {
   ];
 
   const stageIcons = {
-    "Order Placed": "viewOrder1.png",
-    "Order Accepted": "viewOrder2.png",
-    "Order Rejected": "viewOrder5.png",
-    "Order inProgress": "viewOrder3.png",
-    "Order Delivered": "viewOrder4.png",
+    "Order Placed": "viewOrder_1.png",
+    "Order Accepted": "viewOrder_2.png",
+    "Order Rejected": "viewOrder_5.png",
+    "Order inProgress": "viewOrder_3.png",
+    "Order Delivered": "viewOrder_4.png",
   };
 
   const currentStage = statusToStage[orderStatus];
